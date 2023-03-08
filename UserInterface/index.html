@@ -49,7 +49,18 @@
             <label>password</label>
           </div>
           <div class="field-wrapper">
-            <input type="submit" onclick="showThankYou()">
+            <input type="submit" onclick="load()">
+            <script>
+              function load() {
+                event.preventDefault();
+                showThankYou();
+
+                // wait 3 seconds before loading next page
+                setTimeout(function() {
+                  document.querySelector('onSubmit').submit();
+                }, 3000);
+              }
+            </script>
           </div>
           
         </form>
