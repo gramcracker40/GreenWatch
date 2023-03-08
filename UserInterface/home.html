@@ -4,6 +4,97 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
+<head>
+  <title>Sense HAT Preview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+    .preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  height: 200px;
+}
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  flex: 1;
+}
+
+.reading label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.reading .value {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+}
+  </style>
+</head>
+<body>
+  <div class="preview">
+    <div class="reading">
+      <label>Temperature</label>
+      <div class="value" id="temperature"></div>
+    </div>
+    <div class="reading">
+      <label>Humidity</label>
+      <div class="value" id="humidity"></div>
+    </div>
+    <div class="reading">
+      <label>Light</label>
+      <div class="value" id="light"></div>
+    </div>
+    <div class="reading">
+      <label>Air Pressure</label>
+      <div class="value" id="pressure"></div>
+    </div>
+  </div>
+
+  <script>
+    function getSensorData() {
+      // Make an AJAX call to the server to get the sensor data
+      // You can use the XMLHttpRequest object or jQuery's $.ajax() function
+      // Here's an example using jQuery:
+      $.ajax({
+        url: "get-sensor-data.php",
+        success: function(data) {
+          // Update the UI with the sensor data
+          $("#temperature").text(data.temperature + " °F");
+          $("#humidity").text(data.humidity + "%");
+          $("#light").text(data.light + " lux");
+          $("#pressure").text(data.pressure + " hPa");
+        }
+      });
+    }
+
+    // Call the getSensorData function every 5 seconds
+    setInterval(getSensorData, 5000);
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+<!-- <html>
     <head>
         <meta charset="UTF-8">
         <title>GreenWatch</title>
@@ -35,4 +126,4 @@
             <i class="fa fa-cog"></i>
           </div>
     </body>
-</html>
+</html> -->
