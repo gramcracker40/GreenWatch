@@ -85,6 +85,86 @@
     // Call the getSensorData function every 5 seconds
     setInterval(getSensorData, 5000);
   </script>
+
+<div class="preview">
+    <div class="reading">
+      <label>Temperature</label>
+      <div class="value" id="temperature"></div>
+    </div>
+    <div class="reading">
+      <label>Humidity</label>
+      <div class="value" id="humidity"></div>
+    </div>
+    <div class="reading">
+      <label>Light</label>
+      <div class="value" id="light"></div>
+    </div>
+    <div class="reading">
+      <label>Air Pressure</label>
+      <div class="value" id="pressure"></div>
+    </div>
+  </div>
+
+  <script>
+    function getSensorData() {
+      // Make an AJAX call to the server to get the sensor data
+      // You can use the XMLHttpRequest object or jQuery's $.ajax() function
+      // Here's an example using jQuery:
+      $.ajax({
+        url: "get-sensor-data.php",
+        success: function(data) {
+          // Update the UI with the sensor data
+          $("#temperature").text(data.temperature + " °F");
+          $("#humidity").text(data.humidity + "%");
+          $("#light").text(data.light + " lux");
+          $("#pressure").text(data.pressure + " hPa");
+        }
+      });
+    }
+
+    // Call the getSensorData function every 5 seconds
+    setInterval(getSensorData, 5000);
+  </script>
+
+<div class="preview">
+    <div class="reading">
+      <label>Temperature</label>
+      <div class="value" id="temperature"></div>
+    </div>
+    <div class="reading">
+      <label>Humidity</label>
+      <div class="value" id="humidity"></div>
+    </div>
+    <div class="reading">
+      <label>Light</label>
+      <div class="value" id="light"></div>
+    </div>
+    <div class="reading">
+      <label>Air Pressure</label>
+      <div class="value" id="pressure"></div>
+    </div>
+  </div>
+
+  <script>
+    function getSensorData() {
+      // Make an AJAX call to the server to get the sensor data
+      // You can use the XMLHttpRequest object or jQuery's $.ajax() function
+      // Here's an example using jQuery:
+      $.ajax({
+        url: "get-sensor-data.php",
+        success: function(data) {
+          // Update the UI with the sensor data
+          $("#temperature").text(data.temperature + " °F");
+          $("#humidity").text(data.humidity + "%");
+          $("#light").text(data.light + " lux");
+          $("#pressure").text(data.pressure + " hPa");
+        }
+      });
+    }
+
+    // Call the getSensorData function every 5 seconds
+    setInterval(getSensorData, 5000);
+  </script>
 </body>
 </html>
 
