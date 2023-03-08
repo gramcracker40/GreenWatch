@@ -196,6 +196,29 @@ body {
   cursor: pointer;
 }
 
+.animated-header {
+  color: #07ad90;
+  font-size: 60px;
+  text-align: center;
+  animation-name: bounce;
+  animation-duration: 2.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 small {
   font-size: 0.7em;
 }

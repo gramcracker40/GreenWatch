@@ -10,16 +10,20 @@
 <!-- partial:index.partial.html -->
 <ul class="nav">
   <li onclick="showLogin()">Login</li>
-  <li onclick="showSignup()">Sign up</li>
+ 
   <!--li onclick="showForgotPassword()">Forgot password</li-->
-  <li onclick="showSubscribe()">Subscribe</li>
+ 
   <!--li onclick="showContactUs()">Contact us</li-->
 </ul>
+<!--div  img src="./images/greenwatchlogo" alt="GreenWatch logo"></div-->
+<img src="./images/greenwatchlogo.png" alt="" style="width: 200px; height: 175px">
+<h1 class="animated-header">GreenWatch</h1>
 <div class="wrapper">
   <div class="rec-prism">
     <div class="face face-top">
       <div class="content">
         <h2>Subscribe</h2>
+        
         <small>Enter your email so we can send you the latest updates!</small>
         <form onsubmit="event.preventDefault()">
           <div class="field-wrapper">
@@ -47,8 +51,7 @@
           <div class="field-wrapper">
             <input type="submit" onclick="showThankYou()">
           </div>
-          <span class="psw" onclick="showForgotPassword()">Forgot Password?   </span>
-          <span class="signup" onclick="showSignup()">Not a user?  Sign up</span>
+          
         </form>
       </div>
     </div>
