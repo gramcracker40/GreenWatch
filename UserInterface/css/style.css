@@ -251,6 +251,42 @@ textarea {
   animation-iteration-count: infinite;
 }
 
+.preview {
+  display:-webkit-flex   ;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  height: 200px;
+}
+
+.reading {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  flex: 1;
+}
+
+.reading label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.reading .value {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+}
+
 @keyframes bounce {
   0% {
     transform: translateY(0);
