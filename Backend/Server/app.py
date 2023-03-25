@@ -11,7 +11,7 @@ from blocklist import BLOCKLIST
 
 
 from resources.user import blp as UserBlueprint
-
+from resources.room import blp as RoomBlueprint
 
 # factory pattern
 def create_app(db_url=None):
@@ -67,7 +67,9 @@ def create_app(db_url=None):
     with app.app_context():
         db.create_all()
 
+
     api.register_blueprint(UserBlueprint)
+    api.register_blueprint(RoomBlueprint)
 
     return app
 

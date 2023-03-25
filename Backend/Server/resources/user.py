@@ -34,6 +34,9 @@ class UserRegister(MethodView):
         try:
             db.session.add(user)
             db.session.commit()
+
+        except IntegrityError as err:
+            abort(409, message="Duplicate resource identified")
         except SQLAlchemyError as err:
             abort(500, message=f"Database error occurred, error: {err}")
 
@@ -45,11 +48,10 @@ class UserLogin(MethodView):
     @blp.arguments(UserLoginSchema)
     def post(self, user_data):
         user = UserModel.query.filter_by(username=user_data['username']).first()
-        print(user.username)
 
         if user and pbkdf2_sha256.verify(user_data["password"], user.password):
-            access_token = create_access_token(identity=user.id, fresh=True)
-            refresh_token = create_refresh_token(identity=user.id)
+            access_token = create_access_token(identity=user.id, fresh=True, additional_claims={"admin": user.is_admin})
+            refresh_token = create_refresh_token(identity=user.id, additional_claims={"admin": user.is_admin})
             return {"success": True, "access_token": access_token, "refresh_token": refresh_token}
 
         abort(401, message="Invalid credentials")
@@ -61,7 +63,7 @@ class UserLogout(MethodView):
     def post(self):
         jti = get_jwt()['jti']
         BLOCKLIST.add(jti)
-        return {"message": "Successfully logged out"}
+        return {"message": "Successfully logged out"}, 201
 
 
 @blp.route("/refresh")
@@ -69,11 +71,12 @@ class TokenRefresh(MethodView):
     @jwt_required(refresh=True)
     def post(self):
         current_user = get_jwt_identity()
-        new_token = create_access_token(identity=current_user, fresh=False)
+        print(current_user)
+        new_token = create_access_token(identity=current_user, fresh=False, additional_claims={"admin": True})
         
         print(new_token)
 
-        jti = get_jwt(['jti'])
+        jti = get_jwt()['jti']
         BLOCKLIST.add(jti)
         
-        return {"access_token": new_token}
+        return {"access_token": new_token}, 201
