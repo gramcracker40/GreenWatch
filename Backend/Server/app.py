@@ -5,6 +5,7 @@ from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 from db import db
 from blocklist import BLOCKLIST
@@ -12,10 +13,12 @@ from blocklist import BLOCKLIST
 
 from resources.user import blp as UserBlueprint
 from resources.room import blp as RoomBlueprint
+from resources.experiment import blp as ExperimentBlueprint
 
 # factory pattern
 def create_app(db_url=None):
     app = Flask(__name__)
+    CORS(app)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Green Watch REST API"
@@ -70,6 +73,7 @@ def create_app(db_url=None):
 
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(RoomBlueprint)
+    api.register_blueprint(ExperimentBlueprint)
 
     return app
 

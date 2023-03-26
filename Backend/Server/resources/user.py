@@ -16,7 +16,7 @@ blp = Blueprint("users", "users", description="Operations on users")
 
 @blp.route("/register")
 class UserRegister(MethodView):
-    @jwt_required(fresh=True)
+    #@jwt_required(fresh=True)
     @blp.arguments(UserRegisterSchema)
     def post(self, user_data):
         
@@ -29,7 +29,8 @@ class UserRegister(MethodView):
             password=pbkdf2_sha256.hash(user_data['password']),
             is_admin=user_data['is_admin'],
             email=user_data['email'],
-            
+            first_name=user_data['first_name'],
+            last_name=user_data["last_name"]
         )
 
         try:
@@ -37,7 +38,7 @@ class UserRegister(MethodView):
             db.session.commit()
 
         except IntegrityError as err:
-            abort(409, message="Duplicate resource identified")
+            abort(409, message=f"Duplicate resource identified - {err}")
         except SQLAlchemyError as err:
             abort(500, message=f"Database error occurred, error: {err}")
 
@@ -72,10 +73,7 @@ class TokenRefresh(MethodView):
     #@jwt_required(refresh=True)
     def post(self):
         current_user = get_jwt_identity()
-        print(current_user)
         new_token = create_access_token(identity=current_user, fresh=False, additional_claims={"admin": True})
-        
-        print(new_token)
 
         jti = get_jwt()['jti']
         BLOCKLIST.add(jti)

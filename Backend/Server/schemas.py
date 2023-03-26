@@ -23,20 +23,26 @@ class PlainRoomSchema(Schema):
 
 
 class PlainMeasurementSchema(Schema):
-    room_id = fields.Int(dump_only=True, unique=True)
+    room_id = fields.Int(required=True)
     name = fields.Str(unique=True)
 
 
 class PlainAgentSchema(Schema):
-    room_id = fields.Int(dump_only=True, unique=True)
-    name = fields.Str(unique=True)
+    id = fields.Int(dump_only=True, unique=True)
+    room_id = fields.Int(required=True)
+    name = fields.Str(required=True)
 
 
 class PlainExperimentSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
-    room_id = fields.Int(dump_only=True, unique=True)
-    name = fields.Str(unique=True)
+    room_id = fields.Int(required=True)
+    name = fields.Str(required=True)
 
+
+class PlainMessageSchema(Schema):
+    id = fields.Int(dump_only=True, unique=True)
+    room_id = fields.Int(required=True)
+    name = fields.Str(required=True)
 
 
 class MeasurementSchema(PlainMeasurementSchema):
@@ -48,24 +54,31 @@ class MeasurementSchema(PlainMeasurementSchema):
     timestamp = fields.DateTime(dump_only=True)
 
 
+class MessageSchema(PlainMessageSchema):
+    body = fields.String(required=True)
+    user_id = fields.Int(required=True)
+
+
 class RoomSchema(PlainRoomSchema):
     experiments = fields.List(fields.Nested(PlainExperimentSchema), dump_only=True)
     measurements = fields.List(fields.Nested(MeasurementSchema()), dump_only=True)
-
+    messages = fields.List(fields.Nested(MessageSchema()), dump_only=True)
 
 
 class AgentSchema(PlainAgentSchema):
     room = fields.Nested(RoomSchema())
+    public_key = fields.Str(required=True)
+    private_key = fields.Str(required=True, load_only=True)
 
-    public_key = fields.Str(dump_only=True)
 
 
 class ExperimentSchema(PlainExperimentSchema):
-    upper_temp = fields.Float()
-    lower_temp = fields.Float()
+    
+    upper_temp = fields.Float(required=True)
+    lower_temp = fields.Float(required=True)
 
-    lower_hum = fields.Float()
-    upper_hum = fields.Float()
+    lower_hum = fields.Float(required=True)
+    upper_hum = fields.Float(required=True)
 
     average_light = fields.Float(dump_only=True)
     average_pressure = fields.Float(dump_only=True)
@@ -75,9 +88,11 @@ class ExperimentSchema(PlainExperimentSchema):
     start = fields.DateTime(required=True)
     end = fields.DateTime(required=True)
 
-    time_spent_outside = fields.Time()
+    time_spent_outside = fields.Time(dump_only=True)
     alert_on = fields.Boolean(required=True)
+    active = fields.Boolean(dump_only=True)
 
+    room = fields.List(fields.Nested(RoomSchema))
     users = fields.List(fields.Nested(UserRegisterSchema), dump_only=True)
     measurements = fields.List(fields.Nested(MeasurementSchema), dump_only=True)
 
