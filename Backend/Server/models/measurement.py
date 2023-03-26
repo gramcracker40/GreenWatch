@@ -13,6 +13,12 @@ class MeasurementModel(db.Model):
     
     timestamp = db.Column(db.DateTime, nullable=False)
 
-    #relationships
+    #foreign keys
     room_id = db.Column(db.Integer, db.ForeignKey("room.id"), nullable=False)
     experiment_id = db.Column(db.Integer, db.ForeignKey("experiment.id"))
+
+    #relationships
+    room = db.relationship("RoomModel", back_populates="measurements")
+    experiment = db.relationship("ExperimentModel", back_populates="measurements")
+
+    

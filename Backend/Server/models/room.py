@@ -10,8 +10,8 @@ class RoomModel(db.Model):
     room_key_public = db.Column(db.String(30), nullable=False)
     room_key_private = db.Column(db.String(60), nullable=False)
     
-    experiments = db.relationship("ExperimentModel", back_populates="room", lazy=True)
-    measurements = db.relationship("MeasurementModel", back_populates="room", lazy=True)
-    messages = db.relationship("MessageModel", back_populates="room", lazy=True)
+    experiments = db.relationship("ExperimentModel", back_populates="room", lazy=True, cascade="all, delete")
+    measurements = db.relationship("MeasurementModel", back_populates="room", lazy=True, cascade="all, delete")
+    messages = db.relationship("MessageModel", back_populates="room", lazy=True, cascade="all, delete")
 
 

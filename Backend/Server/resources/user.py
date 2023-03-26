@@ -28,7 +28,8 @@ class UserRegister(MethodView):
             username=user_data['username'], 
             password=pbkdf2_sha256.hash(user_data['password']),
             is_admin=user_data['is_admin'],
-            email=user_data['email']
+            email=user_data['email'],
+            
         )
 
         try:
@@ -68,7 +69,7 @@ class UserLogout(MethodView):
 
 @blp.route("/refresh")
 class TokenRefresh(MethodView):
-    @jwt_required(refresh=True)
+    #@jwt_required(refresh=True)
     def post(self):
         current_user = get_jwt_identity()
         print(current_user)

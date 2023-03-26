@@ -29,6 +29,6 @@ class ExperimentModel(db.Model):
     
     #relationships
     room = db.relationship("RoomModel", back_populates="experiments")
-    users = db.relationship("UserModel", back_populates="experiments")
+    users = db.relationship("UserModel", back_populates="experiments", secondary="experiment_users")
     measurements = db.relationship("MeasurementModel", back_populates="experiment")
 

@@ -9,3 +9,8 @@ class MessageModel(db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey("room.id"), nullable=False)
+
+    user = db.relationship("UserModel", back_populates="messages")
+    room = db.relationship("RoomModel", back_populates="messages")
+
+

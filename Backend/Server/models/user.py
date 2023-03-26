@@ -14,7 +14,7 @@ class UserModel(db.Model):
     is_admin = db.Column(db.Boolean)
     email = db.Column(db.String, unique=True, nullable=False)
 
-    experiments = db.relationship("ExperimentModel", back_populates="users", lazy=True)
-    messages = db.relationship("MessageModel", back_populates="users", lazy=True)
+    experiments = db.relationship("ExperimentModel", back_populates="users", secondary="experiment_users")
+    messages = db.relationship("MessageModel", back_populates="user", lazy=True)
 
 
