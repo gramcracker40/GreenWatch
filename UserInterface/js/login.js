@@ -20,6 +20,7 @@ function validateUser() {
   fetch('http://192.168.1.94:5000/login', options)
   .then((res) => {
     if (res.ok) {
+      document.getElementById("invalidCreds").style.visibility = 'hidden';
       showThankYou();
       setTimeout(function() {
         window.location.href = 'home.html';
