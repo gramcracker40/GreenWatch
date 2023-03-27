@@ -41,30 +41,22 @@
         <h2>Sign in</h2>
         <form onsubmit="event.preventDefault()" action="home.html" value="home" method="POST">
           <div class="field-wrapper">
-            <input type="text" name="username" placeholder="username">
+            <input type="text" id="usernameTextbox" name="username" placeholder="username">
             <label>username</label>
           </div>
           <div class="field-wrapper">
-            <input type="password" name="password" placeholder="password" autocomplete="new-password">
+            <input type="password" id="passwordTextbox" name="password" placeholder="password" autocomplete="new-password">
             <label>password</label>
           </div>
           <div class="field-wrapper">
-            <input type="submit" onclick="load('home.html')">
-            <script>
-              function load(url) {
-                event.preventDefault();
-                showThankYou();
-
-                // API Call goes here
-                
-                // wait 3 seconds before loading next page
-                setTimeout(function() {
-                  window.location.href = url;
-                }, 3000);
-              }
-            </script>
+            <input type="submit" onclick="validateUser()">
+            <script src="js/login.js"></script>
           </div>
-          
+          <div class="field-wrapper">
+            <p class="invalid-paragraph" id="invalidCreds">
+              Credintials are invalid.<br>
+              Please try again.</p>
+          </div>
         </form>
       </div>
     </div>

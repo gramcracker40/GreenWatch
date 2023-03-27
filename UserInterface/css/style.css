@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+.invalid-paragraph {
+  color: red;
+  visibility: hidden;
+}
+
 body {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 14px;
