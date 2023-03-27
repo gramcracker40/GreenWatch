@@ -33,3 +33,6 @@ class ExperimentModel(db.Model):
     users = db.relationship("UserModel", back_populates="experiments", secondary="experiment_users")
     measurements = db.relationship("MeasurementModel", back_populates="experiment")
 
+    # def __dict__(self):
+    #     return {"start": self.start, "end": self.end, "alert_on": self.alert_on, "lower_humidity": self.lower_hum, 
+    #             "upper_humidity": self.upper_hum, "lower_temp": self.lower_temp, "upper_temp": self.upper_temp}

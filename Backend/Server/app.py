@@ -1,5 +1,4 @@
 import os
-import secrets
 
 from flask import Flask, jsonify
 from flask_smorest import Api
@@ -9,7 +8,6 @@ from flask_cors import CORS
 
 from db import db
 from blocklist import BLOCKLIST
-
 
 from resources.user import blp as UserBlueprint
 from resources.room import blp as RoomBlueprint
@@ -21,7 +19,7 @@ def create_app(db_url=None):
     CORS(app)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
-    app.config["API_TITLE"] = "Green Watch REST API"
+    app.config["API_TITLE"] = "GreenWatch REST API"
     app.config["API_VERSION"] = "v1"
     app.config["OPENAPI_VERSION"] = "3.0.3"
     app.config["OPENAPI_URL_PREFIX"] = "/"

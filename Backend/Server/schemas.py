@@ -23,7 +23,7 @@ class PlainRoomSchema(Schema):
 
 
 class PlainMeasurementSchema(Schema):
-    room_id = fields.Int(required=True)
+    room_id = fields.Int(dump_only=True)
     name = fields.Str(unique=True)
 
 
@@ -42,7 +42,6 @@ class PlainExperimentSchema(Schema):
 class PlainMessageSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
     room_id = fields.Int(required=True)
-    name = fields.Str(required=True)
 
 
 class MeasurementSchema(PlainMeasurementSchema):
@@ -57,6 +56,7 @@ class MeasurementSchema(PlainMeasurementSchema):
 class MessageSchema(PlainMessageSchema):
     body = fields.String(required=True)
     user_id = fields.Int(required=True)
+    timestamp = fields.DateTime(dump_only=True)
 
 
 class RoomSchema(PlainRoomSchema):
@@ -92,9 +92,24 @@ class ExperimentSchema(PlainExperimentSchema):
     alert_on = fields.Boolean(required=True)
     active = fields.Boolean(dump_only=True)
 
-    room = fields.List(fields.Nested(RoomSchema))
     users = fields.List(fields.Nested(UserRegisterSchema), dump_only=True)
     measurements = fields.List(fields.Nested(MeasurementSchema), dump_only=True)
+
+
+class ExperimentUpdateSchema(Schema):
+    id = fields.Int(dump_only=True, unique=True)
+    
+    start = fields.DateTime()
+    end = fields.DateTime()
+
+    upper_temp = fields.Float()
+    lower_temp = fields.Float()
+
+    lower_hum = fields.Float()
+    upper_hum = fields.Float()
+
+    alert_on = fields.Boolean()
+
 
 
 class DateRangeSchema(Schema):
