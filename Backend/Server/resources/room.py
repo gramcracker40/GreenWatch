@@ -82,11 +82,18 @@ class Measurement(MethodView):
     @blp.arguments(MeasurementSchema)
     def post(self, measurement_data, room_id):
         room = RoomModel.query.get_or_404(room_id)
+
+        active_experiments = [experiment for experiment in room.experiments
+                            if experiment.active]
+
         measurement = MeasurementModel(**measurement_data)
         
         measurement.timestamp = datetime.now()
         measurement.room_id = room_id
 
+        if active_experiments:
+            active_experiments[0].measurements.append(measurement)
+        
         room.measurements.append(measurement)
 
         try:

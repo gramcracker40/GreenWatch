@@ -22,7 +22,8 @@ class ExperimentModel(db.Model):
     end = db.Column(db.DateTime, nullable=False)
 
     time_spent_outside = db.Column(db.Time, nullable=False)
-    alert_on = db.Column(db.Boolean)
+    alert_on = db.Column(db.Boolean, nullable=False)
+    active = db.Column(db.Boolean, nullable=False)
 
     #foreign keys
     room_id = db.Column(db.Integer, db.ForeignKey("room.id"))
