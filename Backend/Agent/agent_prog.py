@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import socket
 from json import dumps
 from json import JSONEncoder
@@ -37,19 +38,21 @@ while True:
     light = 1
     #AirPressure
     pres = round(sense.get_pressure(), 2)
-    
-    #Rounding to the nearest hundreth (0.01)
-    print("Temperature: %sC" %temp)
-    print("Humidity: %s%%" %hum)
-    print("Air Pressure: %s Millibars" %pres)
 
     #Dataset
-    dataSet = {temp, hum, light, pres}
-    
-    print(dataSet)
+    dataSet = {'Temperature': temp,
+               'Humidity': hum,
+               'Lighting': light,
+               'AirPressure': pres}
+    print(dataSet['Temperature'])
+    print(dataSet['Humidity'])
+    print(dataSet['Lighting'])
+    print(dataSet['AirPressure'])
     
     #Encoding data set
     packToSend = jsonData = set_encoder().encode(dataSet)
+    
+    print(jsonData)
     
     message,address = RPIsocket.recvfrom(bufferSize)
     message = message.decode('utf-8')

@@ -6,15 +6,18 @@
   <link rel="stylesheet" href="./css/style.css">
 
 </head>
-<body>
+<body class="body-login">
 <!-- partial:index.partial.html -->
+<!--
 <ul class="nav">
   <li onclick="showLogin()">Login</li>
  
-  <!--li onclick="showForgotPassword()">Forgot password</li-->
+  <!-li onclick="showForgotPassword()">Forgot password</li-->
  
-  <!--li onclick="showContactUs()">Contact us</li-->
+  <!--li onclick="showContactUs()">Contact us</li->
 </ul>
+-->
+
 <!--div  img src="./images/greenwatchlogo" alt="GreenWatch logo"></div-->
 <img src="./images/greenwatchlogo.png" alt="" style="width: 200px; height: 175px">
 <h1 class="animated-header">GreenWatch</h1>
@@ -41,30 +44,22 @@
         <h2>Sign in</h2>
         <form onsubmit="event.preventDefault()" action="home.html" value="home" method="POST">
           <div class="field-wrapper">
-            <input type="text" name="username" placeholder="username">
+            <input type="text" id="usernameTextbox" name="username" placeholder="username">
             <label>username</label>
           </div>
           <div class="field-wrapper">
-            <input type="password" name="password" placeholder="password" autocomplete="new-password">
+            <input type="password" id="passwordTextbox" name="password" placeholder="password" autocomplete="new-password">
             <label>password</label>
           </div>
           <div class="field-wrapper">
-            <input type="submit" onclick="load('home.html')">
-            <script>
-              function load(url) {
-                event.preventDefault();
-                showThankYou();
-
-                // API Call goes here
-                
-                // wait 3 seconds before loading next page
-                setTimeout(function() {
-                  window.location.href = url;
-                }, 3000);
-              }
-            </script>
+            <input type="submit" onclick="validateUser()">
+            <script src="js/login.js"></script>
           </div>
-          
+          <div class="field-wrapper">
+            <p class="invalid-paragraph" id="invalidCreds">
+              Credintials are invalid.<br>
+              Please try again.</p>
+          </div>
         </form>
       </div>
     </div>

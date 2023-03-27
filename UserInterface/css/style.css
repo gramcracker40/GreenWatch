@@ -2,12 +2,21 @@
   box-sizing: border-box;
 }
 
+.invalid-paragraph {
+  color: red;
+  visibility: hidden;
+}
+
 body {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 14px;
-  background: #f6fffd;
+  background: #CAC9C3;
   padding: 20px;
   text-align: center;
+}
+
+.body-login {
+  background: white;
 }
 
 .wrapper {
@@ -196,7 +205,7 @@ body {
   cursor: pointer;
 }
 
-.container {
+/* .container {
   display: inline-block;
   width: 30%;
   height: 200px;
@@ -207,6 +216,18 @@ body {
   vertical-align: top;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+}
+
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+} */
+
 h2 {
   margin: 0;
   padding: 0;
@@ -214,15 +235,99 @@ h2 {
   color: #333;
 }
 
-.measurement {
+/* .measurement {
   font-size: 60px;
   font-weight: bold;
   margin-top: 20px;
   color: green;
+} */
+
+.measurements-container {
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  height: 250px;
+  padding: 20px;
+  background-color: #bdd2a6;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
 }
 
-.notes {
+.title {
+  flex-basis: 40%;
+  justify-content: left;
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+.measurement {
+  display: flex;
+  justify-content: stretch;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.label {
+  flex-basis: 40%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.value {
+  flex-basis: 40%;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: right;
+}
+/* adding notes section css code */
+.notes-container {
   margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.notes-container h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.notes-container ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.notes-container li {
+  margin-bottom: 10px;
+}
+
+.notes-container .note-header {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.notes-container .note-description {
+  font-size: 12px;
+  margin: 0;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 textarea {
@@ -245,46 +350,12 @@ textarea {
   color: #07ad90;
   font-size: 60px;
   text-align: center;
+  /*
   animation-name: bounce;
   animation-duration: 2.5s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-}
-
-.preview {
-  display:-webkit-flex   ;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 200px;
-  height: 200px;
-}
-
-.reading {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  justify-content: left;
-  flex: 1;
-}
-
-.reading label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  text-align: left;
-}
-
-.reading .value {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
+  */
 }
 
 @keyframes bounce {
@@ -312,3 +383,5 @@ small {
     -webkit-transform: translate(-50%, -50%) rotate(-45deg) scale(1);
   }
 }
+/* Add Fontawesome library for icon use*/
+

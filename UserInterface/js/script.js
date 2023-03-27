@@ -21,3 +21,7 @@ function showContactUs(){
 function showThankYou(){
   prism.style.transform = "translateZ(-100px) rotateX( 90deg)";
 }
+
+const settingsIcon = document.createElement('i');
+settingsIcon.classList.add('fas', 'fa-cog');
+document.getElementById('settings-icon').appendChild(settingsIcon);
