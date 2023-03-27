@@ -5,7 +5,7 @@
 body {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 14px;
-  background: #f6fffd;
+  background: #CAC9C3;
   padding: 20px;
   text-align: center;
 }
@@ -250,8 +250,6 @@ textarea {
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
-
-
 
 @keyframes bounce {
   0% {
