@@ -1,5 +1,5 @@
 <p align="center">
-  #GreenWatch
+# GreenWatch
 </p>
 
 <p align="center">
