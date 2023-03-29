@@ -1,193 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>GreenWatch Home</title>
-  <link rel="stylesheet" href="./css/style.css">
-  <link rel="stylesheet" href="./assets/font-awesome-4.7.0/font-awesome/css/font-awesome.css">
-  <style>
-    
-  </style>
+	<title>My Minimalistic Home Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			background-color: #ffffff;
+			color: #000000;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #07ad90;
+			color: #ffffff;
+			padding: 20px;
+			text-align: center;
+		}
+		h1 {
+			margin: 0;
+			font-size: 32px;
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+		main {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 20px;
+			padding: 20px;
+		}
+		.card {
+			background-color: white;
+			border-radius: 5px;
+      border-color: #07ad90;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+			padding: 20px;
+			text-align: center;
+			cursor: pointer;
+		}
+		.card img {
+			max-width: 100%;
+			height: auto;
+		}
+		.plus-card {
+			background-color: white;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			padding: 20px;
+			text-align: center;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.plus-card:hover {
+			background-color: #06a27b;
+		}
+		.plus-card-img {
+			margin-left: 1500px;
+      width: 50px;
+		}
+	</style>
 </head>
 <body>
-  <div class="header">
-    <i class="fa fa-cog fa-4x" style="color: grey; position: absolute; top: 50px; right: 50px;"></i>
-  </div>
-  <!--div id="settings-icon" style="color: black;"></div-->
-  <div class="row">
-    <div class="column">
-
-  
-  <div class="measurements-container">
-    <div class="title">Room 1</div>
-    <div class="measurement">
-      <div class="label">Temperature:</div>
-      <div class="value">-- °F</div>
-    </div>
-    <div class="measurement">
-      <div class="label">Humidity:</div>
-      <div class="value">-- %</div>
-    </div>
-    <div class="measurement">
-      <div class="label">Air Pressure:</div>
-      <div class="value">-- hPa</div>
-    </div>
-    <div class="measurement">
-      <div class="label">Light:</div>
-      <div class="value">-- lux</div>
-    </div>
-  </div>
-  <script>
-    function getSensorData() {
-      // Make an AJAX call to the server to get the sensor data
-      // You can use the XMLHttpRequest object or jQuery's $.ajax() function
-    
-      $.ajax({
-        url: "get-sensor-data.php",
-        success: function(data) {
-          // Update the UI with the sensor data
-          $("#temperature").text(data.temperature + " °F");
-          $("#humidity").text(data.humidity + "%");
-          $("#light").text(data.light + " lux");
-          $("#pressure").text(data.pressure + " hPa");
-        }
-      });
-    }
-
-    // Call the getSensorData function every 5 seconds
-    setInterval(getSensorData, 5000);
-  </script>
-
-<div class="measurements-container">
-  <div class="title">Room 2</div>
-  <div class="measurement">
-    <div class="label">Temperature:</div>
-    <div class="value">-- °F</div>
-  </div>
-  <div class="measurement">
-    <div class="label">Humidity:</div>
-    <div class="value">-- %</div>
-  </div>
-  <div class="measurement">
-    <div class="label">Air Pressure:</div>
-    <div class="value">-- hPa</div>
-  </div>
-  <div class="measurement">
-    <div class="label">Light:</div>
-    <div class="value">-- lux</div>
-  </div>
-</div>
-
-  <script>
-    function getSensorData() {
-      // Make an AJAX call to the server to get the sensor data
-      // You can use the XMLHttpRequest object or jQuery's $.ajax() function
-      // Here's an example using jQuery:
-      $.ajax({
-        url: "get-sensor-data.php",
-        success: function(data) {
-          // Update the UI with the sensor data
-          $("#temperature").text(data.temperature + " °F");
-          $("#humidity").text(data.humidity + "%");
-          $("#light").text(data.light + " lux");
-          $("#pressure").text(data.pressure + " hPa");
-        }
-      });
-    }
-
-    
-
-    // Call the getSensorData function every 5 seconds
-    setInterval(getSensorData, 5000);
-  </script>
-
-<div class="measurements-container">
-  <div class="title">Room 3</div>
-  <div class="measurement">
-    <div class="label">Temperature:</div>
-    <div class="value">-- °F</div>
-  </div>
-  <div class="measurement">
-    <div class="label">Humidity:</div>
-    <div class="value">-- %</div>
-  </div>
-  <div class="measurement">
-    <div class="label">Air Pressure:</div>
-    <div class="value">-- hPa</div>
-  </div>
-  <div class="measurement">
-    <div class="label">Light:</div>
-    <div class="value">-- lux</div>
-  </div>
-</div>
-
-  <script>
-    function getSensorData() {
-      // Make an AJAX call to the server to get the sensor data
-      // You can use the XMLHttpRequest object or jQuery's $.ajax() function
-      // Here's an example using jQuery:
-      $.ajax({
-        url: "get-sensor-data.php",
-        success: function(data) {
-          // Update the UI with the sensor data
-          $("#temperature").text(data.temperature + " °F");
-          $("#humidity").text(data.humidity + "%");
-          $("#light").text(data.light + " lux");
-          $("#pressure").text(data.pressure + " hPa");
-        }
-      });
-    }
-
-    // Call the getSensorData function every 5 seconds
-    setInterval(getSensorData, 5000);
-  </script>
-    </div>
-  </div>
-</body>
-</html>
-
-
-
-
-
-
-
-<!-- <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>GreenWatch</title>
-        <link rel="stylesheet" href="./css/style.css">
-    </head>
-    <body>
-        <div class="container">
-            <h2>Temperature</h2>
-            <div class="measurement">22.5&deg;C</div>
-            <div class="notes">
-              <textarea placeholder="Add notes here"></textarea>
-            </div>
-          </div>
-          <div class="container">
-            <h2>Humidity</h2>
-            <div class="measurement">65%</div>
-            <div class="notes">
-              <textarea placeholder="Add notes here"></textarea>
-            </div>
-          </div>
-          <div class="container">
-            <h2>Light</h2>
-            <div class="measurement">120 lux</div>
-            <div class="notes">
-              <textarea placeholder="Add notes here"></textarea>
-            </div>
-          </div>
-          <div class="settings">
-            <i class="fa fa-cog"></i>
-          </div>
-    </body>
-</html> -->
+	<header>
+		<h1>GreenWatch
+      <a href="#">
+        <img src="images/plus.png" class="plus-card-img">
+      </a>
+    </h1>
+	</header>
+	<main>
+		<div class="card">
+			<a href="#">
+				<img src="https://via.placeholder.com/300x200.png?text=Room+1" alt="Room 1">
+				<h2>Room 1</h2>
+				<p>Description of Room 1.</p>
+			</a>
+		</div>
+		<div class="card">
+			<a href="#">
+				<img src="https://via.placeholder.com/300x200.png?text=Room+2" alt="Room 2">
+				<h2>Room 2</h2>
+				<p>Description of Room 2.</p>
+			</a>
+		</div>
+		<div class="card">
+			<a href="#">
+				<img src="https://via.placeholder.com/300x200.png?text=Room+3" alt="Room 3">
+				<h2>Room 3</h2>
+				<p>Description of Room 3.</p>
+			</a>
+		</div>
+		<div class="card">
+			<a href="#">
+				<img src="https://via.placeholder.com/300x200.png?text=Room+4" alt="Room 4">
+				<h2>Room 4</h2>
+				<p>Description of Room 4.</p>
+			</a>
+		</div
