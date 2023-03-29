@@ -1,6 +1,5 @@
 from db import db
 
-
 class ExperimentUsersModel(db.Model):
     __tablename__ = "experiment_users"
 
