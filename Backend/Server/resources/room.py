@@ -108,7 +108,7 @@ class Measurement(MethodView):
 
         return {"message": "Successfully added new measurement"}, 201
     
-
+    #@jwt_required()
     @blp.arguments(DateRangeSchema)
     def get(self, dates, room_id):
         room = RoomModel.query.get_or_404(room_id)
@@ -130,19 +130,36 @@ class Measurement(MethodView):
 
         return {"Success": True, "data": valid}, 200
 
+@blp.route("/rooms/messages")
+class Messages(MethodView):
+
+    #@jwt_required()
+    @blp.response(200, MessageSchema(many=True))
+    def get(self):
+        return MessageModel.query.all()
+
 
 @blp.route("/rooms/<int:room_id>/messages")
 class Message(MethodView):
+    '''
+    Used to work with messages in the seperate rooms. 
+    Allows notes to be made about experiment progress. 
+    '''
     #@jwt_required()
     @blp.arguments(MessageSchema)
     def post(self, message_data, room_id):
-    
+        '''
+        Create a new message, adds the message to the room messages
+        and also the users messages. Which will be tracked in the database
+        for both resources
+        '''
+
         room = RoomModel.query.get_or_404(room_id)
         user = UserModel.query.get_or_404(message_data["user_id"])
-        
+
         message = MessageModel(**message_data)
         message.timestamp = datetime.now()
-        
+
         room.messages.append(message)
         user.messages.append(message)
 
@@ -173,4 +190,5 @@ class SpecificMessage(MethodView):
 
         return {"Success": True}, 200
     
+
 

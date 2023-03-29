@@ -9,9 +9,11 @@ from flask_cors import CORS
 from db import db
 from blocklist import BLOCKLIST
 
+from resources.greenhouse import blp as GreenhouseBlueprint
 from resources.user import blp as UserBlueprint
 from resources.room import blp as RoomBlueprint
 from resources.experiment import blp as ExperimentBlueprint
+from resources.server import blp as ServerBlueprint
 
 # factory pattern
 def create_app(db_url=None):
@@ -72,6 +74,8 @@ def create_app(db_url=None):
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(RoomBlueprint)
     api.register_blueprint(ExperimentBlueprint)
+    api.register_blueprint(GreenhouseBlueprint)
+    api.register_blueprint(ServerBlueprint)
 
     return app
 

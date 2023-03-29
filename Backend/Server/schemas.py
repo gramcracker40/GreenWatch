@@ -1,6 +1,5 @@
 from marshmallow import Schema, fields
 
-
 class UserLoginSchema(Schema):
     id = fields.Int(dump_only=True)
     username = fields.Str(required=True)
@@ -30,7 +29,7 @@ class PlainMeasurementSchema(Schema):
 class PlainAgentSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
     room_id = fields.Int(required=True)
-    name = fields.Str(required=True)
+    server_id = fields.Int(required=True)
 
 
 class PlainExperimentSchema(Schema):
@@ -41,7 +40,21 @@ class PlainExperimentSchema(Schema):
 
 class PlainMessageSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
-    room_id = fields.Int(required=True)
+    room_id = fields.Int(dump_only=True)
+
+
+class PlainServerSchema(Schema):
+    id = fields.Int(dump_only=True, unique=True)
+    name = fields.Str(required=True)
+
+
+class GreenhouseSchema(Schema):
+    id = fields.Int(dump_only=True, unique=True)
+    name = fields.Str(required=True)
+    location = fields.Str()
+
+    rooms = fields.List(fields.Nested(PlainRoomSchema()), dump_only=True)
+    servers = fields.List(fields.Nested(PlainServerSchema()), dump_only=True)
 
 
 class MeasurementSchema(PlainMeasurementSchema):
@@ -66,10 +79,9 @@ class RoomSchema(PlainRoomSchema):
 
 
 class AgentSchema(PlainAgentSchema):
-    room = fields.Nested(RoomSchema())
-    public_key = fields.Str(required=True)
     private_key = fields.Str(required=True, load_only=True)
-
+    duration = fields.Time(required=True)
+    ip_address = fields.IPv4(required=True)
 
 
 class ExperimentSchema(PlainExperimentSchema):
@@ -111,7 +123,16 @@ class ExperimentUpdateSchema(Schema):
     alert_on = fields.Boolean()
 
 
+class ServerSchema(PlainServerSchema):
+    
+    greenhouse_id = fields.Integer(required=True)
+    agents = fields.List(fields.Nested(AgentSchema), dump_only=True)
+    ip_address = fields.IPv4(required=True)
+
 
 class DateRangeSchema(Schema):
     start_date = fields.Date(required=True, format="%Y-%m-%d")
     end_date = fields.Date(required=True, format="%Y-%m-%d")
+
+
+
