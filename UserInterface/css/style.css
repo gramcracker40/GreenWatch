@@ -10,7 +10,7 @@
 body {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 14px;
-  background: #CAC9C3;
+  background: lightgray;
   padding: 20px;
   text-align: center;
 }
@@ -243,7 +243,6 @@ h2 {
 } */
 
 .measurements-container {
-  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -251,8 +250,8 @@ h2 {
   width: 50%;
   height: 250px;
   padding: 20px;
-  background-color: #bdd2a6;
-  border: 1px solid #ccc;
+  background-color: white;
+  border: 1px solid #07ad90;
   border-radius: 10px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
