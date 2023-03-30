@@ -6,7 +6,7 @@ class AgentModel(db.Model):
     #attributes
     id = db.Column(db.Integer, unique=True, primary_key=True)
     private_key = db.Column(db.String, unique=True, nullable=False)
-    ip_address = db.Column(db.String, unique=True, nullable=False)
+    ip_address = db.Column(db.String, nullable=False)
     duration = db.Column(db.Time, nullable=False)
 
     #foreign keys 
