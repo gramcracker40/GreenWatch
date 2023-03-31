@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Nav Bar-->
+    <nav>
+        <div class="logo">
+            <a href="#"></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Rooms</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+    <!--Room Page Content-->
+    <!--Experiments Section-->
+    <div class="content">
+        <div class="room-header">
+            <h1>Room name</h1>
+            <div class="room-actions">
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        </div>
+        <div class="chart-filters">
+            <label for="chart-filter">Filter:</label>
+            <select id="chart-filter">
+                <option value="6h">Last 6h</option>
+                <option value="12h">Last 12h</option>
+                <option value="24h">Last 24h</option>
+            </select>
+        </div>
+        <div class="chart-container">
+            <div class="chart-item">
+                <canvas id="temperature-chart"></canvas>
+                <h2>Temperature</h2>
+            </div>
+            <div class="chart-item">
+                <canvas id="humidity-chart"></canvas>
+                <h2>Humidity</h2>
+            </div>
+            <div class="chart-item">
+                <canvas id="air-pressure-chart"></canvas>
+                <h2>Air Pressure</h2>
+            </div>
+            <div class="chart-item">
+                <canvas id="light-chart"></canvas>
+                <h2>Light</h2>
+            </div>
+        </div>
+        <div class="experiments-section">
+            <h2>Experiments</h2>
+            <ul class="experiment-list">
+                <li>Experiment 1</li>
+                <li>Experiment 2</li>
+                <li>Experiment 3</li>
+            </ul>
+            <div class="experiment-actions">
+                <button>Add Experiment</button>
+                <button>Edit Experiments</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+</html>
+<html></html>
