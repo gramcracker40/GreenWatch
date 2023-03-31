@@ -1,44 +1,33 @@
-const http = require('http');
+function validateUser() {
+  event.preventDefault();
 
+  const username = document.getElementById('usernameTextbox').value;
+  const password = document.getElementById('passwordTextbox').value;
 
+  const user = {
+    "username": username,
+    "password": password
+  }
 
-// let authTokens = {
-//     'Content-Type': 'application/json',
-//     'Authentication': token
-// }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  }
 
-JWT = ""
-
-// const token = Bearer ${JWT}
-
-const auth = {
-    "username": "kpuilliam",
-    "password": "CrazyPasswordBro"
+  fetch('http://192.168.1.94:5000/login', options)
+  .then((res) => {
+    if (res.ok) {
+      document.getElementById("invalidCreds").style.visibility = 'hidden';
+      showThankYou();
+      setTimeout(function() {
+        window.location.href = 'home.html';
+      }, 3000);
+    }else{
+      console.log("Invalid Credentials");
+      document.getElementById("invalidCreds").style.visibility = 'visible';
+    }
+  })
 }
-
-const options = {
-  port: 5000,
-  hostname: '127.0.0.1',
-  path: '/login',
-  method: 'POST',
-  body: auth
-};
-
-const req = http.request(options, res => {
-  let responseData = '';
-  res.on('data', chunk => {
-    responseData += chunk;
-  });
-  res.on('end', () => {
-    // Success! Parse the response as JSON
-    let jsonResponse = JSON.parse(responseData);
-    console.log(jsonResponse);
-  });
-});
-
-req.on('error', error => {
-  // Handle errors here
-  console.error(error);
-});
-
-req.end();

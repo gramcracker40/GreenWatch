@@ -20,7 +20,6 @@ class UserRegister(MethodView):
     @blp.arguments(UserRegisterSchema)
     def post(self, user_data):
         
-        
         if UserModel.query.filter(UserModel.username == user_data["username"]).first():
             abort(409, message="A user with that username already exists")
 
@@ -79,3 +78,12 @@ class TokenRefresh(MethodView):
         BLOCKLIST.add(jti)
         
         return {"access_token": new_token}, 201
+
+
+
+@blp.route("/users")
+class Users(MethodView):
+    #@jwt_required(refresh=True)
+    @blp.response(200, UserRegisterSchema(many=True))
+    def get(self):
+        return UserModel.query.all()

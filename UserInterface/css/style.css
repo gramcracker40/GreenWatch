@@ -2,12 +2,21 @@
   box-sizing: border-box;
 }
 
+.invalid-paragraph {
+  color: red;
+  visibility: hidden;
+}
+
 body {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 14px;
-  background: #CAC9C3;
+  background: lightgray;
   padding: 20px;
   text-align: center;
+}
+
+.body-login {
+  background: white;
 }
 
 .wrapper {
@@ -196,6 +205,55 @@ body {
   cursor: pointer;
 }
 
+/* Room page css, will edit for aesthetics once everything works */
+
+/* Room page container */
+.room-page-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Page header */
+
+.room-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.room-page-header h2 {
+  margin: 0;
+}
+
+/* Chart Containers */
+
+.chart-container {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+/* Chart filter container */
+
+.chart-filter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chart-filter-container label {
+  margin-right: 10px;
+}
+
+.chart-filter-container select {
+  height: 30px;
+}
+
+/* Room page css, will edit for aesthetics once everything works */
+
+
 /* .container {
   display: inline-block;
   width: 30%;
@@ -234,7 +292,6 @@ h2 {
 } */
 
 .measurements-container {
-  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -244,6 +301,8 @@ h2 {
   padding: 20px;
   background-color: #07ad90;
   border: 1px solid #ccc;
+  background-color: white;
+  border: 1px solid #07ad90;
   border-radius: 10px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
@@ -341,10 +400,12 @@ textarea {
   color: #07ad90;
   font-size: 60px;
   text-align: center;
+  /*
   animation-name: bounce;
   animation-duration: 2.5s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+  */
 }
 
 @keyframes bounce {
