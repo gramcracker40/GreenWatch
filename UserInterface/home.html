@@ -11,6 +11,7 @@
   <title>GreenWatch Home</title>
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./assets/font-awesome-4.7.0/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <style>
     
   </style>
@@ -18,7 +19,10 @@
 <body>
 
   <div class="header">
-    <i class="fa fa-cog fa-4x" style="color: grey; position: absolute; top: 50px; right: 50px;"></i>
+    <!-- <i class="fa fa-cog fa-4x" style="color: grey; position: absolute; top: 50px; right: 50px;"></i> -->
+    <button type="button" class="btn btn-success btn-lg" style="position: absolute; top: 50px; right: 50px; color: #07ad90;">
+      <i class="fa fa-cog fa-4x" style="color: grey;"></i>
+    </button>
   </div>
   <!--div id="settings-icon" style="color: black;"></div-->
   <div class="row">
@@ -149,6 +153,13 @@
     setInterval(getSensorData, 5000);
   </script>
     </div>
+  </div>
+
+  <div class="notes-container">
+    <h3>Greenhouse Notes</h3>
+    <ul id="notes-list">
+      <!-- notes will be added here with javascript -->
+    </ul>
   </div>
 </body>
 </html>
