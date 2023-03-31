@@ -205,6 +205,10 @@ body {
   cursor: pointer;
 }
 
+/* Header continuous across all pages */
+
+
+
 /* Room page css, will edit for aesthetics once everything works */
 
 /* Room page container */
@@ -249,6 +253,127 @@ body {
 
 .chart-filter-container select {
   height: 30px;
+}
+
+/* Experiments Container */
+
+.experiment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.experiment-table th,
+.experiment-table td {
+  border: 1 px #07ad90;
+  padding: 10px;
+}
+
+.experiment-table th {
+  text-align: left;
+  background-color: #a6979c;
+}
+
+.experiment-table td {
+  text-align: center;
+}
+
+/* Add experiment button */
+.add-experiment-btn{
+  background-color: #07ad90;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-experiment-btn:hover {
+  background-color: #3e8e41;
+}
+
+/* Modal dialogue - a modal is like a pop up window */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(200,200,200,0.3);
+}
+/* Content of the modal */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+/* Close Button */
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Save button */
+.save-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #3e8e41;
+}
+
+/*  error msg */
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+/* loading spinner */
+
+.overlay {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 0;
 }
 
 /* Room page css, will edit for aesthetics once everything works */
@@ -306,6 +431,10 @@ h2 {
   border-radius: 10px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
+}
+
+.measurements-container:hover {
+  background-color: #4CAF50;
 }
 
 .title {
