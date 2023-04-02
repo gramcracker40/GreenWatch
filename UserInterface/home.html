@@ -11,20 +11,15 @@
     
   </style>
 </head>
+<body>
 <header>
-  <div class="logo">
-    <img src="./images/greenwatchlogo.png" alt="greenwatchlogo" style="height: 50px;">
-  </div>
-  <div class="title">
-    <h1>GreenWatch Monitoring System</h1>
-  </div>
-  <div class="cog-icon">
-    <i class="fa fa-cogs"></i>
-  </div>
+  <div class="header" style="background-color: #06a27b;">
+    <!-- <i class="fa fa-cog fa-4x" style="color: grey; position: absolute; top: 50px; right: 50px;"></i> -->
+    <button type="button" class="btn btn-success btn-lg" style="position: absolute; top: 50px; right: 50px; color: #07ad90;">
+      <i class="fa fa-cog fa-4x" style="color: grey;"></i>
+    </button>
   </div>
 </header>
-<body>
-
   <!--div id="settings-icon" style="color: black;"></div-->
   <div class="row">
     <div class="column">
@@ -247,19 +242,26 @@
 			max-width: 100%;
 			height: auto;
 		}
+
+		.card:hover {
+			background-color: #eeeeee;
+		}
+
 		.plus-card {
 			background-color: white;
 			border-radius: 5px;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 			padding: 20px;
+			color: #999999;
 			text-align: center;
 			cursor: pointer;
-			display: flex;
+			/* display: flex; */
 			align-items: center;
 			justify-content: center;
 		}
 		.plus-card:hover {
-			background-color: #06a27b;
+			background-color: #eeeeee;
+			/* #06a27b */
 		}
 		.plus-card-img {
 			margin-left: 1500px;
@@ -270,38 +272,33 @@
 <body>
 	<header>
 		<h1>GreenWatch
-      <a href="#">
-        <img src="images/plus.png" class="plus-card-img">
-      </a>
     </h1>
 	</header>
-	<main>
-		<div class="card">
-			<a href="#">
-				<img src="https://via.placeholder.com/300x200.png?text=Room+1" alt="Room 1">
-				<h2>Room 1</h2>
-				<p>Description of Room 1.</p>
-			</a>
-		</div>
-		<div class="card">
-			<a href="#">
-				<img src="https://via.placeholder.com/300x200.png?text=Room+2" alt="Room 2">
-				<h2>Room 2</h2>
-				<p>Description of Room 2.</p>
-			</a>
-		</div>
-		<div class="card">
-			<a href="#">
-				<img src="https://via.placeholder.com/300x200.png?text=Room+3" alt="Room 3">
-				<h2>Room 3</h2>
-				<p>Description of Room 3.</p>
-			</a>
-		</div>
-		<div class="card">
-			<a href="#">
-				<img src="https://via.placeholder.com/300x200.png?text=Room+4" alt="Room 4">
-				<h2>Room 4</h2>
-				<p>Description of Room 4.</p>
-			</a>
-		</div
->>>>>>> 9f76bfce6ae7478256217b63a318ac0734e64281
+	<script src="js/home.js"></script>
+</body>
+
+<!-- <main>
+	<div class="card">
+		<h2>Room 1</h2>
+		<p id="Room 1">...</p>
+		<a href="#">
+			
+		</a>
+	</div>
+	<div class="card">
+		<h2>Room 2</h2>
+		<p id="Room 2">...</p>
+	</div>
+	<div class="card">
+		<h2>Room 3</h2>
+		<p id="Room 3">...</p>
+	</div>
+	<div class="card">
+		<h2>Room 4</h2>
+		<p id="Room 4">...</p>
+	</div>
+	<div class="plus-card">
+		<img src="images/plus.png" width="50px">
+		<h2>Add new room</h2>
+	</div>
+</main> -->
