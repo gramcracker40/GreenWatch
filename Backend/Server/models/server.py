@@ -13,4 +13,4 @@ class ServerModel(db.Model):
     
     #relationships
     greenhouse = db.relationship("GreenhouseModel", back_populates="servers")
-    agents = db.relationship("AgentModel", back_populates="server")
+    agents = db.relationship("AgentModel", back_populates="server", cascade="all, delete")

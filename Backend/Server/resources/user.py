@@ -2,7 +2,7 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import UserLoginSchema, UserRegisterSchema
+from schemas import UserLoginSchema, UserRegisterSchema, UserUpdateSchema
 from models import UserModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
@@ -80,10 +80,50 @@ class TokenRefresh(MethodView):
         return {"access_token": new_token}, 201
 
 
-
 @blp.route("/users")
 class Users(MethodView):
     #@jwt_required(refresh=True)
     @blp.response(200, UserRegisterSchema(many=True))
     def get(self):
         return UserModel.query.all()
+    
+
+
+@blp.route("/users/<int:user_id>")
+class User(MethodView):
+    #@jwt_required(refresh=True)
+    def delete(self, user_id):
+        user = UserModel.query.get_or_404(user_id)
+
+        try:
+            db.session.delete(user)
+            db.session.commit()
+        except SQLAlchemyError as err:
+            abort(500, message=f"Error in DB drivers --> Error code: {err}")
+
+        return {"Success": True}, 200
+
+
+    #@jwt_required(refresh=True)
+    @blp.arguments(UserUpdateSchema)
+    def patch(self, user_data, user_id):
+        '''
+        test for admin credentials
+        '''
+        
+        user = UserModel.query.get_or_404(user_id)
+
+        for key, value in user_data.items():
+            if key != "password":
+                setattr(user, key, value)
+
+        try:
+            hashed = pbkdf2_sha256.hash(user_data["password"])
+            user.password = hashed
+        # KeyError is thrown in case of "password" not being present in user_data
+        except KeyError:
+            pass
+
+        db.session.commit()
+
+        return {"Success": True}, 201

@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import RoomSchema, MeasurementSchema, DateRangeSchema, MessageSchema
+from schemas import RoomSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema
 from models import RoomModel, MeasurementModel, MessageModel, UserModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
@@ -186,5 +186,14 @@ class SpecificMessage(MethodView):
 
         return {"Success": True}, 200
     
+    #@jwt_required()
+    @blp.arguments(MessageUpdateSchema)
+    def patch(self, message_data, message_id):
+        message = MessageModel.query.get_or_404(message_id)
 
+        for key, value in message_data.items():
+            setattr(message, key, value)
 
+        db.session.commit()
+
+        return {"Success": True}, 201
