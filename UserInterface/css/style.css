@@ -78,7 +78,7 @@ body {
   border: none;
   background: transparent;
   line-height: 2em;
-  border-bottom: 1px solid #07ad90;
+  border-bottom: 1px solid rgb(7, 173, 144);
   color: #666;
 }
 .face .content .field-wrapper input[type=text]::-webkit-input-placeholder, .face .content .field-wrapper input[type=password]::-webkit-input-placeholder, .face .content .field-wrapper textarea::-webkit-input-placeholder {
