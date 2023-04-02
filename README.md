@@ -29,7 +29,7 @@ In [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInt
 
 ## Contributors
 
-- [Garret Mathers](https://github.com/gramcracker40): Project Lead & Backend
+- [Garrett Mathers](https://github.com/gramcracker40): Project Lead & Backend
 - [Kolten Pulliam](https://github.com/klpulliam-37): API & Frontend
 - [Derrick Pollock](https://github.com/derrk): Frontend & GUI
 - [Edwin Mondragon](https://github.com/Takaximos): Hardware

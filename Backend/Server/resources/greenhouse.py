@@ -13,8 +13,19 @@ from datetime import datetime, date, time
 
 blp = Blueprint("greenhouse", "greenhouse", description="Operations on greenhouses")
 
-@blp.route("/greenhouse")
+@blp.route("/greenhouses/<int:greenhouse_id>")
 class Greenhouse(MethodView):
+    
+    #@jwt_required()
+    @blp.response(200, GreenhouseSchema())
+    def get(self, greenhouse_id):
+        '''
+        Get a single greenhouse by id
+        '''
+        return GreenhouseModel.query.get_or_404(greenhouse_id)
+    
+@blp.route("/greenhouses")
+class Greenhouses(MethodView):
     #@jwt_required()
     @blp.arguments(GreenhouseSchema())
     def post(self, greenhouse_data):
@@ -35,3 +46,12 @@ class Greenhouse(MethodView):
             abort(500, message=f"An unhandled server error has occurred -> {err}")
 
         return {"Success": True}, 201
+    
+    
+    #@jwt_required()
+    @blp.response(200, GreenhouseSchema(many=True))
+    def get(self):
+        '''
+        Get a single greenhouse by id
+        '''
+        return GreenhouseModel.query.all()

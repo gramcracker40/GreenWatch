@@ -32,14 +32,10 @@ class Rooms(MethodView):
         create new room as specified in payload
         '''
         try:
-            public = pbkdf2_sha256.hash(rand_string(size=30)) 
-            private = pbkdf2_sha256.hash(rand_string(size=60))
+            # public = pbkdf2_sha256.hash(rand_string(size=30)) 
+            # private = pbkdf2_sha256.hash(rand_string(size=60))
 
-            new_room = RoomModel(
-                name=room_data['name'], 
-                room_key_public=public,
-                room_key_private=private
-            )
+            new_room = RoomModel(**room_data)
 
             db.session.add(new_room)
             db.session.commit()

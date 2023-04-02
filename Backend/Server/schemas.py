@@ -18,6 +18,7 @@ class UserRegisterSchema(Schema):
 
 class PlainRoomSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
+    greenhouse_id = fields.Int(required=True)
     name = fields.Str(required=True, unique=True)
 
 
@@ -79,10 +80,13 @@ class RoomSchema(PlainRoomSchema):
 
 
 class AgentSchema(PlainAgentSchema):
-    private_key = fields.Str(required=True, load_only=True)
     duration = fields.Time(required=True)
-    ip_address = fields.IPv4(required=True)
+    ip_address = fields.String(required=True)
 
+
+class AgentUpdateSchema(Schema):
+    duration = fields.Time()
+    ip_address = fields.String()
 
 class ExperimentSchema(PlainExperimentSchema):
     
@@ -127,7 +131,7 @@ class ServerSchema(PlainServerSchema):
     
     greenhouse_id = fields.Integer(required=True)
     agents = fields.List(fields.Nested(AgentSchema), dump_only=True)
-    ip_address = fields.IPv4(required=True)
+    ip_address = fields.String(required=True)
 
 
 class DateRangeSchema(Schema):
