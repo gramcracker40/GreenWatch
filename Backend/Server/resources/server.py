@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import ServerSchema, AgentSchema, AgentUpdateSchema
+from schemas import ServerSchema, AgentSchema, AgentUpdateSchema, ServerUpdateSchema
 from models import ServerModel, AgentModel, RoomModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
@@ -38,6 +38,36 @@ class Servers(MethodView):
     @blp.response(200, ServerSchema(many=True))
     def get(self):
         return ServerModel.query.all()
+
+
+@blp.route("/servers/<int:server_id>")
+class Server(MethodView):
+    #@jwt_required()
+    def delete(self, server_id):
+        server = ServerModel.query.get_or_404(server_id)
+
+        try:
+            db.session.delete(server)
+            db.session.commit()
+        except SQLAlchemyError as err:
+            abort(500, message=f"Unhandled server error has occurred --> {err}")
+
+        return {"Success": True}, 200
+    
+    #@jwt_required()
+    @blp.arguments(ServerUpdateSchema())
+    def patch(self, server_data, server_id):
+        '''
+        update a server, can only update name and ip_address
+        '''
+        server = ServerModel.query.get_or_404(server_id)
+
+        for key, value in server_data.items():
+            setattr(server, key, value)
+
+        db.session.commit()
+
+        return {"Success": True}, 201
 
 
 @blp.route("/servers/agents")
@@ -96,11 +126,18 @@ class Agent(MethodView):
             abort(500, message=f"Unresolved server error: --> {err}")
 
 
-        return {"Success":True}
+        return {"Success":True}, 200
 
     @blp.arguments(AgentUpdateSchema())
-    def patch(self, agent_id):
+    def patch(self, agent_data, agent_id):
         '''
-        NEED TO IMPLEMENT
+        update an agent, can only update ip_address and duration
         '''
         agent = AgentModel.query.get_or_404(agent_id)
+
+        for key, value in agent_data.items():
+            setattr(agent, key, value)
+
+        db.session.commit()
+
+        return {"Success": True}, 201

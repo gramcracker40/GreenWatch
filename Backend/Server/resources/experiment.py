@@ -102,36 +102,14 @@ class Experiment(MethodView):
     #@jwt_required()
     @blp.arguments(ExperimentUpdateSchema)
     def patch(self, experiment_data, experiment_id):
-        print(experiment_data)
         experiment = ExperimentModel.query.get_or_404(experiment_id)
 
-        if experiment_data["start"]:
-            experiment.start = experiment_data["start"]
-        
-        if experiment_data["end"]:
-            experiment.end = experiment_data["end"]
-
-        if experiment_data["lower_temp"]:
-            experiment.lower_temp = experiment_data["lower_temp"]
-        
-        if experiment_data["higher_temp"]:
-            experiment.higher_temp = experiment_data["higher_temp"]
-
-        if experiment_data["lower_humidity"]:
-            experiment.lower_hum = experiment_data["lower_hum"]
-        
-        if experiment_data["upper_humidity"]:
-            experiment.upper_hum = experiment_data["upper_hum"]
-
-        db.session.merge(experiment)
+        for key, value in experiment_data.items():
+            setattr(experiment, key, value)
+            
         db.session.commit()
 
-        print(experiment_data)
-
-
-
         return {"Success": True}, 201
-
 
 
 

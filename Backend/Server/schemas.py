@@ -16,6 +16,15 @@ class UserRegisterSchema(Schema):
     last_name = fields.Str(required=True)
 
 
+class UserUpdateSchema(Schema):
+    username = fields.Str()
+    password = fields.Str(load_only=True)
+    is_admin = fields.Boolean()
+    email = fields.Str()
+    first_name = fields.Str()
+    last_name = fields.Str()
+
+
 class PlainRoomSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
     greenhouse_id = fields.Int(required=True)
@@ -58,8 +67,12 @@ class GreenhouseSchema(Schema):
     servers = fields.List(fields.Nested(PlainServerSchema()), dump_only=True)
 
 
+class GreenhouseUpdateSchema(Schema):
+    name = fields.Str(required=True)
+    location = fields.Str()
+
+
 class MeasurementSchema(PlainMeasurementSchema):
-    
     temperature = fields.Float(required=True)
     humidity = fields.Float(required=True)
     light = fields.Float(required=True)
@@ -71,6 +84,10 @@ class MessageSchema(PlainMessageSchema):
     body = fields.String(required=True)
     user_id = fields.Int(required=True)
     timestamp = fields.DateTime(dump_only=True)
+
+
+class MessageUpdateSchema(Schema):
+    body = fields.String(required=True)
 
 
 class RoomSchema(PlainRoomSchema):
@@ -132,6 +149,11 @@ class ServerSchema(PlainServerSchema):
     greenhouse_id = fields.Integer(required=True)
     agents = fields.List(fields.Nested(AgentSchema), dump_only=True)
     ip_address = fields.String(required=True)
+
+
+class ServerUpdateSchema(Schema):
+    name = fields.Str()
+    ip_address = fields.Str()
 
 
 class DateRangeSchema(Schema):

@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import GreenhouseSchema
+from schemas import GreenhouseSchema, GreenhouseUpdateSchema
 from models import GreenhouseModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
@@ -23,6 +23,28 @@ class Greenhouse(MethodView):
         Get a single greenhouse by id
         '''
         return GreenhouseModel.query.get_or_404(greenhouse_id)
+    
+    #@jwt_required()
+    @blp.arguments(GreenhouseUpdateSchema)
+    def patch(self, greenhouse_data, greenhouse_id):
+        greenhouse = GreenhouseModel.query.get_or_404(greenhouse_id)
+
+        for key, value in greenhouse_data.items():
+            setattr(greenhouse, key, value)
+
+        db.session.commit()
+
+        return {"Success": True}, 201
+    
+
+    #@jwt_required()
+    def delete(self, greenhouse_id):
+        greenhouse = GreenhouseModel.query.get_or_404(greenhouse_id)
+
+        db.session.delete(greenhouse)
+        db.session.commit()
+
+        return {"Success": True}, 201
     
 @blp.route("/greenhouses")
 class Greenhouses(MethodView):
