@@ -53,20 +53,28 @@ function displayNewRoomCard() {
 
   // Create an array to keep track of references for each card created
 
-  const clickable = document.createElement('a');
   const card = document.createElement('div');
-  const plusIcon = document.createElement('img');
-  const title = document.createElement('h2');
+  // const plusIcon = document.createElement('img');
+  // const title = document.createElement('h2');
+  const button = document.createElement('button');
+  button.setAttribute('class', 'modal-trigger');
   card.setAttribute('class', 'plus-card');
-  plusIcon.setAttribute('src', 'images/plus.png');
-  plusIcon.setAttribute('width', '50px');
-  title.textContent = "add new room";
+  // plusIcon.setAttribute('src', 'images/plus.png');
+  // plusIcon.setAttribute('width', '50px');
+  // title.textContent = "add new room";
+  button.textContent = "create room";
 
-  card.append(plusIcon);
-  card.append(title);
-  clickable.append(card);
+  // card.append(plusIcon);
+  card.append(button);
   main.append(card);
 }
 
-// updateRoomData();
 displayNewRoomCard();
+
+// document.addEventListener('click', e => {
+//   if (e.target.matches("div")) {
+//     console.log("added room");
+//   }
+// });
+
+// updateRoomData();

@@ -3,72 +3,9 @@
 <head>
 	<title>Greenwatch Homepage</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-		body {
-			background-color: #ffffff;
-			color: #000000;
-			font-family: Arial, sans-serif;
-			font-size: 16px;
-			margin: 0;
-			padding: 0;
-		}
-		header {
-			background-color: #07ad90;
-			color: #ffffff;
-			padding: 20px;
-			text-align: center;
-		}
-		h1 {
-			margin: 0;
-			font-size: 32px;
-			font-weight: bold;
-			text-transform: uppercase;
-		}
-		main {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-			gap: 20px;
-			padding: 20px;
-		}
-		.card {
-			background-color: white;
-			border-radius: 5px;
-      border-color: #07ad90;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-			padding: 20px;
-			text-align: center;
-			cursor: pointer;
-		}
-		.card img {
-			max-width: 100%;
-			height: auto;
-		}
-
-		.card:hover {
-			background-color: #eeeeee;
-		}
-
-		.plus-card {
-			background-color: white;
-			border-radius: 5px;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-			padding: 20px;
-			color: #999999;
-			text-align: center;
-			cursor: pointer;
-			/* display: flex; */
-			align-items: center;
-			justify-content: center;
-		}
-		.plus-card:hover {
-			background-color: #eeeeee;
-			/* #06a27b */
-		}
-		.plus-card-img {
-			margin-left: 1500px;
-      width: 50px;
-		}
-	</style>
+	<link rel="stylesheet" href="css/home.css">
+	<link rel="stylesheet" href="css/modal.css">
+	
 </head>
 <body>
 	<header>
@@ -76,7 +13,17 @@
     </h1>
 	</header>
 	<script src="js/home.js"></script>
+	<div class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Room Creation</h2>
+      <p><strong>Name:</strong></p>
+			
+      <script src="js/modal.js"></script>
+    </div>
+  </div>
 </body>
+</html>
 
 <!-- <main>
 	<div class="card">
