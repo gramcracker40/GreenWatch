@@ -26,20 +26,7 @@ modalCreate.addEventListener('click', function() {
     body: JSON.stringify(room)
   }
 
-  fetch('http://192.168.1.115:5000/login', options)
-  .then((res) => {
-    if (res.ok) {
-      setTimeout(function() {
-        window.location.href = 'roompage.html';
-      }, 3000);
-    }else{
-      console.log(res.body);
-    }
-  })
-
-  setTimeout(function() {
-    window.location.href = 'roompage.html';
-  }, 3000);
+  createRoom(options);
 });
 
 // Close Modal when close button clicked
@@ -55,3 +42,16 @@ window.addEventListener('click', function(event) {
     modal.style.display = "none";
   }
 });
+
+function createRoom(options) {
+  fetch('http://192.168.1.115:5000/rooms', options)
+  .then((res) => {
+    if (res.ok) {
+      setTimeout(function() {
+        window.location.href = 'roompage.html';
+      }, 3000);
+    }else{
+      console.log(res.body);
+    }
+  })
+}
