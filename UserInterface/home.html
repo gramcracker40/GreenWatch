@@ -13,10 +13,14 @@
 </head>
 <body>
 <header>
-  <div class="header" style="background-color: #06a27b;">
+  <h2 style="color: white;">GreenWatch</h2>
+  <div class="header" style="background-color: #06a27b; justify-content: space-between;">
+   
+      
+    
     <!-- <i class="fa fa-cog fa-4x" style="color: grey; position: absolute; top: 50px; right: 50px;"></i> -->
-    <button type="button" class="btn btn-success btn-lg" style="position: absolute; top: 50px; right: 50px; color: #07ad90;">
-      <i class="fa fa-cog fa-4x" style="color: grey;"></i>
+    <button type="button" class="btn btn-outline-success btn-lg" style="position: absolute; top: 10px; right: 50px; color: #07ad90;">
+      <i class="fa fa-cog fa-2x" style="color: grey;"></i>
     </button>
   </div>
 </header>
@@ -24,8 +28,9 @@
   <div class="row">
     <div class="column">
 
-  
-  <div class="measurements-container">
+     
+  <div class="measurements-container" id="room1">
+   
     <div class="title">Room 1</div>
     <div class="measurement">
       <div class="label">Temperature:</div>
@@ -45,6 +50,12 @@
     </div>
   </div>
   <script>
+
+    var temperatureContainer = document.getElementById("room1");
+    temperatureContainer.addEventListener("click", function() {
+      window.location.href = "./roompage.html";
+    })
+
     function getSensorData() {
       // Make an AJAX call to the server to get the sensor data
       // You can use the XMLHttpRequest object or jQuery's $.ajax() function
@@ -64,8 +75,9 @@
     // Call the getSensorData function every 5 seconds
     setInterval(getSensorData, 5000);
   </script>
+     
 
-<div class="measurements-container">
+<div class="measurements-container" id="room2">
   <div class="title">Room 2</div>
   <div class="measurement">
     <div class="label">Temperature:</div>
@@ -86,6 +98,14 @@
 </div>
 
   <script>
+
+    
+var temperatureContainer = document.getElementById("room2");
+    temperatureContainer.addEventListener("click", function() {
+      window.location.href = "./roompage.html";
+    })
+
+
     function getSensorData() {
       // Make an AJAX call to the server to get the sensor data
       // You can use the XMLHttpRequest object or jQuery's $.ajax() function
@@ -108,7 +128,7 @@
     setInterval(getSensorData, 5000);
   </script>
 
-<div class="measurements-container">
+<div class="measurements-container" id="room3">
   <div class="title">Room 3</div>
   <div class="measurement">
     <div class="label">Temperature:</div>
@@ -129,6 +149,14 @@
 </div>
 
   <script>
+
+    
+var temperatureContainer = document.getElementById("room3");
+    temperatureContainer.addEventListener("click", function() {
+      window.location.href = "./roompage.html";
+    })
+
+
     function getSensorData() {
       // Make an AJAX call to the server to get the sensor data
       // You can use the XMLHttpRequest object or jQuery's $.ajax() function
