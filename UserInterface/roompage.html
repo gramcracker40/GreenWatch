@@ -51,11 +51,30 @@
                   <div class="card-header">Temperature</div>
                   <div class="card-body">
                     <!-- Chart for Temperature -->
-                    <canvas id="temp-chart"></canvas>
-                    <script src="./js/roompage.js">
-                        
-                        
-                        //backgroundcolor: 'rgb(7,143,144)',
+                    <canvas id="myChart"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1"></script>
+                    <script>
+                      const ctx = document.getElementById('myChart');
+
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: {
+                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                            datasets: [{
+                              label: '# of Votes',
+                              data: [12, 19, 3, 5, 2, 3],
+                              borderWidth: 1
+                            }]
+                          },
+                          options: {
+                            scales: {
+                              y: {
+                                beginAtZero: true
+                              }
+                            }
+                          }
+                        });
+                        //backgroundcolor: ,
                     </script>
                   </div>
                   <div class="card-footer">
@@ -72,6 +91,32 @@
                   <div class="card-header">Humidity</div>
                   <div class="card-body">
                     <!-- Chart for Humidity -->
+                    <canvas id="newChart"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1"></script>
+                    <script>
+                      const temp = document.getElementById('newChart');
+
+                        new Chart(temp, {
+                          type: 'bar',
+                          data: {
+                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                            datasets: [{
+                              label: '# of Votes',
+                              data: [12, 19, 3, 5, 2, 3],
+                              borderWidth: 1
+                            }]
+                          },
+                          options: {
+                            scales: {
+                              y: {
+                                beginAtZero: true
+                              }
+                            }
+                          }
+                        });
+                        //backgroundcolor: ,
+                    </script>
+
                   </div>
                   <div class="card-footer">
                     <div class="btn-group">
@@ -143,9 +188,7 @@
                     </div>
                 </div>
             </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script src="./js/script.js"></script>
 </body>
 </html>
