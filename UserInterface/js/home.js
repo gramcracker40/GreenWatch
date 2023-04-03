@@ -8,7 +8,7 @@ function updateRoomData() {
   //   body: JSON.stringify(user)
   // }
 
-  fetch('http://192.168.1.94:5000/rooms')
+  fetch('http://192.168.1.115:5000/rooms')
   .then((res) => res.json())
   .then((data) => addRoomCards(data)
   );
@@ -28,7 +28,7 @@ function addRoomCards(roomData) {
   // forEach room, in rooms, create a card and append it to main.
   // Also set the information for the card.
 
-  const rooms = ["room1", "room2", "room3"]
+  // const rooms = ["room1", "room2", "room3"]
 
   roomData.forEach(room => {
     const card = document.createElement('div');
@@ -36,11 +36,13 @@ function addRoomCards(roomData) {
     const measurements = document.createElement('p');
     card.setAttribute('class', 'card');
     roomName.textContent = room["name"];
-    measurements.textContent = room["measurements"][0]["temperature"];
+    // measurements.textContent = ;
     card.append(roomName);
     card.append(measurements);
     main.append(card);
   });
+
+  // displayNewRoomCard(main);
 }
 
 function displayNewRoomCard() {
@@ -69,6 +71,7 @@ function displayNewRoomCard() {
   main.append(card);
 }
 
+updateRoomData();
 displayNewRoomCard();
 
 // document.addEventListener('click', e => {
@@ -77,4 +80,3 @@ displayNewRoomCard();
 //   }
 // });
 
-// updateRoomData();

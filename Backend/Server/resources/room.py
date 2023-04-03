@@ -56,12 +56,12 @@ class Room(MethodView):
     def get(self, room_id):
         return RoomModel.query.get_or_404(room_id)
     
-    @jwt_required(fresh=True)
+    #@jwt_required(fresh=True)
     def delete(self, room_id):
         
-        jwt = get_jwt()
-        if(jwt['admin'] == False):
-            abort(403, message=f"User trying to delete room_id={room_id} is not an admin")
+        # jwt = get_jwt()
+        # if(jwt['admin'] == False):
+        #     abort(403, message=f"User trying to delete room_id={room_id} is not an admin")
         
 
         room = RoomModel.query.get_or_404(room_id)

@@ -48,6 +48,20 @@
   cursor: pointer;
 }
 
+.modal-create {
+  background-color: #07ad90;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
 .modal-trigger:hover {
   background-color: grey;
 }
