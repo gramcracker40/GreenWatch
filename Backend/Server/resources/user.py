@@ -19,6 +19,9 @@ class UserRegister(MethodView):
     #@jwt_required(fresh=True)
     @blp.arguments(UserRegisterSchema)
     def post(self, user_data):
+        '''
+        Create a new user
+        '''
         
         if UserModel.query.filter(UserModel.username == user_data["username"]).first():
             abort(409, message="A user with that username already exists")
@@ -48,6 +51,9 @@ class UserRegister(MethodView):
 class UserLogin(MethodView):
     @blp.arguments(UserLoginSchema)
     def post(self, user_data):
+        '''
+        Get access/refresh tokens for basic auth
+        '''
         user = UserModel.query.filter_by(username=user_data['username']).first()
 
         if user and pbkdf2_sha256.verify(user_data["password"], user.password):
@@ -62,6 +68,9 @@ class UserLogin(MethodView):
 class UserLogout(MethodView):
     @jwt_required()
     def post(self):
+        '''
+        logs out a user
+        '''
         jti = get_jwt()['jti']
         BLOCKLIST.add(jti)
         return {"message": "Successfully logged out"}, 201
@@ -71,6 +80,11 @@ class UserLogout(MethodView):
 class TokenRefresh(MethodView):
     #@jwt_required(refresh=True)
     def post(self):
+        '''
+        refreshes and maintains access for the client, refreshing every hour is best practice.
+        a refresh token will not be considered 'fresh'. For a fresh token you must reauthenticate
+        through /login
+        '''
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False, additional_claims={"admin": True})
 
@@ -85,6 +99,9 @@ class Users(MethodView):
     #@jwt_required(refresh=True)
     @blp.response(200, UserRegisterSchema(many=True))
     def get(self):
+        '''
+        Gets all Users
+        '''
         return UserModel.query.all()
     
 
@@ -93,6 +110,9 @@ class Users(MethodView):
 class User(MethodView):
     #@jwt_required(refresh=True)
     def delete(self, user_id):
+        '''
+        Deletes a user by id
+        '''
         user = UserModel.query.get_or_404(user_id)
 
         try:
@@ -108,7 +128,7 @@ class User(MethodView):
     @blp.arguments(UserUpdateSchema)
     def patch(self, user_data, user_id):
         '''
-        test for admin credentials
+        Update a user by id
         '''
         
         user = UserModel.query.get_or_404(user_id)
