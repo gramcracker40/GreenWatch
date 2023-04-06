@@ -10,7 +10,7 @@ body = {
     "is_admin": True
   }
 
-req = requests.post("http://192.168.1.94:5000/register", json=body)
+req = requests.post("http://192.168.1.28:5000/register", json=body)
 
 response = json.loads(req.text)
 
