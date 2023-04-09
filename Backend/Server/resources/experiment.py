@@ -19,7 +19,7 @@ class Experiments(MethodView):
     @blp.response(200, ExperimentSchema(many=True))
     def get(self):
         '''
-        grab all experiment objects in greenhouse
+        Get all experiment objects in database
         '''
         return ExperimentModel.query.all()
     
@@ -28,7 +28,7 @@ class Experiments(MethodView):
     @blp.response(200, PlainExperimentSchema)
     def post(self, experiment_data):
         '''
-        create new experiment in greenhouse
+        Create a new experiment in greenhouse
         '''
         experiment = ExperimentModel(**experiment_data)
 
@@ -71,14 +71,14 @@ class Experiment(MethodView):
     @blp.response(200, ExperimentSchema)
     def get(self, experiment_id):
         '''
-        grab a experiment object in greenhouse
+        Get a experiment object by id
         '''
         return ExperimentModel.query.get_or_404(experiment_id)
 
     @jwt_required()
     def delete(self, experiment_id):
         '''
-        delete a experiment object in greenhouse
+        Delete a experiment object in greenhouse
         '''
 
         jwt = get_jwt()
@@ -102,6 +102,9 @@ class Experiment(MethodView):
     #@jwt_required()
     @blp.arguments(ExperimentUpdateSchema)
     def patch(self, experiment_data, experiment_id):
+        '''
+        Update a Experiment
+        '''
         experiment = ExperimentModel.query.get_or_404(experiment_id)
 
         for key, value in experiment_data.items():
@@ -118,6 +121,9 @@ class ExperimentUsers(MethodView):
     
     #@jwt_required()
     def post(self, experiment_id, user_id):
+        '''
+        Add a User to an Experiment alert list
+        '''
 
         experiment = ExperimentModel.query.get_or_404(experiment_id)
         user = UserModel.query.get_or_404(user_id)
@@ -132,7 +138,25 @@ class ExperimentUsers(MethodView):
             abort(500, message=f"Internal server error unhandled -> {err}")
 
         return {"Success": True}, 201
+    
 
+    def delete(self, experiment_id, user_id):
+        '''
+        Delete a User off an Experiment alert list
+        '''
+
+        experiment = ExperimentModel.query.get_or_404(experiment_id)
+        user = UserModel.query.get_or_404(user_id)
+
+        experiment.users.remove(user)
+
+        try:
+            db.session.commit()
+
+        except SQLAlchemyError as err:
+            abort(500, message=f"Internal server error unhandled -> {err}")
+
+        return {"Success": True}, 200
 
 
 def ExperimentCheck():
