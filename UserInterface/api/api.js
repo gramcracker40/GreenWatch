@@ -47,7 +47,7 @@ class GreenhouseProxy {
     }
     
     getJwt(obj) {
-
+        return JSON.parse(obj)["access_token"];
     }
 
     // ------------------USERS------------------
@@ -69,7 +69,7 @@ class GreenhouseProxy {
                 console.log("Login Successful");
                 // console.log(res.body);
                 res.text()
-                .then((result) => console.log(this.parseJwt(JSON.parse(result)["access_token"])));
+                .then((result) => sessionStorage.setItem('jwt', this.getJwt(result)));
                 // console.log(res);
             }else{
                 console.log("Invalid Login");
@@ -122,8 +122,14 @@ class GreenhouseProxy {
     // Get room by id
 
     deleteRoom(room_id) {
+        const auth = `Bearer ${sessionStorage.getItem('jwt')}`;
+        // console.log(auth);
+
         const options = {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': auth
+            }
         }
 
         fetch(`${url}/rooms/${room_id}`, options)
@@ -140,7 +146,7 @@ class GreenhouseProxy {
 
     // Create room measurement by room id
     createMeasurement() {
-        fetch(`${url}/`)
+        fetch(`${url}/`);
     }
 
     // Get all messages
@@ -199,7 +205,7 @@ class GreenhouseProxy {
 
 const proxy = new GreenhouseProxy();
 // proxy.registerUser();
-proxy.login();
+// proxy.login();
 // proxy.createRoom("Room 1");
-// proxy.listRooms();
+proxy.listRooms();
 // proxy.deleteRoom(1);
