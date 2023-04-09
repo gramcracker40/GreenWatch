@@ -1,0 +1,16 @@
+{
+    "REGISTER" : ["/register", ["POST"], {"POST":{"username": "test", "password": "testtest", "first_name":"test", "last_name": "name", "is_admin": true, "email": "test@testmail.com"}}],
+    "LOGIN" : ["/login", ["POST"], {"POST": {"username": "test", "password": "testtest"}}],
+    "LOGOUT" : ["/logout", ["POST"]],
+    "REFRESH": ["/refresh", ["POST"]],
+    "USERS": ["/users", ["GET"]],
+    "USER": ["/users/<int:user_id>", ["DELETE", "PATCH"]],
+    "ROOMS": ["/rooms", ["GET", "POST"]],
+    "ROOM": ["/rooms/<int:room_id>", ["GET", "DELETE"]],
+    "MEASUREMENT": ["/rooms/<int:room_id>/measurement", ["POST", "GET"]],
+    "MESSAGES": ["/rooms/messages", ["GET"]],
+    "MESSAGE": ["/rooms/<int:room_id>/messages", ["POST", "GET"]],
+    "SPECIFICMESSAGE": ["/rooms/messages/<int:message_id>", ["DELETE", "PATCH"], {"PATCH": {"body":"a test message"}}],
+    "EXPERIMENTS": [""]
+
+}
