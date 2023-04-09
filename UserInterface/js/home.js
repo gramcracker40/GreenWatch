@@ -70,3 +70,9 @@ function displayNewRoomCard() {
 
 // updateRoomData();
 displayNewRoomCard();
+
+$(document).ready(function() {
+  $("#room1").clickable(function() {
+    window.location.href = "roompage.html";
+  });
+});

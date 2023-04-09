@@ -34,48 +34,102 @@
   <div class="container mt-5">
     <div class="row">
       <!--Room 1 Container-->
-      <div class="col-md-6 col-lg-4 mb-4">
+      <div class="col-md-6 col-lg-4 mb-4" id="room1">
         <div class="card rounded-lg border-success">
           <div class="card-body">
-            <h5 class="card-title">Room 1</h5>
+            <h5 class="title">Room 1</h5>
             <div class="card-text">
-              <p>Temperature: 75°F</p>
-              <p>Humidity: 50%</p>
-              <p>Pressure: 1013 hPa</p>
-              <p>Light: 80 lux</p>
+              <div class="measurement">
+                <div class="label">Temperature</div>
+                <div class="value">--</div>
+              </div>
+              <div class="measurement">
+                <div class="label">Humidity</div>
+                <div class="value">--</div>
+              </div>
+              <div class="measurement">
+                <div class="label">Air Pressure</div>
+                <div class="value">--</div>
+              </div>
+              <div class="measurement">
+                <div class="label">Light</div>
+                <div class="value">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          var room1container = document.getElementById("room1");
+          room1container.addEventListener("click", function() {
+            window.location.href = "./roompage.html";
+          });
+        </script>
+      </div>
+      <!--Room2 Container-->
+      <div class="col-md-6 col-lg-4" id="room2">
+        <div class="card rounded-lg border-success">
+          <div class="card-body">
+          <h5 class="title">Room 2</h5>
+          <div class="card-text">
+            <div class="measurement">
+              <div class="label">Temperature</div>
+              <div class="value">--</div>
+            </div>
+            <div class="measurement">
+              <div class="label">Humidity</div>
+              <div class="value">--</div>
+            </div>
+            <div class="measurement">
+              <div class="label">Air Pressure</div>
+              <div class="value">--</div>
+            </div>
+            <div class="measurement">
+              <div class="label">Light</div>
+              <div class="value">--</div>
             </div>
           </div>
         </div>
       </div>
-      <!--Room2 Container-->
-      <div class="col-md-6 col-lg-4">
-        <div class="card rounded-lg border-success">
-          <div class="card-body">
-          <h5 class="card-title">Room 2</h5>
-          <div class="card-text">
-            <p>Temperature: 75°F</p>
-              <p>Humidity: 50%</p>
-              <p>Pressure: 1013 hPa</p>
-              <p>Light: 80 lux</p>
-          </div>
-        </div>
       </div>
-      </div>
+      <script>
+        var room1container = document.getElementById("room2");
+        room1container.addEventListener("click", function() {
+          window.location.href = "./roompage.html";
+        });
+      </script>
     </div>
     <div class="row">
     <!--Room 3 container-->
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-4" id="room3">
       <div class="card rounded-lg border-success">
         <div class="card-body">
-          <h5 class="card-title">Room 3</h5>
+          <h5 class="title">Room 3</h5>
           <div class="card-text">
-            <p>Temperature: 24°C</p>
-            <p>Humidity: 60%</p>
-            <p>Pressure: 1012 hPa</p>
-            <p>Light: 100 lux</p>
+            <div class="measurement">
+              <div class="label">Temperature</div>
+              <div class="value">--</div>
+            </div>
+            <div class="measurement">
+              <div class="label">Humidity</div>
+              <div class="value">--</div>
+            </div>
+            <div class="measurement">
+              <div class="label">Air Pressure</div>
+              <div class="value">--</div>
+            </div>
+            <div class="measurement">
+              <div class="label">Light</div>
+              <div class="value">--</div>
+            </div>
           </div>
         </div>
       </div>
+      <script>
+        var room1container = document.getElementById("room3");
+        room1container.addEventListener("click", function() {
+          window.location.href = "./roompage.html";
+        });
+      </script>
     </div>
   
     <!--Add room container-->
@@ -89,14 +143,17 @@
       </div>
     </div>
   </div>
-</div>
-  <div class="notes-container" style="width: 700px; margin-left: 7%;">
+<div class="row">
+  <div class="notes-container" style="width: 750px; margin-left: 1.5%;">
     <h3>Greenhouse Notes</h3>
     <ul id="notes-list">
       <!-- notes will be added here with javascript -->
     </ul>
   </div>
+</div>
+</div>
 </body>
+<script src="./js/home.js"></script>
 </html>
 
 
