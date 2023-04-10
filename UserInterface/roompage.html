@@ -39,115 +39,23 @@
   <!-- Main Content -->
   <div class="container my-5">
     <h1 class="text-center mb-5">Room Name</h1>
-    <div class="row">
-      <!-- Charts Container -->
-      <div class="col-lg-8 offset-lg-2">
-        <div class="card">
-          <div class="card-header">Charts</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="card mb-3">
-                  <div class="card-header">Temperature</div>
-                  <div class="card-body">
-                    <!-- Chart for Temperature -->
-                    <canvas id="myChart"></canvas>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1"></script>
-                    <script>
-                      const ctx = document.getElementById('myChart');
-
-                        new Chart(ctx, {
-                          type: 'bar',
-                          data: {
-                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                            datasets: [{
-                              label: '# of Votes',
-                              data: [12, 19, 3, 5, 2, 3],
-                              borderWidth: 1
-                            }]
-                          },
-                          options: {
-                            scales: {
-                              y: {
-                                beginAtZero: true
-                              }
-                            }
-                          }
-                        });
-                        //backgroundcolor: ,
-                    </script>
-                  </div>
-                  <div class="card-footer">
-                    <div class="btn-group">
-                      <button class="btn btn-secondary">6h</button>
-                      <button class="btn btn-secondary">12h</button>
-                      <button class="btn btn-secondary">24h</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="card mb-3">
-                  <div class="card-header">Humidity</div>
-                  <div class="card-body">
-                    <!-- Chart for Humidity -->
-                    <canvas id="newChart"></canvas>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1"></script>
-                    <script>
-                      const temp = document.getElementById('newChart');
-
-                        new Chart(temp, {
-                          type: 'bar',
-                          data: {
-                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                            datasets: [{
-                              label: '# of Votes',
-                              data: [12, 19, 3, 5, 2, 3],
-                              borderWidth: 1
-                            }]
-                          },
-                          options: {
-                            scales: {
-                              y: {
-                                beginAtZero: true
-                              }
-                            }
-                          }
-                        });
-                        //backgroundcolor: ,
-                    </script>
-
-                  </div>
-                  <div class="card-footer">
-                    <div class="btn-group">
-                      <button class="btn btn-secondary">6h</button>
-                      <button class="btn btn-secondary">12h</button>
-                      <button class="btn btn-secondary">24h</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="card mb-3">
-                  <div class="card-header">Air Pressure</div>
-                  <div class="card-body">
-                    <!-- Chart for Air Pressure -->
-                  </div>
-                  <div class="card-footer">
-                    <div class="btn-group">
-                      <button class="btn btn-secondary">6h</button>
-                      <button class="btn btn-secondary">12h</button>
-                      <button class="btn btn-secondary">24h</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                <div class="col-lg-6">
-                    <div class="card mb-3">
-                        <div class="card-header">Light</div>
-                        <div class="card-body">
-                            <!-- Chart for light sensor -->
-                        </div>
+      <div class="container mt-5 mb-5" style="width: 70%;">
+      <div class="row">
+        <div class="col-md-8">
+          <canvas id="line-chart"></canvas>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="chart-selector">Select a Chart:</label>
+            <select class="form-control" id="chart-selector">
+              <option value="temperature">Temperature</option>
+              <option value="humidity">Humidity</option>
+              <option value="air pressure">Air Pressure</option>
+              <option value="Light">Light</option>
+            </select>
+          </div>
+        </div>
+      </div>
                         <div class="card-footer">
                         <div class="btn-group">
                             <button class="btn btn-secondary">6h</button>
@@ -157,6 +65,7 @@
                     </div>
                 </div>
             </div>
+          </div>
 
             <div class="container">
                 <div class="row mt-4">
