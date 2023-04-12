@@ -1,18 +1,17 @@
 import requests
 import json
 from enum import Enum
-from db import db
 
-base_url = "http://127.0.0.1:5000"
-username = "test1"
-password = "test1"
+test_url = "http://127.0.0.1:5000"
+user = "tester"
+passw = "testtest"
 
 
-class RouteTester(Enum):
+class RouteTester:
     '''
     Implements methods used to test the Greenwatch REST API
 
-    __init__    --> pass the 'base_url' aka "IP:port"
+    init    --> pass the 'base_url' aka "IP:port"
                  as well as passing the username and password. 
                  can be fed in automatically at start of app
 
@@ -20,19 +19,49 @@ class RouteTester(Enum):
                 given the data and intelligently form the requests
                 necessary and provide the data needed for any errors
                 to test_routes
-    
-    test_routes --> opens the formatted JSON file and tests
+
+    test_routes --> Implements its own JSON format to receive consistent
+                info for each route. opens the formatted JSON file and tests
                 all routes and places their results in a dictionary. 
                 A choice between dumping results to output on startup 
                 or to a JSON file is given. 
 
-    
     '''
 
-    def __init__(self, base_url, JWT):
+    def __init__(self, base_url="127.0.0.1:5000", username="test", password="testtest"):
+        '''
+        initializes the test user and logs in receiving the JWT to pass around with the headers
+        '''
         self.base_url = base_url
-        self.headers = {"Authentication": f"Bearer {JWT}"}
+        self.username = username
+        self.password = password
 
+        #registering and logging in a fake user with admin credentials to test all routes with
+        register_url = base_url + "/register"
+        new_user_req = requests.post(register_url, json={"username": username, "password": password, 
+            "first_name":"test", "last_name": "name", "is_admin": True, "email": "test@testmail.com"})
+        new_user = json.loads(new_user_req.text)
+        print(new_user)
+        self.new_user_id = new_user["user_id"]
+
+        auth_url = base_url + "/login"
+        jwt = json.loads(requests.post(auth_url, json={"username": username, "password": password}).text)
+
+        self.headers = {"Authorization": f"Bearer {jwt['access_token']}"}
+
+
+    def __del__(self):
+        '''
+        logs out the user created in __init__ for the tests and then deletes the user as well
+        '''
+        logout_url = self.base_url + "/logout"
+        del_url = self.base_url + f"/users/{self.new_user_id}"
+        
+        logout = requests.post(logout_url, headers=self.headers)
+        delete = requests.delete(del_url, headers=self.headers)
+
+        print(f"{logout.text}\n\n{delete.text}")
+        
 
     def request(self, uri, method, data=None):
         '''
@@ -53,7 +82,7 @@ class RouteTester(Enum):
             else:
                 req = requests.request(method, url, headers=self.headers)
 
-            if req.status_code != 200 or req.status_code != 201:
+            if req.status_code != 200 and req.status_code != 201:
                 return {"uri":uri, "method": method, "status_code": req.status_code, "error": req.text}
             
             obj = json.loads(req.text)
@@ -61,14 +90,14 @@ class RouteTester(Enum):
         except requests.exceptions.RequestException as err:
             return {"uri":uri, "method": method, "status_code": req.status_code, "error": err}
 
-        return obj
+        return {"uri": uri, "method": method, "status_code": req.status_code, "data": obj}
 
 
     def test_routes(self, file, dump=True, json_file_save=None):
         '''
-        file            : str  -->
-        dump            : bool -->
-        json_file_save  : str  -->
+        file            : str  --> path to the formatted JSON file, examples below
+        dump            : bool --> determines if test_routes dumps results to terminal
+        json_file_save  : str  --> name of desired saved JSON file for results
 
 
         accepts the path to a specific formatted JSON file. Below will detail
@@ -76,24 +105,44 @@ class RouteTester(Enum):
         for any JSON based REST API. 
 
         {
-            "URI-Name": ["/uri", [methods implemented], {"data": "if any for the routes implemented"}]
+            "URI-Name": ["/uri", [methods implemented], {"method": {"data": "dataaa"}}]
         }
 
         {
-            "REGISTER" : ["/register", ["POST"], [{"method":"POST", "username": "test", "password": "testtest"}]],
-            "SPECIFICMESSAGE": ["/rooms/messages/<int:message_id>", ["DELETE", "PATCH"], {"PATCH": {"body":"a test message"}}]
+            "REGISTER" : ["/register", ["POST"], {"POST":{"username": "test", "password": "testtest", "first_name":"test", "last_name": "name", "is_admin": true, "email": "test@testmail.com"}}],
+            "LOGIN" : ["/login", ["POST"], {"POST": {"username": "test", "password": "testtest"}}],
         }
         '''
-        pass
+        api_file = open("routes.json", "r")
+        api = json.loads(api_file)
+
+        results = {}
+        for resource in api:
+            for method in api[resource][1]:
+                if method == "POST" or method == "PATCH":
+                    test = RouteTester.request(self, api[resource][0], method, data=api[resource][2][method])
+                else:
+                    test = RouteTester.request(self, api[resource][0], method)
+
+                try: 
+                    results[resource].append(test)
+                except KeyError:
+                    results[resource] = [test]
+
+        if dump:
+            json.dumps(results, indent=2)
+
+        if json_file_save:
+            file = open(f"{json_file_save}.json", "w")
+            json.dump(results, file)
 
 
 
-    
-    
-
-
-test = RouteTester(base_url, username, password)
+test = RouteTester(base_url=test_url, username=user, password=passw)
 
 real = test.request("/rooms", "GET")
 
 print(real)
+
+
+del test
