@@ -62,7 +62,7 @@ class Experiments(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"Unhandled server err: --> {err}")
 
-        return {"Success": True, "message": "experiment added successfully"}, 201
+        return {"Success": True}, 201
         
 
 @blp.route("/experiments/<int:experiment_id>")
@@ -71,14 +71,14 @@ class Experiment(MethodView):
     @blp.response(200, ExperimentSchema)
     def get(self, experiment_id):
         '''
-        Get a experiment object by id
+        Get a Experiment
         '''
         return ExperimentModel.query.get_or_404(experiment_id)
 
     @jwt_required()
     def delete(self, experiment_id):
         '''
-        Delete a experiment object in greenhouse
+        Delete a Experiment
         '''
 
         jwt = get_jwt()
@@ -94,8 +94,6 @@ class Experiment(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"Internal server error unhandled -> {err}")
             
-
-
         return {"Success": True}, 200
     
 
