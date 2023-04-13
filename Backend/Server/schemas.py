@@ -33,7 +33,6 @@ class PlainRoomSchema(Schema):
 
 class PlainMeasurementSchema(Schema):
     room_id = fields.Int(dump_only=True)
-    name = fields.Str(unique=True)
 
 
 class PlainAgentSchema(Schema):
