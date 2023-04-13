@@ -17,7 +17,7 @@ function validateUser() {
     body: JSON.stringify(user)
   }
 
-  fetch('http://192.168.1.115:5000/login', options)
+  fetch('http://127.0.0.1:5000/login', options)
   .then((res) => {
     if (res.ok) {
       document.getElementById("invalidCreds").style.visibility = 'hidden';

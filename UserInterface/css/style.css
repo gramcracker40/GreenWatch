@@ -16,7 +16,7 @@ body {
 }
 
 .body-login {
-  background: white;
+  background: #ffffff;
 }
 
 .wrapper {
@@ -470,6 +470,8 @@ h2 {
 .measurements-container:hover {
   background-color: #07ad90;
 }
+
+
 
 .title {
   flex-basis: 40%;

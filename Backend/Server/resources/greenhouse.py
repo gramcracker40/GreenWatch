@@ -11,7 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from utilities.rand import rand_string
 from datetime import datetime, date, time
 
-blp = Blueprint("greenhouse", "greenhouse", description="Operations on greenhouses")
+blp = Blueprint("Greenhouse", "Greenhouse", description="Operations on Greenhouses")
 
 @blp.route("/greenhouses/<int:greenhouse_id>")
 class Greenhouse(MethodView):
@@ -20,13 +20,16 @@ class Greenhouse(MethodView):
     @blp.response(200, GreenhouseSchema())
     def get(self, greenhouse_id):
         '''
-        Get a single greenhouse by id
+        Get a single Greenhouse by id
         '''
         return GreenhouseModel.query.get_or_404(greenhouse_id)
     
     #@jwt_required()
     @blp.arguments(GreenhouseUpdateSchema)
     def patch(self, greenhouse_data, greenhouse_id):
+        '''
+        Updates a current Greenhouse by id
+        '''
         greenhouse = GreenhouseModel.query.get_or_404(greenhouse_id)
 
         for key, value in greenhouse_data.items():
@@ -39,6 +42,9 @@ class Greenhouse(MethodView):
 
     #@jwt_required()
     def delete(self, greenhouse_id):
+        '''
+        Deletes a Greenhouse given an id
+        '''
         greenhouse = GreenhouseModel.query.get_or_404(greenhouse_id)
 
         db.session.delete(greenhouse)
@@ -52,7 +58,7 @@ class Greenhouses(MethodView):
     @blp.arguments(GreenhouseSchema())
     def post(self, greenhouse_data):
         '''
-        takes the server data and creates a new server for the greenhouse
+        Creates a new Greenhouse
         '''
 
         greenhouse = GreenhouseModel(**greenhouse_data)
@@ -74,6 +80,6 @@ class Greenhouses(MethodView):
     @blp.response(200, GreenhouseSchema(many=True))
     def get(self):
         '''
-        Get a single greenhouse by id
+        Gets all Greenhouses
         '''
         return GreenhouseModel.query.all()

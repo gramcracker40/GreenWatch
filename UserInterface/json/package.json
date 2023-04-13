@@ -1,0 +1,16 @@
+{
+    "name": "charths-example",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scripts": {
+        "dev": "parcel roompage.html",
+        "build": "parcel build roompage.html"
+    },
+    "devDependencies": {
+        "parcel": "^2.6.2"
+    },
+    "dependencies": {
+        "@cubejs-client/core": "0.32.17",
+        "chartjs": "0.3.24"
+    }
+}

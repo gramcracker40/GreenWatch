@@ -20,7 +20,7 @@ class Rooms(MethodView):
     @blp.response(200, RoomSchema(many=True))
     def get(self):
         '''
-        grab all room objects in greenhouse
+        Get all Rooms
         '''
         return RoomModel.query.all()
     
@@ -29,7 +29,7 @@ class Rooms(MethodView):
     @blp.response(200, RoomSchema)
     def post(self, room_data):
         '''
-        create new room as specified in payload
+        Create new Room
         '''
         try:
             # public = pbkdf2_sha256.hash(rand_string(size=30)) 
@@ -54,10 +54,16 @@ class Room(MethodView):
     #@jwt_required()
     @blp.response(200, RoomSchema)
     def get(self, room_id):
+        '''
+        Get all Rooms
+        '''
         return RoomModel.query.get_or_404(room_id)
     
     #@jwt_required(fresh=True)
     def delete(self, room_id):
+        '''
+        Delete a Room -- admin user required and JWT must be fresh
+        '''
         
         # jwt = get_jwt()
         # if(jwt['admin'] == False):
@@ -78,6 +84,10 @@ class Measurement(MethodView):
     
     @blp.arguments(MeasurementSchema)
     def post(self, measurement_data, room_id):
+        '''
+        Add a Measurement to a Room and any Experiments that are active
+        within the room
+        '''
         room = RoomModel.query.get_or_404(room_id)
 
         ExperimentCheck()
@@ -107,6 +117,10 @@ class Measurement(MethodView):
     #@jwt_required()
     @blp.arguments(DateRangeSchema)
     def get(self, dates, room_id):
+        '''
+        Given a start and end date, this method will return all 
+        Measurements within a Room in that given period. 
+        '''
         room = RoomModel.query.get_or_404(room_id)
 
         valid = []
@@ -128,10 +142,12 @@ class Measurement(MethodView):
 
 @blp.route("/rooms/messages")
 class Messages(MethodView):
-
     #@jwt_required()
     @blp.response(200, MessageSchema(many=True))
     def get(self):
+        '''
+        Get all Messages
+        '''
         return MessageModel.query.all()
 
 
@@ -172,6 +188,9 @@ class Message(MethodView):
     #@jwt_required()
     @blp.response(201, MessageSchema(many=True))
     def get(self, room_id):
+        '''
+        Get all Messages in Room
+        '''
         return MessageModel.query.filter_by(room_id=room_id).all()
     
 
@@ -179,6 +198,9 @@ class Message(MethodView):
 class SpecificMessage(MethodView):
     #@jwt_required()
     def delete(self, message_id):
+        '''
+        Delete a Message
+        '''
         message = MessageModel.query.get_or_404(message_id)
 
         db.session.delete(message)
@@ -189,6 +211,9 @@ class SpecificMessage(MethodView):
     #@jwt_required()
     @blp.arguments(MessageUpdateSchema)
     def patch(self, message_data, message_id):
+        '''
+        Update a Message
+        '''
         message = MessageModel.query.get_or_404(message_id)
 
         for key, value in message_data.items():
