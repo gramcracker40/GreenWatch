@@ -1,4 +1,4 @@
-const url = "http://192.168.1.28:5000"
+const url = "http://127.0.0.1:5000"
 class GreenhouseProxy {
     constructor() {
         this.userRegister = {
@@ -83,6 +83,11 @@ class GreenhouseProxy {
     // Refresh
 
     // Get all users
+    getUsers() {
+        fetch(`${url}/users`)
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
 
     // Update user by id
 
@@ -92,7 +97,10 @@ class GreenhouseProxy {
     listRooms() {
         fetch(`${url}/rooms`)
         .then((res) => res.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+            console.log(data);
+            return data;
+        });
     }
 
     createRoom(name) {
@@ -154,6 +162,29 @@ class GreenhouseProxy {
     // Get all room messages by room id
 
     // Create new room message by room id
+    createRoomMessage(roomID) {
+        const message = {
+            "user_id": 1,
+            "body": "This is a random test message. So yeah."
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(message)
+        }
+
+        fetch(`${url}/rooms/${roomID}/messages`, options)
+        .then((res) => {
+            if (res.ok) {
+                console.log("Message Successfully Created");
+            }else{
+                console.log(res);
+            }
+        });
+    }
 
     // Update a message by message id
 
@@ -206,6 +237,8 @@ class GreenhouseProxy {
 const proxy = new GreenhouseProxy();
 // proxy.registerUser();
 // proxy.login();
+// proxy.getUsers();
 // proxy.createRoom("Room 1");
-proxy.listRooms();
+// proxy.listRooms();
 // proxy.deleteRoom(1);
+proxy.createRoomMessage(1);
