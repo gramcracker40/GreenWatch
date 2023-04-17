@@ -115,14 +115,13 @@
     
     <script>
       const ctx = document.getElementById('myChart');
-      const yValues = [30,40,50,60,70,80,90,100,100,120];
 
         var chart = new Chart(ctx, {
           type: 'line',
           data: {
             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
-              label: '$',
+              label: 'Temp',
               data: [75, 78, 81, 84, 81, 73],
               borderWidth: 1
             }]
