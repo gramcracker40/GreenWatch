@@ -41,7 +41,6 @@ class RouteTester:
         new_user_req = requests.post(register_url, json={"username": username, "password": password, 
             "first_name":"test", "last_name": "name", "is_admin": True, "email": "test@testmail.com"})
         new_user = json.loads(new_user_req.text)
-        print(new_user)
         self.new_user_id = new_user["user_id"]
 
         auth_url = base_url + "/login"
@@ -63,7 +62,7 @@ class RouteTester:
         print(f"{logout.text}\n\n{delete.text}")
         
 
-    def request(self, uri, method, data=None):
+    def request(self, uri:str, method:str, data:dict=None) -> dict:
         '''
         str:  uri="/login"
         str:  method="POST",
@@ -93,7 +92,7 @@ class RouteTester:
         return {"uri": uri, "method": method, "status_code": req.status_code, "data": obj}
 
 
-    def test_routes(self, file, dump=True, json_file_save=None):
+    def test_routes(self, file:str, dump:bool=True, json_file_save:str=None):
         '''
         file            : str  --> path to the formatted JSON file, examples below
         dump            : bool --> determines if test_routes dumps results to terminal
@@ -140,7 +139,7 @@ class RouteTester:
 
 test = RouteTester(base_url=test_url, username=user, password=passw)
 
-real = test.request("/rooms", "GET")
+real = test.request("/login", "POST", {"username": "test", "password": "testtest"})
 
 print(real)
 

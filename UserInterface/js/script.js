@@ -24,5 +24,5 @@ function showThankYou(){
 
 const settingsIcon = document.createElement('i');
 settingsIcon.classList.add('fas', 'fa-cog');
-document.getElementById('settings-icon').appendChild(settingsIcon);
+// document.getElementById('settings-icon').appendChild(settingsIcon);
 

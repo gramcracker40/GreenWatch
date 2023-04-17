@@ -2,7 +2,7 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import RoomSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema
-from models import RoomModel, MeasurementModel, MessageModel, UserModel
+from models import RoomModel, MeasurementModel, MessageModel, UserModel, AgentModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import db
@@ -59,15 +59,15 @@ class Room(MethodView):
         '''
         return RoomModel.query.get_or_404(room_id)
     
-    @jwt_required(fresh=True)
+    #@jwt_required(fresh=True)
     def delete(self, room_id):
         '''
         Delete a Room -- admin user required and JWT must be fresh
         '''
         
-        jwt = get_jwt()
-        if(jwt['admin'] == False):
-            abort(403, message=f"User trying to delete room_id={room_id} is not an admin")
+        # jwt = get_jwt()
+        # if(jwt['admin'] == False):
+        #     abort(403, message=f"User trying to delete room_id={room_id} is not an admin")
         
 
         room = RoomModel.query.get_or_404(room_id)
@@ -89,6 +89,11 @@ class Measurement(MethodView):
         within the room
         '''
         room = RoomModel.query.get_or_404(room_id)
+        agent = AgentModel.query.filter(AgentModel.room_id == room.id).first()
+
+
+        key = request.headers.get("Key")
+        same = pbkdf2_sha256.verify(key, agent.private_key)
 
         ExperimentCheck()
 
@@ -112,7 +117,7 @@ class Measurement(MethodView):
             abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
 
 
-        return {"message": "Successfully added new measurement"}, 201
+        return {"message": "Successfully added new measurement", "duration": agent.duration.second}, 201
     
     #@jwt_required()
     @blp.arguments(DateRangeSchema)
