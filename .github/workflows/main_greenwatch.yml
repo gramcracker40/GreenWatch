@@ -30,11 +30,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r Backend/Server/requirements.txt
         
-      - name: Run flask app
-        run: |
-          cd Backend/Server
-          flask run --host 0.0.0.0
-        
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
       - name: Upload artifact for deployment jobs
