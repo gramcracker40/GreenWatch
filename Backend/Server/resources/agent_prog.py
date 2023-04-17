@@ -8,14 +8,14 @@ from time import sleep
 #from spidev import SpiDev
 from datetime import time
 
-
-roomTitle = '///room-name///'
-roomID = '///room-id///'
+bufferSize = 1024
+roomTitle = "Empty Room"
+roomID = 2
 ServerPort = 5000
-ServerIP='///server-ip///'
-duration = '///duration///'
-private_key = '///private-key///'
+ServerIP='127.0.0.1'
+duration = 60
 
+private_key = "HPZHM8FQT3T7SNMAHVCBHEXBUWD9EFPNDHVNQWM12LO6UFCQDOJQ28PSZU7M"
 req_headers = {
     "Key": private_key
 }
@@ -77,3 +77,4 @@ while True:
     server_data = json.loads(post_measurement.text)
     sleep(int(server_data["duration"]))
 
+    

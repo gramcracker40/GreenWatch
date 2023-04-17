@@ -7,10 +7,38 @@
     "USER": ["/users/<int:user_id>", ["DELETE", "PATCH"]],
     "ROOMS": ["/rooms", ["GET", "POST"]],
     "ROOM": ["/rooms/<int:room_id>", ["GET", "DELETE"]],
-    "MEASUREMENT": ["/rooms/<int:room_id>/measurement", ["POST", "GET"]],
+    "MEASUREMENT": ["/rooms/<int:room_id>/measurement", ["POST", "GET"], {"POST": {
+        "pressure": 5,
+        "humidity": 50,
+        "temperature": 25,
+        "light": 5
+      }}],
     "MESSAGES": ["/rooms/messages", ["GET"]],
     "MESSAGE": ["/rooms/<int:room_id>/messages", ["POST", "GET"]],
     "SPECIFICMESSAGE": ["/rooms/messages/<int:message_id>", ["DELETE", "PATCH"], {"PATCH": {"body":"a test message"}}],
-    "EXPERIMENTS": [""]
+    "EXPERIMENTS": ["/experiments", ["GET", "POST"], {"POST": {
+        "upper_temp": 40,
+        "alert_on": true,
+        "lower_hum": 70,
+        "room_id": 1,
+        "name": "test",
+        "upper_hum": 90,
+        "lower_temp": 30,
+        "start": "2023-04-12T18:45:35.085Z",
+        "end": "2023-04-15T18:45:35.085Z"
+      }}],
+    "EXPERIMENT": ["/experiments/<int:experiment_id>", ["GET", "PATCH", "DELETE"], {"PATCH": {
+        "upper_temp": 30,
+        "alert_on": false,
+        "lower_hum": 60,
+        "room_id": 1,
+        "name": "string",
+        "upper_hum": 100,
+        "lower_temp": 20,
+        "start": "2023-04-12T18:45:35.085Z",
+        "end": "2023-04-17T18:45:35.085Z"
+      }}],
+    "EXPERIMENTUSERS": [""]
+    
 
 }

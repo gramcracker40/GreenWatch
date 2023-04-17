@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, send_file
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import ServerSchema, AgentSchema, AgentUpdateSchema, ServerUpdateSchema
@@ -10,6 +10,9 @@ from blocklist import BLOCKLIST
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from utilities.rand import rand_string
 from datetime import datetime, date, time
+import os
+import shutil
+import re
 
 blp = Blueprint("server", "server", description="Operations on servers")
 
@@ -82,9 +85,7 @@ class Agents(MethodView):
         agent = AgentModel(**agent_data)
 
         passcode = rand_string(size=60)
-        private = pbkdf2_sha256.hash(passcode)
-
-        agent.private_key = private
+        agent.private_key = pbkdf2_sha256.hash(passcode)
 
         room = RoomModel.query.get_or_404(agent_data['room_id'])
         if room.agent:
@@ -101,7 +102,7 @@ class Agents(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"An unhandled server error has occurred -> {err}")
 
-        return {"Success": True, "private_key": passcode, "server_ip": server.ip_address}, 201
+        return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id}, 201
     
     #@jwt_required()
     @blp.response(200, AgentSchema(many=True))
@@ -111,6 +112,47 @@ class Agents(MethodView):
 
 @blp.route("/servers/agents/<int:agent_id>")
 class Agent(MethodView):
+
+    #@jwt_required()
+    def get(self, agent_id):
+        '''
+        TODO: Not done implementing. Need way to overwrite python file contents...
+
+        get the executable file for a specific agent, must be chained with 
+        creation of agent to receive the executable that is correct for the 
+        private key that is created
+        '''
+        agent = AgentModel.query.get_or_404(agent_id)
+        room = RoomModel.query.get_or_404(agent.room_id)
+        server = ServerModel.query.get_or_404(agent.server_id)
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        agent_path = dir_path[:-16].replace('\\', '/') + "Agent/agent_prog.py"
+
+        shutil.copy(agent_path, dir_path)
+        copy = open(f"{dir_path}/agent_{room.id}.py", "w")
+
+        private = request.get_json()["private_key"]
+
+        patterns = {
+            "'///room-name///'": room.name,
+            "'///room-id///'": room.id,
+            "'///private-key///'": private, 
+            "'///server-ip///'": server.ip_address,
+            "''///duration///'": str(agent.duration.second)
+        }
+        
+        for line in copy:
+            for pattern in patterns:
+                if pattern in line:
+                    line.replace(pattern, patterns[pattern], end='') 
+    
+
+
+        return send_file(copy), 200
+
+
+
     #@jwt_required(fresh=True)
     def delete(self, agent_id):
         '''
