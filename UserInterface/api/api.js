@@ -1,61 +1,59 @@
 const url = "http://127.0.0.1:5000"
 
-const userRegister1 = {
-    "first_name": "Billy",
-    "last_name": "The Hero",
-    "is_admin": true,
-    "username": "test1", 
-    "password":"password1",
-    "email": "bHero@at.com"
-}
+// const userRegister1 = {
+//     "first_name": "Billy",
+//     "last_name": "The Hero",
+//     "is_admin": true,
+//     "username": "test1", 
+//     "password":"password1",
+//     "email": "bHero@at.com"
+// }
 
-const userRegister2 = {
-    "first_name": "Finn",
-    "last_name": "The Human",
-    "is_admin": true,
-    "username": "finn", 
-    "password":"pb",
-    "email": "fHuman@at.com"
-}
+// const userRegister2 = {
+//     "first_name": "Finn",
+//     "last_name": "The Human",
+//     "is_admin": true,
+//     "username": "finn", 
+//     "password":"pb",
+//     "email": "fHuman@at.com"
+// }
 
-const userRegister3 = {
-    "first_name": "Jake",
-    "last_name": "The Dog",
-    "is_admin": true,
-    "username": "jtdoggzone", 
-    "password":"lady",
-    "email": "jDog@at.com"
-}
+// const userRegister3 = {
+//     "first_name": "Jake",
+//     "last_name": "The Dog",
+//     "is_admin": true,
+//     "username": "jtdoggzone", 
+//     "password":"lady",
+//     "email": "jDog@at.com"
+// }
 
-const o_user_register = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(this.userRegister1)
-}
+// const o_user_register = {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(this.userRegister1)
+// }
 
-const userLogin = {
-    "username": "test1",
-    "password": "password1"
-}
+// const userLogin = {
+//     "username": "test1",
+//     "password": "password1"
+// }
 
-const o_login = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(this.userLogin)
-}
+// const o_login = {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(this.userLogin)
+// }
 
-const o_create_room = {
+// const o_create_room = {
 
-}
+// }
 
-class GreenhouseProxy {
-    constructor() {
-        
-    }
+export class GreenhouseProxy {
+    constructor() {}
 
     parseJwt (token) {
         var base64Url = token.split('.')[1];
@@ -112,10 +110,9 @@ class GreenhouseProxy {
     // Refresh
 
     // Get all users
-    getUsers() {
-        fetch(`${url}/users`)
-        .then((res) => res.json())
-        .then((data) => console.log(data));
+    async getUsers() {
+        let response = await fetch(`${url}/users`);
+        return await response.json();
     }
 
     // Update user by id
@@ -123,13 +120,9 @@ class GreenhouseProxy {
     // Delete user by id
 
     // ------------------ROOM------------------
-    listRooms() {
-        fetch(`${url}/rooms`)
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            return data;
-        });
+    async listRooms() {
+        let response = await fetch(`${url}/rooms`);
+        return await response.json();
     }
 
     createRoom(name) {
@@ -200,17 +193,18 @@ class GreenhouseProxy {
     }
 
     // Get all room messages by room id
-
-    getAllMessagesByRoom(roomID) {
+    async getAllMessagesByRoom(roomID) {
         const options = {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
-
-        fetch(`${url}/rooms/${roomID}/messages`, options)
-        .then((res) => res.json())
-        .then((data) => console.log(data));
+      
+        let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+      
+        // console.log(data);
+      
+        return await response.json();
     }
 
     // Create new room message by room id
@@ -286,7 +280,7 @@ class GreenhouseProxy {
     // Delete an agent by id
 }
 
-const proxy = new GreenhouseProxy();
+// const proxy = new GreenhouseProxy();
 // proxy.registerUser(userRegister2);
 // proxy.registerUser(userRegister3);
 // proxy.login();

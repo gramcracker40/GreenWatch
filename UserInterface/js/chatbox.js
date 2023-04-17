@@ -1,48 +1,56 @@
-// import { GreenhouseProxy } from "../api/api.js";
+import { GreenhouseProxy } from "../api/api.js";
 
-// const proxy = new GreenhouseProxy();
-
-// const rooms = proxy.listRooms();
-// console.log(rooms);
-// console.log(typeof(rooms));
+const proxy = new GreenhouseProxy();
 
 const chatbox_dropdown = document.getElementById('chatbox-dropdown');
 const chatbox_body = document.getElementById('chat-box-body');
+const users = await proxy.getUsers();
+let usernames = {};
+// console.log(users);
 
-function generateDropdownItems() {
-  fetch('http://127.0.0.1:5000/rooms')
-  .then((res) => res.json())
-  .then((data) => {
-      // console.log(data);
-      data.forEach(room => {
-
-        // // Item based on bootstrap dropdown
-        // const item = document.createElement('li');
-        // item.setAttribute('class', 'dropdown-item');
-        // item.setAttribute('id', `${room['id']}`);
-        // item.textContent = `${room["name"]}`;
-        // document.getElementById('chatbox-dropdown').append(item);
-
-        // Item based on html option selector
-        const option = document.createElement('option');
-        option.setAttribute('value', `${room['id']}`);
-        option.textContent = `${room['name']}`;
-        chatbox_dropdown.append(option);
-      });
+function createUserList() {
+  users.forEach(user => {
+    usernames[user['id']] = user['first_name'];
   });
 }
 
-function getAllMessagesByRoom(roomID) {
-  const options = {
-      headers: {
-          'Content-Type': 'application/json'
-      }
-  }
+createUserList();
+// console.log(usernames);
 
-  fetch(`${url}/rooms/${roomID}/messages`, options)
-  .then((res) => res.json())
-  // .then((data) => );
+async function generateDropdownItems() {
+  const rooms = await proxy.listRooms();
+
+  rooms.forEach(room => {
+
+    // // Item based on bootstrap dropdown
+    // const item = document.createElement('li');
+    // item.setAttribute('class', 'dropdown-item');
+    // item.setAttribute('id', `${room['id']}`);
+    // item.textContent = `${room["name"]}`;
+    // document.getElementById('chatbox-dropdown').append(item);
+
+    // Item based on html option selector
+    const option = document.createElement('option');
+    option.setAttribute('value', `${room['id']}`);
+    option.textContent = `${room['name']}`;
+    chatbox_dropdown.append(option);
+  });
 }
+
+// async function getAllMessagesByRoom(roomID) {
+//   const options = {
+//       headers: {
+//           'Content-Type': 'application/json'
+//       }
+//   }
+
+//   let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+//   let data = await response.json();
+
+//   // console.log(data);
+
+//   return data;
+// }
 
 function resetChatbox() {
   while(chatbox_body.firstChild) {
@@ -52,23 +60,15 @@ function resetChatbox() {
 
 generateDropdownItems();
 
-chatbox_dropdown.addEventListener("click", e => {
-  // const messages = getAllMessagesByRoom(e.target.value);
+async function renderMessages() {
+    console.log(chatbox_dropdown.value);
+    const messages = await proxy.getAllMessagesByRoom(chatbox_dropdown.value);
+  
+    const roomID = chatbox_dropdown.value;
 
-  const roomID = e.target.value;
-
-  const options = {
-    headers: {
-        'Content-Type': 'application/json'
-    }
-  }
-
-  fetch(`${url}/rooms/${roomID}/messages`, options)
-  .then((res) => res.json())
-  .then((data) => {
     resetChatbox();
-    data.forEach(message => {
-      // const emptyDiv = documnet.createElement('div');
+    messages.forEach(message => {
+      const user = message["user_id"];
       const textContainer = document.createElement('div');
       textContainer.setAttribute('class', 'd-flex align-items-baseline mb-4');
       const container2 = document.createElement('div');
@@ -77,7 +77,7 @@ chatbox_dropdown.addEventListener("click", e => {
       textCard.setAttribute('class', 'card card-text d-inline-block p-2 px-3 m-1');
       const date = document.createElement('div');
       date.setAttribute('class', 'small');
-      date.textContent = "1:10PM";
+      date.textContent = usernames[message['user_id']];
 
       textCard.textContent = message["body"];
 
@@ -88,11 +88,8 @@ chatbox_dropdown.addEventListener("click", e => {
       
       chatbox_body.append(textContainer);
     });
-  });
+    console.log(messages);
+}
 
-  // resetChatbox();
-  // messages.forEach(message => {
-  //   chatbox_body.append(message["body"]);
-  // });
-  // console.log(messages);
-});
+// renderMessages();
+chatbox_dropdown.addEventListener("click", renderMessages);
