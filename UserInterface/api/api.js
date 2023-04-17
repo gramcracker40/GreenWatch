@@ -1,39 +1,60 @@
 const url = "http://127.0.0.1:5000"
+
+const userRegister1 = {
+    "first_name": "Billy",
+    "last_name": "The Hero",
+    "is_admin": true,
+    "username": "test1", 
+    "password":"password1",
+    "email": "bHero@at.com"
+}
+
+const userRegister2 = {
+    "first_name": "Finn",
+    "last_name": "The Human",
+    "is_admin": true,
+    "username": "finn", 
+    "password":"pb",
+    "email": "fHuman@at.com"
+}
+
+const userRegister3 = {
+    "first_name": "Jake",
+    "last_name": "The Dog",
+    "is_admin": true,
+    "username": "jtdoggzone", 
+    "password":"lady",
+    "email": "jDog@at.com"
+}
+
+const o_user_register = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(this.userRegister1)
+}
+
+const userLogin = {
+    "username": "test1",
+    "password": "password1"
+}
+
+const o_login = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(this.userLogin)
+}
+
+const o_create_room = {
+
+}
+
 class GreenhouseProxy {
     constructor() {
-        this.userRegister = {
-            "first_name": "Billy",
-            "last_name": "The Hero",
-            "is_admin": true,
-            "username": "test1", 
-            "password":"password1",
-            "email": "bHero@at.com"
-        }
-
-        this.o_user_register = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.userRegister)
-        }
-
-        this.userLogin = {
-            "username": "test1",
-            "password": "password1"
-        }
-
-        this.o_login = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.userLogin)
-        }
-
-        this.o_create_room = {
-
-        }
+        
     }
 
     parseJwt (token) {
@@ -51,8 +72,16 @@ class GreenhouseProxy {
     }
 
     // ------------------USERS------------------
-    registerUser() {
-        fetch(`${url}/register`, this.o_user_register)
+    registerUser(user) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+
+        fetch(`${url}/register`, options)
         .then((res) => {
             if (res.ok) {
                 console.log("User Created Successfully");
@@ -158,14 +187,37 @@ class GreenhouseProxy {
     }
 
     // Get all messages
+    getAllMessages() {
+        const options = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        fetch(`${url}/rooms/messages`, options)
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
 
     // Get all room messages by room id
 
+    getAllMessagesByRoom(roomID) {
+        const options = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        fetch(`${url}/rooms/${roomID}/messages`, options)
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
+
     // Create new room message by room id
-    createRoomMessage(roomID) {
-        const message = {
-            "user_id": 1,
-            "body": "This is a random test message. So yeah."
+    createRoomMessage(roomID, userID, message) {
+        const _body = {
+            "user_id": userID,
+            "body": message
         }
 
         const options = {
@@ -173,7 +225,7 @@ class GreenhouseProxy {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(message)
+            body: JSON.stringify(_body)
         }
 
         fetch(`${url}/rooms/${roomID}/messages`, options)
@@ -235,10 +287,16 @@ class GreenhouseProxy {
 }
 
 const proxy = new GreenhouseProxy();
-// proxy.registerUser();
+// proxy.registerUser(userRegister2);
+// proxy.registerUser(userRegister3);
 // proxy.login();
 // proxy.getUsers();
 // proxy.createRoom("Room 1");
 // proxy.listRooms();
 // proxy.deleteRoom(1);
-proxy.createRoomMessage(1);
+// proxy.getAllMessages();
+// proxy.getAllMessagesByRoom(1);
+// proxy.getAllMessagesByRoom(2);
+// proxy.getAllMessagesByRoom(3);
+// proxy.getAllMessagesByRoom(4);
+// proxy.createRoomMessage(4, 1, "That sounds like a great idea. Let's do it!");
