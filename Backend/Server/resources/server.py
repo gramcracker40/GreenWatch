@@ -165,20 +165,22 @@ class Agent(MethodView):
         
         copy = open(f"{dir_path}\\agent.py", "w")
         copy.writelines(replace)
+        copy.close()
+        print(dir_path)
 
+        build_path = agent_path = dir_path[:-16].replace('\\', '/') + "Server/build/agent/agent.exe"
+
+        return send_file(build_path)
 
         subprocess.call("pyinstaller resources/agent.py --noconfirm")
 
-        sleep(15)
-
-        return send_file("..\dist\\agent.exe", attachment_filename=f"agent{room.id}.exe")
 
 
 
     #@jwt_required(fresh=True)
     def delete(self, agent_id):
         '''
-        takes the agent data and creates a new agent for the greenhouse
+        delete an agent by id
         '''
 
         agent = AgentModel.query.get_or_404(agent_id)
