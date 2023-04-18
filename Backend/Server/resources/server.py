@@ -10,9 +10,11 @@ from blocklist import BLOCKLIST
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from utilities.rand import rand_string
 from datetime import datetime, date, time
+from time import sleep
 import os
 import shutil
 import re
+import subprocess
 
 blp = Blueprint("server", "server", description="Operations on servers")
 
@@ -127,10 +129,10 @@ class Agent(MethodView):
         server = ServerModel.query.get_or_404(agent.server_id)
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        agent_path = dir_path[:-16].replace('\\', '/') + "Agent/agent_prog.py"
+        agent_path = dir_path[:-16].replace('\\', '/') + "Agent/agent.py"
 
         shutil.copy(agent_path, dir_path)
-        copy = open(f"{dir_path}/agent_{room.id}.py", "w")
+        copy = open(f"{dir_path}\\agent.py", "r")
 
         private = request.get_json()["private_key"]
 
@@ -139,17 +141,37 @@ class Agent(MethodView):
             "'///room-id///'": room.id,
             "'///private-key///'": private, 
             "'///server-ip///'": server.ip_address,
-            "''///duration///'": str(agent.duration.second)
+            "'///duration///'": int(agent.duration.second)
         }
         
+        replace = []
+        replaced = False
         for line in copy:
-            for pattern in patterns:
-                if pattern in line:
-                    line.replace(pattern, patterns[pattern], end='') 
-    
+            for pattern in patterns: 
+                if pattern in line and type(patterns[pattern]) == str:
+                    replace.append(line.replace(pattern, f"'{patterns[pattern]}'"))
+                    replaced = True
+                elif pattern in line:
+                    replace.append(line.replace(pattern, str(patterns[pattern])))
+                    replaced = True
+                
+            if not replaced:
+                replace.append(line)
+            else:
+                replaced = False
+        
+        copy.close()
+        print(f"REPLACE ---> {replace}")
+        
+        copy = open(f"{dir_path}\\agent.py", "w")
+        copy.writelines(replace)
 
 
-        return send_file(copy), 200
+        subprocess.call("pyinstaller resources/agent.py --noconfirm")
+
+        sleep(15)
+
+        return send_file("..\dist\\agent.exe", attachment_filename=f"agent{room.id}.exe")
 
 
 
