@@ -1,3 +1,6 @@
+// TODO: Have "no messages..." displayed when there are no messages in the room
+// Could be a simple check in the renderRooms function
+
 import { GreenhouseProxy } from "../api/api.js";
 
 const proxy = new GreenhouseProxy();
@@ -37,21 +40,6 @@ async function generateDropdownItems() {
   });
 }
 
-// async function getAllMessagesByRoom(roomID) {
-//   const options = {
-//       headers: {
-//           'Content-Type': 'application/json'
-//       }
-//   }
-
-//   let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
-//   let data = await response.json();
-
-//   // console.log(data);
-
-//   return data;
-// }
-
 function resetChatbox() {
   while(chatbox_body.firstChild) {
     chatbox_body.removeChild(chatbox_body.lastChild);
@@ -61,10 +49,10 @@ function resetChatbox() {
 generateDropdownItems();
 
 async function renderMessages() {
-    console.log(chatbox_dropdown.value);
-    const messages = await proxy.getAllMessagesByRoom(chatbox_dropdown.value);
-  
+    // console.log(chatbox_dropdown.value);
     const roomID = chatbox_dropdown.value;
+
+    const messages = await proxy.getAllMessagesByRoom(roomID);
 
     resetChatbox();
     messages.forEach(message => {
@@ -88,7 +76,7 @@ async function renderMessages() {
       
       chatbox_body.append(textContainer);
     });
-    console.log(messages);
+    // console.log(messages);
 }
 
 // renderMessages();

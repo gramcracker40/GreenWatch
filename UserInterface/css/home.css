@@ -24,25 +24,27 @@ main {
   gap: 20px;
   padding: 20px;
 }
-.card {
+
+.room-card {
   background-color: white;
   border-radius: 5px;
   border-color: #07ad90;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  /* margin: 10px; */
   padding: 20px;
   text-align: center;
   cursor: pointer;
 }
-.card img {
+.roomn-card img {
   max-width: 100%;
   height: auto;
 }
 
-.card:hover {
+.room-card:hover {
   background-color: #eeeeee;
 }
 
-.plus-card {
+.room-plus-card {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -54,11 +56,11 @@ main {
   align-items: center;
   justify-content: center;
 }
-.plus-card:hover {
+.room-plus-card:hover {
   background-color: #eeeeee;
   /* #06a27b */
 }
-.plus-card-img {
+.room-plus-card-img {
   margin-left: 1500px;
   width: 50px;
 }

@@ -175,8 +175,24 @@ export class GreenhouseProxy {
     // Get room measurement by room id
 
     // Create room measurement by room id
-    createMeasurement() {
-        fetch(`${url}/`);
+    async createMeasurement(roomID, measurement) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(measurement)
+        }
+
+        try {
+            let response = await fetch(`${url}/rooms/${roomID}/measurement`, options);
+            if (response.status) {
+                console.log("Measurement Created Successfully");
+            }
+        } 
+        catch (error) {
+            console.log(error);
+        }
     }
 
     // Get all messages
@@ -288,9 +304,44 @@ export class GreenhouseProxy {
 // proxy.createRoom("Room 1");
 // proxy.listRooms();
 // proxy.deleteRoom(1);
+// proxy.createMeasurement(1, measurement);
 // proxy.getAllMessages();
 // proxy.getAllMessagesByRoom(1);
 // proxy.getAllMessagesByRoom(2);
 // proxy.getAllMessagesByRoom(3);
 // proxy.getAllMessagesByRoom(4);
 // proxy.createRoomMessage(4, 1, "That sounds like a great idea. Let's do it!");
+
+// const measurements = [
+//     {
+//         "temperature": 98,
+//         "humidity": 73,
+//         "pressure": 21,
+//         "light": 4
+//     },
+//     {
+//         "temperature": 95,
+//         "humidity": 79,
+//         "pressure": 18,
+//         "light": 3
+//     },
+//     {
+//         "temperature": 97,
+//         "humidity": 74,
+//         "pressure": 19,
+//         "light": 4
+//     },
+//     {
+//         "temperature": 97,
+//         "humidity": 77,
+//         "pressure": 23,
+//         "light": 2
+//     },
+// ]
+
+// let roomID = 1;
+
+// measurements.forEach(measurment => {
+//     proxy.createMeasurement(roomID, measurment);
+//     roomID++;
+// });
