@@ -61,7 +61,4 @@ jobs:
           app-name: 'greenwatch'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E1130BCD4B124AB4B44F27DF5AB25E7B }}
-      
-      - name: 'Start Gunicorn with flask'
-        run: gunicorn --bind=0.0.0.0 --timeout 600 Backend/Server/app:app
             
