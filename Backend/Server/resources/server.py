@@ -118,29 +118,35 @@ class Agent(MethodView):
     #@jwt_required()
     def get(self, agent_id):
         '''
-        returns an executable file of the agent id passed through
-        to download the scripts needed to pull data from senseHAT 
-        and begin running on its set duration indefinitely. 
+        performed directly after post method for agent, takes private key
+        from json passed and creates a new agent executable that is unique
+        to the specific room that agent is attached to. 
 
-        TODO: Not done implementing. Need way to overwrite python file contents...
-
-        get the executable file for a specific agent, must be chained with 
-        creation of agent to receive the executable that is correct for the 
-        private key that is created
+        The executable will run on the rasberry pi os and collect measurements from
+        the senseHAT and associate those measurements with the specific room it was 
+        originally created for. Boiler plate code it is copying and parsing out is located
+        in Backend/Agent/agent.py
+        
+        example json: {"private_key": "60 character string from Post"}}
         '''
         try:
+            # Querying all objects associated with creation of agent
             agent = AgentModel.query.get_or_404(agent_id)
             room = RoomModel.query.get_or_404(agent.room_id)
             server = ServerModel.query.get_or_404(agent.server_id)
+            
+            # grabbing private key from JSON data
+            private = request.get_json()["private_key"]
 
+            # marking location of boiler plate code
             dir_path = os.path.dirname(os.path.realpath(__file__))
             agent_path = dir_path[:-16].replace('\\', '/') + "Agent/agent.py"
 
-            shutil.copy(agent_path, f"{dir_path}-{room.id}")
-            copy = open(f"{dir_path}\\agent.py", "r")
+            # copying boiler plate code into resources as a copy and opening the copy
+            shutil.copy(agent_path, f"resources/agent{room.id}.py")
+            copy = open(f"{dir_path}\\agent{room.id}.py", "r")
 
-            private = request.get_json()["private_key"]
-
+            # patterns to parse through the copy and replace for the creation of the agent
             patterns = {
                 "'///room-name///'": room.name,
                 "'///room-id///'": room.id,
@@ -166,33 +172,36 @@ class Agent(MethodView):
                     replaced = False
             
             copy.close()
-            print(f"REPLACE ---> {replace}")
             
-            print(dir_path)
-            copy = open(f"{dir_path}\\agent.py", "w")
+            copy = open(f"{dir_path}\\agent{room.id}.py", "w")
             copy.writelines(replace)
             copy.close()
-            print(dir_path)
 
-            subprocess.run("pyinstaller Server/resources/agent.py --noconfirm --onefile")
-            
-            build_path = dir_path[:-16].replace('\\', '/') + "resources/dist/agent.exe"
-            print(build_path)
+            try:
+                create_exe_p = subprocess.Popen(f"pyinstaller resources/agent{room.id}.py --noconfirm --onefile")
+                outs, errs = create_exe_p.communicate(timeout=30)
+            except subprocess.TimeoutExpired as err:
+                create_exe_p.kill()
+                return abort(500, message="Could not create agent")
+
+            build_path = dir_path[:-16].replace('\\', '/') + f"Server/dist/agent{room.id}.exe"
+
             return send_file(build_path)
 
         finally:
-            delete_files = [dir_path[:-16].replace('\\', '/') + "Server/resources/agent.py",
-                            dir_path[:-16].replace('\\', '/') + "Server/resources/dist",
-                            dir_path[:-16].replace('\\', '/') + "Server/resources/build",
-                            dir_path[:-16].replace('\\', '/') + "Server/resources/agent.spec"]
+            delete_files = [dir_path[:-16].replace('\\', '/') + f"Server/resources/agent{room.id}.py",
+                            dir_path[:-16].replace('\\', '/') + "Server/build",
+                            dir_path[:-16].replace('\\', '/') + f"Server/agent{room.id}.spec"]
 
-            for file in delete_files:
-                if(os.path.isfile(file)):
-                    #os.remove(file)
-                    print(f"Removed file: {file}")
+            for directory in delete_files:
+                try:    
+                    if(os.path.isfile(directory)):
+                        os.remove(directory)
+                    else:
+                        shutil.rmtree(directory)
 
-
-
+                except PermissionError:
+                    pass
 
 
     #@jwt_required(fresh=True)
