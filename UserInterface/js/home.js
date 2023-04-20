@@ -7,7 +7,7 @@ room_grid.append(main);
 
 async function renderRooms() {
   const rooms = await proxy.listRooms();
-  console.log(rooms);
+  // console.log(rooms);
 
   // forEach room, in rooms, create a card and append it to main.
   // Also set the information for the card.
@@ -19,33 +19,68 @@ async function renderRooms() {
     const roomName = document.createElement('h1');
 
     // Need a label, value, and row for each
-    const t_measurement = document.createElement('p');
-    const h_measurement = document.createElement('p');
-    const p_measurement = document.createElement('p');
-    const l_measurement = document.createElement('p');
+    const t_row = document.createElement('div');
+    const t_label = document.createElement('p');
+    const t_value = document.createElement('p');
+    const h_row = document.createElement('div');
+    const h_label = document.createElement('p');
+    const h_value = document.createElement('p');
+    const p_row = document.createElement('div');
+    const p_label = document.createElement('p');
+    const p_value = document.createElement('p');
+    const l_row = document.createElement('div');
+    const l_label = document.createElement('p');
+    const l_value = document.createElement('p');
 
     card.setAttribute('class', 'room-card');
+    card.setAttribute('id', `${room['id']}`)
+    card_header.setAttribute('class', 'card-header');
     card_body.setAttribute('class', 'row');
     roomName.setAttribute('class', 'display-3')
     roomName.textContent = room["name"];
-    t_measurement.setAttribute('class', 'h1');
-    t_measurement.textContent = room['measurements'][0]['temperature'];
-    h_measurement.setAttribute('class', 'h1');
-    h_measurement.textContent = room['measurements'][0]['humidity'];
-    p_measurement.setAttribute('class', 'h1');
-    p_measurement.textContent = room['measurements'][0]['pressure'];
-    l_measurement.setAttribute('class', 'h1');
-    l_measurement.textContent = room['measurements'][0]['light'];
+    
+    t_row.setAttribute('class', 'd-flex justify-content-between');
+    t_label.setAttribute('class', 'h1');
+    t_label.textContent = "Temperature:";
+    t_value.setAttribute('class', 'h1');
+    t_value.textContent = `${room['measurements'][0]['temperature']}`;
+    h_row.setAttribute('class', 'd-flex justify-content-between');
+    h_label.setAttribute('class', 'h1');
+    h_label.textContent = "Humidity:";
+    h_value.setAttribute('class', 'h1');
+    h_value.textContent = `${room['measurements'][0]['humidity']}`;
+    p_row.setAttribute('class', 'd-flex justify-content-between');
+    p_label.setAttribute('class', 'h1');
+    p_label.textContent = "Pressure:";
+    p_value.setAttribute('class', 'h1');
+    p_value.textContent = `${room['measurements'][0]['pressure']}`;
+    l_label.setAttribute('class', 'h1');
+    l_label.textContent = "Light:";
+    l_row.setAttribute('class', 'd-flex justify-content-between');
+    l_value.setAttribute('class', 'h1');
+    l_value.textContent = `${room['measurements'][0]['light']}`;
 
+    t_row.append(t_label);
+    t_row.append(t_value);
+    h_row.append(h_label);
+    h_row.append(h_value);
+    p_row.append(p_label);
+    p_row.append(p_value);
+    l_row.append(l_label);
+    l_row.append(l_value);
+    card_body.append(t_row);
+    card_body.append(h_row);
+    card_body.append(p_row);
+    card_body.append(l_row);
     card_header.append(roomName);
-    card_body.append(t_measurement);
-    card_body.append(h_measurement);
-    card_body.append(p_measurement);
-    card_body.append(l_measurement);
     card.append(card_header);
     card.append(card_body);
     main.append(card);
   
+    card.addEventListener('click', () => {
+      // console.log(card.getAttribute('id'));
+      window.location.href = "./roompage.html";
+    });
   });
 
   // displayNewRoomCard(main);
@@ -79,10 +114,3 @@ function renderNewRoomCard() {
 
 renderRooms();
 // renderNewRoomCard();
-
-// document.addEventListener('click', e => {
-//   if (e.target.matches("div")) {
-//     console.log("added room");
-//   }
-// });
-

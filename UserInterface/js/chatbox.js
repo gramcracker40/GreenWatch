@@ -25,12 +25,12 @@ async function generateDropdownItems() {
 
   rooms.forEach(room => {
 
-    // // Item based on bootstrap dropdown
+    // Item based on bootstrap dropdown
     // const item = document.createElement('li');
     // item.setAttribute('class', 'dropdown-item');
     // item.setAttribute('id', `${room['id']}`);
     // item.textContent = `${room["name"]}`;
-    // document.getElementById('chatbox-dropdown').append(item);
+    // document.getElementById('dropdown-menu').append(item);
 
     // Item based on html option selector
     const option = document.createElement('option');
