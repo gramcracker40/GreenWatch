@@ -8,13 +8,12 @@ from time import sleep
 #from spidev import SpiDev
 from datetime import time
 
-
-roomTitle = '///room-name///'
-roomID = '///room-id///'
+roomTitle = 'test roo'
+roomID = 2
 ServerPort = 5000
-ServerIP='///server-ip///'
-duration = '///duration///'
-private_key = '///private-key///'
+ServerIP='127.0.0.1'
+duration = 15
+private_key = 'HPZHM8FQT3T7SNMAHVCBHEXBUWD9EFPNDHVNQWM12LO6UFCQDOJQ28PSZU7M'
 
 req_headers = {
     "Key": private_key

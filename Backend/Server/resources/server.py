@@ -118,61 +118,79 @@ class Agent(MethodView):
     #@jwt_required()
     def get(self, agent_id):
         '''
+        returns an executable file of the agent id passed through
+        to download the scripts needed to pull data from senseHAT 
+        and begin running on its set duration indefinitely. 
+
         TODO: Not done implementing. Need way to overwrite python file contents...
 
         get the executable file for a specific agent, must be chained with 
         creation of agent to receive the executable that is correct for the 
         private key that is created
         '''
-        agent = AgentModel.query.get_or_404(agent_id)
-        room = RoomModel.query.get_or_404(agent.room_id)
-        server = ServerModel.query.get_or_404(agent.server_id)
+        try:
+            agent = AgentModel.query.get_or_404(agent_id)
+            room = RoomModel.query.get_or_404(agent.room_id)
+            server = ServerModel.query.get_or_404(agent.server_id)
 
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        agent_path = dir_path[:-16].replace('\\', '/') + "Agent/agent.py"
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            agent_path = dir_path[:-16].replace('\\', '/') + "Agent/agent.py"
 
-        shutil.copy(agent_path, dir_path)
-        copy = open(f"{dir_path}\\agent.py", "r")
+            shutil.copy(agent_path, f"{dir_path}-{room.id}")
+            copy = open(f"{dir_path}\\agent.py", "r")
 
-        private = request.get_json()["private_key"]
+            private = request.get_json()["private_key"]
 
-        patterns = {
-            "'///room-name///'": room.name,
-            "'///room-id///'": room.id,
-            "'///private-key///'": private, 
-            "'///server-ip///'": server.ip_address,
-            "'///duration///'": int(agent.duration.second)
-        }
-        
-        replace = []
-        replaced = False
-        for line in copy:
-            for pattern in patterns: 
-                if pattern in line and type(patterns[pattern]) == str:
-                    replace.append(line.replace(pattern, f"'{patterns[pattern]}'"))
-                    replaced = True
-                elif pattern in line:
-                    replace.append(line.replace(pattern, str(patterns[pattern])))
-                    replaced = True
-                
-            if not replaced:
-                replace.append(line)
-            else:
-                replaced = False
-        
-        copy.close()
-        print(f"REPLACE ---> {replace}")
-        
-        copy = open(f"{dir_path}\\agent.py", "w")
-        copy.writelines(replace)
-        copy.close()
-        print(dir_path)
+            patterns = {
+                "'///room-name///'": room.name,
+                "'///room-id///'": room.id,
+                "'///private-key///'": private, 
+                "'///server-ip///'": server.ip_address,
+                "'///duration///'": int(agent.duration.second)
+            }
+            
+            replace = []
+            replaced = False
+            for line in copy:
+                for pattern in patterns: 
+                    if pattern in line and type(patterns[pattern]) == str:
+                        replace.append(line.replace(pattern, f"'{patterns[pattern]}'"))
+                        replaced = True
+                    elif pattern in line:
+                        replace.append(line.replace(pattern, str(patterns[pattern])))
+                        replaced = True
+                    
+                if not replaced:
+                    replace.append(line)
+                else:
+                    replaced = False
+            
+            copy.close()
+            print(f"REPLACE ---> {replace}")
+            
+            print(dir_path)
+            copy = open(f"{dir_path}\\agent.py", "w")
+            copy.writelines(replace)
+            copy.close()
+            print(dir_path)
 
-        build_path = agent_path = dir_path[:-16].replace('\\', '/') + "Server/build/agent/agent.exe"
+            subprocess.run("pyinstaller Server/resources/agent.py --noconfirm --onefile")
+            
+            build_path = dir_path[:-16].replace('\\', '/') + "resources/dist/agent.exe"
+            print(build_path)
+            return send_file(build_path)
 
-        return send_file(build_path)
+        finally:
+            delete_files = [dir_path[:-16].replace('\\', '/') + "Server/resources/agent.py",
+                            dir_path[:-16].replace('\\', '/') + "Server/resources/dist",
+                            dir_path[:-16].replace('\\', '/') + "Server/resources/build",
+                            dir_path[:-16].replace('\\', '/') + "Server/resources/agent.spec"]
 
-        subprocess.call("pyinstaller resources/agent.py --noconfirm")
+            for file in delete_files:
+                if(os.path.isfile(file)):
+                    #os.remove(file)
+                    print(f"Removed file: {file}")
+
 
 
 
