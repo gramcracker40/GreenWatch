@@ -65,12 +65,32 @@
            Canvas
         </canvas>
       </div>
-                        <div class="card-footer">
+                        <div class="card-footer d-flex justify-content-between">
                         <div class="btn-group">
                             <button class="btn btn-secondary">6h</button>
                             <button class="btn btn-secondary">12h</button>
                             <button class="btn btn-secondary">24h</button>
                         </div>
+                        <button id="export-data-button" class="btn btn-primary" >Export Data</button>
+
+                          <script>
+                            // Get a reference to the chart canvas element
+                            const chartCanvas = document.getElementById('myChart');
+
+                            // Attach an event listener to the export data button
+                            document.getElementById('export-data-button').addEventListener('click', () => {
+                              // Get the chart data as a data URL
+                              const chartDataURL = chartCanvas.toBase64Image();
+
+                              // Create a temporary anchor element and set its attributes
+                              const downloadLink = document.createElement('a');
+                              downloadLink.setAttribute('href', chartDataURL);
+                              downloadLink.setAttribute('download', 'chart-data.csv');
+
+                              // Programmatically click the anchor element to trigger the download
+                              downloadLink.click();
+                            });
+                          </script>
                     </div>
                 </div>
             </div>
@@ -106,6 +126,14 @@
                                           <div class="mb-3">
                                             <label for="endDate" class="form-label">End Date</label>
                                             <input type="date" class="form-control" id="endDate" required>
+                                          </div>
+                                          <div class="mb-3">
+                                            <label for="highThreshold" class="form-label">Temperature High</label>
+                                            <input type="number" class="form-control" id="highThreshold" required>
+                                          </div>
+                                          <div class="mb-3">
+                                            <label for="lowThreshold" class="form-label">Temperature Low</label>
+                                            <input type="number" class="form-control" id="lowThreshold" required>
                                           </div>
                                           <div class="mb-3">
                                             <label for="experimentDetails" class="form-label">Experiment Details</label>
@@ -159,6 +187,14 @@
                                                       <div class="mb-3">
                                                         <label for="endDate" class="form-label">End Date</label>
                                                         <input type="date" class="form-control" id="endDate" required>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="highThreshold" class="form-label">Temperature High</label>
+                                                        <input type="number" class="form-control" id="highThreshold" required>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="lowThreshold" class="form-label">Temperature Low</label>
+                                                        <input type="number" class="form-control" id="lowThreshold" required>
                                                       </div>
                                                       <div class="mb-3">
                                                         <label for="experimentDetails" class="form-label">Experiment Details</label>
