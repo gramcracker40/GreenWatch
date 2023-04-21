@@ -1,40 +1,59 @@
 const url = "http://127.0.0.1:5000"
-class GreenhouseProxy {
-    constructor() {
-        this.userRegister = {
-            "first_name": "Billy",
-            "last_name": "The Hero",
-            "is_admin": true,
-            "username": "test1", 
-            "password":"password1",
-            "email": "bHero@at.com"
-        }
 
-        this.o_user_register = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.userRegister)
-        }
+// const userRegister1 = {
+//     "first_name": "Billy",
+//     "last_name": "The Hero",
+//     "is_admin": true,
+//     "username": "test1", 
+//     "password":"password1",
+//     "email": "bHero@at.com"
+// }
 
-        this.userLogin = {
-            "username": "test1",
-            "password": "password1"
-        }
+// const userRegister2 = {
+//     "first_name": "Finn",
+//     "last_name": "The Human",
+//     "is_admin": true,
+//     "username": "finn", 
+//     "password":"pb",
+//     "email": "fHuman@at.com"
+// }
 
-        this.o_login = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.userLogin)
-        }
+// const userRegister3 = {
+//     "first_name": "Jake",
+//     "last_name": "The Dog",
+//     "is_admin": true,
+//     "username": "jtdoggzone", 
+//     "password":"lady",
+//     "email": "jDog@at.com"
+// }
 
-        this.o_create_room = {
+// const o_user_register = {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(this.userRegister1)
+// }
 
-        }
-    }
+// const userLogin = {
+//     "username": "test1",
+//     "password": "password1"
+// }
+
+// const o_login = {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(this.userLogin)
+// }
+
+// const o_create_room = {
+
+// }
+
+export class GreenhouseProxy {
+    constructor() {}
 
     parseJwt (token) {
         var base64Url = token.split('.')[1];
@@ -51,8 +70,16 @@ class GreenhouseProxy {
     }
 
     // ------------------USERS------------------
-    registerUser() {
-        fetch(`${url}/register`, this.o_user_register)
+    registerUser(user) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+
+        fetch(`${url}/register`, options)
         .then((res) => {
             if (res.ok) {
                 console.log("User Created Successfully");
@@ -83,24 +110,40 @@ class GreenhouseProxy {
     // Refresh
 
     // Get all users
-    getUsers() {
-        fetch(`${url}/users`)
-        .then((res) => res.json())
-        .then((data) => console.log(data));
+    async getUsers() {
+        let response = await fetch(`${url}/users`);
+        return await response.json();
     }
 
     // Update user by id
+    async editUser(userID, userData) {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        }
+        
+        try {
+            let response = await fetch(`${url}/users/${userID}`, options);
+            if (response.ok) {
+                console.log("User Successfully Updated");
+                console.log(await response.json());
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 
     // Delete user by id
+    
 
     // ------------------ROOM------------------
-    listRooms() {
-        fetch(`${url}/rooms`)
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            return data;
-        });
+    async listRooms() {
+        let response = await fetch(`${url}/rooms`);
+        return await response.json();
     }
 
     createRoom(name) {
@@ -153,19 +196,59 @@ class GreenhouseProxy {
     // Get room measurement by room id
 
     // Create room measurement by room id
-    createMeasurement() {
-        fetch(`${url}/`);
+    async createMeasurement(roomID, measurement) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(measurement)
+        }
+
+        try {
+            let response = await fetch(`${url}/rooms/${roomID}/measurement`, options);
+            if (response.status) {
+                console.log("Measurement Created Successfully");
+            }
+        } 
+        catch (error) {
+            console.log(error);
+        }
     }
 
     // Get all messages
+    getAllMessages() {
+        const options = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        fetch(`${url}/rooms/messages`, options)
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
 
     // Get all room messages by room id
+    async getAllMessagesByRoom(roomID) {
+        const options = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+      
+        let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+      
+        // console.log(data);
+      
+        return await response.json();
+    }
 
     // Create new room message by room id
-    createRoomMessage(roomID) {
-        const message = {
-            "user_id": 1,
-            "body": "This is a random test message. So yeah."
+    createRoomMessage(roomID, userID, message) {
+        const _body = {
+            "user_id": userID,
+            "body": message
         }
 
         const options = {
@@ -173,7 +256,7 @@ class GreenhouseProxy {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(message)
+            body: JSON.stringify(_body)
         }
 
         fetch(`${url}/rooms/${roomID}/messages`, options)
@@ -234,11 +317,52 @@ class GreenhouseProxy {
     // Delete an agent by id
 }
 
-const proxy = new GreenhouseProxy();
-// proxy.registerUser();
+// const proxy = new GreenhouseProxy();
+// proxy.registerUser(userRegister2);
+// proxy.registerUser(userRegister3);
 // proxy.login();
 // proxy.getUsers();
 // proxy.createRoom("Room 1");
 // proxy.listRooms();
 // proxy.deleteRoom(1);
-proxy.createRoomMessage(1);
+// proxy.createMeasurement(1, measurement);
+// proxy.getAllMessages();
+// proxy.getAllMessagesByRoom(1);
+// proxy.getAllMessagesByRoom(2);
+// proxy.getAllMessagesByRoom(3);
+// proxy.getAllMessagesByRoom(4);
+// proxy.createRoomMessage(4, 1, "That sounds like a great idea. Let's do it!");
+
+// const measurements = [
+//     {
+//         "temperature": 98,
+//         "humidity": 73,
+//         "pressure": 21,
+//         "light": 4
+//     },
+//     {
+//         "temperature": 95,
+//         "humidity": 79,
+//         "pressure": 18,
+//         "light": 3
+//     },
+//     {
+//         "temperature": 97,
+//         "humidity": 74,
+//         "pressure": 19,
+//         "light": 4
+//     },
+//     {
+//         "temperature": 97,
+//         "humidity": 77,
+//         "pressure": 23,
+//         "light": 2
+//     },
+// ]
+
+// let roomID = 1;
+
+// measurements.forEach(measurment => {
+//     proxy.createMeasurement(roomID, measurment);
+//     roomID++;
+// });
