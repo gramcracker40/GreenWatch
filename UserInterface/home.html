@@ -2,6 +2,7 @@
 <!-- 
 DOM Events to dynamically create add room card
 Add text in chatbox for a room with no messages
+Settings only visible to admins
 Implent settings dropdown:
 - Users:
   + Create dynamic user cards in list-group
@@ -99,17 +100,122 @@ Delete User
         </div>
         <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-users-body">
           <!-- User List -->
-          <!-- <ul class="list-group">
-            <li class="list-group-item justify-content-between d-flex align-items-center">
-              <div>
-                test1
-              </div>
-              <div>
-                <i class="fa-solid fa-pen-to-square btn btn-outline-dark m-2" type="button" id=""></i>
-                <i class="fa-solid fa-trash btn btn-outline-dark m-2" type="button"></i>
-              </div>
-            </li>
-          </ul> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-bs-target="#users-modal-create" data-bs-toggle="modal">Add User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit User-->
+  <div class="modal fade" id="users-modal-edit" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="user-edit-modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-edit-user-body">
+          <!-- User Options -->
+          <form>
+            <div class="mb-3">
+              <label for="first-name" class="col-form-label">First Name</label>
+              <input type="text" class="form-control" id="edit-first-name">
+            </div>
+            <div class="mb-3">
+              <label for="last-name" class="col-form-label">Last Name</label>
+              <input type="text" class="form-control" id="edit-last-name">
+            </div>
+            <div class="mb-3">
+              <label for="username" class="col-form-label">Username</label>
+              <input type="text" class="form-control" id="edit-username">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="col-form-label">Password</label>
+              <input type="text" class="form-control" id="edit-password">
+            </div>
+            <div class="mb-3">
+              <label for="email" class="col-form-label">Email</label>
+              <input type="text" class="form-control" id="edit-email">
+            </div>
+            <div class="mb-3">
+              <label for="admin-status" class="col-form-label">Admin Status</label>
+              <select class="form-control" id="edit-admin-status">
+                <option value=1>true</option>
+                <option value=0>false</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
+          id="save-user-button">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Create User-->
+  <div class="modal fade" id="users-modal-create" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Create User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-create-user-body">
+          <!-- User Options -->
+          <form>
+            <div class="mb-3">
+              <label for="first-name" class="col-form-label">First Name</label>
+              <input type="text" class="form-control" id="create-first-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="last-name" class="col-form-label">Last Name</label>
+              <input type="text" class="form-control" id="create-last-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="username" class="col-form-label">Username</label>
+              <input type="text" class="form-control" id="create-username" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="col-form-label">Password</label>
+              <input type="text" class="form-control" id="create-password" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="col-form-label">Email</label>
+              <input type="text" class="form-control" id="create-email" required>
+            </div>
+            <div class="mb-3">
+              <label for="admin-status" class="col-form-label">Admin Status</label>
+              <input type="text" class="form-control" id="create-admin-status" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" id="users-modal-create-footer">
+          <p class="invalid-paragraph" id="invalidCreds">
+            Credintials are invalid.<br>
+            Please try again.
+          </p>
+          <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
+          id="create-user-button">Create</button>
+          <!-- <input type="submit" id="create-user-button"> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Delete User-->
+  <div class="modal fade" id="users-modal-delete" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-edit-user-body">
+          <!-- User List -->
         </div>
       </div>
     </div>

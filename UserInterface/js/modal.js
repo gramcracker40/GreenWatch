@@ -6,14 +6,23 @@ const usersModalBody = document.getElementById('modal-users-body');
 
 usersButton.addEventListener('click', renderUsers);
 
+ // Create a new list for each user card item
+ const listGroup = document.createElement('ul');
+ listGroup.setAttribute('class', 'list-group');
+
+function resetUserList() {
+  while(listGroup.firstChild) {
+    listGroup.removeChild(listGroup.lastChild);
+  }
+}
+
 async function renderUsers() {
+  // Reset current list
+  resetUserList();
+
   // Get list of users
   const users = await proxy.getUsers();
-  // console.log(users);
-
-  // Create a new list for each user card item
-  const listGroup = document.createElement('ul');
-  listGroup.setAttribute('class', 'list-group');
+  console.log(users);
 
   usersModalBody.append(listGroup);
 
@@ -27,10 +36,13 @@ async function renderUsers() {
     const trash = document.createElement('i');
 
     listGroupItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
+    // listGroupItem.setAttribute('id', user['id']);
     // Set username text content
     username.textContent = fullname;
     // set icon classes, type, and id
     edit.setAttribute('class', 'fa-solid fa-pen-to-square btn btn-outline-dark m-2');
+    edit.setAttribute('data-bs-target', '#users-modal-edit');
+    edit.setAttribute('data-bs-toggle', 'modal');
     trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-dark m-2');
 
     listGroup.append(listGroupItem);
@@ -40,7 +52,9 @@ async function renderUsers() {
     icons.append(trash);
 
     edit.addEventListener('click', () => {
-      console.log('Edit Clicked');
+      sessionStorage.setItem('userID', user['id']);
+      const modalTitle = document.getElementById('user-edit-modal-title');
+      modalTitle.textContent = `Editing: ${fullname}`;
     });
 
     trash.addEventListener('click', () => {
@@ -49,6 +63,70 @@ async function renderUsers() {
   });
 }
 
+async function editUser() {
+  const userID = sessionStorage.getItem('userID');
+  sessionStorage.removeItem('userID');
+
+  const password = document.getElementById('edit-password').value
+  const username = document.getElementById('edit-username').value
+  const isAdmin = document.getElementById('edit-admin-status').value
+  const firstName = document.getElementById('edit-first-name').value
+  const lastName = document.getElementById('edit-last-name').value
+  const email = document.getElementById('edit-email').value
+
+  const user = {
+    "password": password,
+    "username": username,
+    "is_admin": Boolean(isAdmin),
+    "first_name": firstName,
+    "last_name": lastName,
+    "email": email
+  }
+
+  console.log(user);
+  console.log(userID);
+  await proxy.editUser(userID, user);
+  renderUsers();
+
+  password.value = "";
+  username.value = "";
+  isAdmin.value = "0";
+  firstName.value = "";
+  lastName.value = "";
+  email.value = "";
+}
+
+async function createUser() {
+  const userCreateModal = document.getElementById('users-modal-create-footer');
+
+  const password = document.getElementById('create-password').value
+  const username = document.getElementById('create-username').value
+  const isAdmin = document.getElementById('create-admin-status').value
+  const firstName = document.getElementById('create-first-name').value
+  const lastName = document.getElementById('create-last-name').value
+  const email = document.getElementById('create-email').value
+
+  const user = {
+    "password": password,
+    "username": username,
+    "is_admin": Boolean(isAdmin),
+    "first_name": firstName,
+    "last_name": lastName,
+    "email": email
+  }
+
+  for (const field in user) {
+    if (field == "") {
+      createButton.ariaDisabled = true;
+    }
+  }
+}
+
+const saveButton = document.getElementById('save-user-button');
+saveButton.addEventListener('click', editUser);
+
+const createButton = document.getElementById('create-user-button');
+createButton.addEventListener('click', createUser);
 
 // Open Modal when button clicked
 // const modalTrigger = document.querySelector('.modal-trigger');

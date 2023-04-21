@@ -116,8 +116,29 @@ export class GreenhouseProxy {
     }
 
     // Update user by id
+    async editUser(userID, userData) {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        }
+        
+        try {
+            let response = await fetch(`${url}/users/${userID}`, options);
+            if (response.ok) {
+                console.log("User Successfully Updated");
+                console.log(await response.json());
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 
     // Delete user by id
+    
 
     // ------------------ROOM------------------
     async listRooms() {
