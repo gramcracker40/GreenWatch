@@ -102,7 +102,7 @@ Delete User
           <!-- User List -->
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-dark" data-bs-target="#users-modal-create" data-bs-toggle="modal">Add User</button>
+          <button type="button" class="btn btn-success" data-bs-target="#users-modal-create" data-bs-toggle="modal">Add User</button>
         </div>
       </div>
     </div>
@@ -142,6 +142,7 @@ Delete User
             <div class="mb-3">
               <label for="admin-status" class="col-form-label">Admin Status</label>
               <select class="form-control" id="edit-admin-status">
+                <option value="" selected disabled hidden>select status</option>
                 <option value=1>true</option>
                 <option value=0>false</option>
               </select>
@@ -149,6 +150,9 @@ Delete User
           </form>
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal">
+            Cancel
+          </button>
           <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
           id="save-user-button">Save</button>
         </div>
@@ -189,7 +193,11 @@ Delete User
             </div>
             <div class="mb-3">
               <label for="admin-status" class="col-form-label">Admin Status</label>
-              <input type="text" class="form-control" id="create-admin-status" required>
+              <select class="form-control" id="create-admin-status">
+                <option value="" selected disabled hidden>select status</option>
+                <option value=1>true</option>
+                <option value=0>false</option>
+              </select>
             </div>
           </form>
         </div>
@@ -198,8 +206,13 @@ Delete User
             Current input fields are invalid.<br>
             Please try again.
           </p>
-          <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
-          id="create-user-button">Create</button>
+          <div>
+            <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-outline-success" data-bs-target="#users-modal" data-bs-toggle="modal" 
+            id="create-user-button">Create</button>
+          </div>
           <!-- <input type="submit" id="create-user-button"> -->
         </div>
       </div>

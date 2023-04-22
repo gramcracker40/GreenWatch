@@ -61,7 +61,7 @@ async function renderUsers() {
     icons.append(trash);
 
     edit.addEventListener('click', () => {
-      sessionStorage.setItem('userID', user['id']);
+      sessionStorage.setItem('selectdUser', user);
       const modalTitle = document.getElementById('user-edit-modal-title');
       modalTitle.textContent = `Editing: ${fullname}`;
     });
@@ -75,30 +75,42 @@ async function renderUsers() {
 }
 
 async function editUser() {
-  const userID = sessionStorage.getItem('userID');
-  sessionStorage.removeItem('userID');
+  // Pull user from session storage for use in edit modal
+  const previousUser = sessionStorage.getItem('user');
+  sessionStorage.removeItem('user');
 
-  const password = document.getElementById('edit-password').value
-  const username = document.getElementById('edit-username').value
-  const isAdmin = document.getElementById('edit-admin-status').value
-  const firstName = document.getElementById('edit-first-name').value
-  const lastName = document.getElementById('edit-last-name').value
-  const email = document.getElementById('edit-email').value
+  // Get values from input fields
+  const password = document.getElementById('edit-password')
+  const username = document.getElementById('edit-username')
+  const isAdmin = document.getElementById('edit-admin-status')
+  const firstName = document.getElementById('edit-first-name')
+  const lastName = document.getElementById('edit-last-name')
+  const email = document.getElementById('edit-email')
 
+  // Load user object with input field values
   const user = {
-    "password": password,
-    "username": username,
-    "is_admin": Boolean(isAdmin),
-    "first_name": firstName,
-    "last_name": lastName,
-    "email": email
+    "password": password.value,
+    "username": username.value,
+    "is_admin": Boolean(isAdmin.value),
+    "first_name": firstName.value,
+    "last_name": lastName.value,
+    "email": email.value
+  }
+
+  Object.keys(user);
+
+  for (const key in user) {
+    if (user[key] == "") {
+      // user[key] = previousUser[key];
+    }
   }
 
   console.log(user);
-  console.log(userID);
-  await proxy.editUser(userID, user);
+  console.log(previousUser);
+  // await proxy.editUser(userID, user);
   renderUsers();
 
+  // Reset input field values
   password.value = "";
   username.value = "";
   isAdmin.value = "0";
@@ -126,11 +138,13 @@ async function createUser() {
     "email": email
   }
 
-  for (const field in user) {
-    if (field == "") {
-      createButton.ariaDisabled = true;
-    }
-  }
+  // Loop through input fields and check if they are empty.
+  // If they are, then disable the create button and signify that the credentials are invalid.
+  // for (const field in user) {
+  //   if (field == "") {
+  //     createButton.ariaDisabled = true;
+  //   }
+  // }
 }
 
 async function deleteUser() {

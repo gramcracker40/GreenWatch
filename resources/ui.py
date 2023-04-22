@@ -16,17 +16,17 @@ blp = Blueprint("User-Interface", "ui", description="provides user interface fil
 
 # grabbing root directory path
 dir = os.path.dirname(os.path.realpath(__file__))
-root = str(os.path.split(os.path.split(os.path.split(dir)[0])[0])[0])
+# root = str(os.path.split(os.path.split(os.path.split(dir)[0])[0])[0])
 
-home_page_path = root + "\\UserInterface\\home.html"
-login_page_path = root + "\\UserInterface\\login.html"
-room_page_path = root + "\\UserInterface\\room.html"
+home_page_path = dir + "\\UserInterface\\home.html"
+login_page_path = dir + "\\UserInterface\\login.html"
+room_page_path = dir + "\\UserInterface\\room.html"
 
 
-image_directory = root + "\\UserInterface\\images"
-css_directory = root + "\\UserInterface\\css"
-js_directory = root + "\\UserInterface\\js"
-api_directory = root + "\\UserInterface\\api"
+image_directory = dir + "\\UserInterface\\images"
+css_directory = dir + "\\UserInterface\\css"
+js_directory = dir + "\\UserInterface\\js"
+api_directory = dir + "\\UserInterface\\api"
 
 
 @blp.route("/")
