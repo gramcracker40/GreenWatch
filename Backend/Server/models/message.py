@@ -7,7 +7,7 @@ class MessageModel(db.Model):
     body = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
     
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
     room_id = db.Column(db.Integer, db.ForeignKey("room.id"), nullable=False)
 
     user = db.relationship("UserModel", back_populates="messages")

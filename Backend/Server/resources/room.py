@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import RoomSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema
+from schemas import RoomSchema, RoomUpdateSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema
 from models import RoomModel, MeasurementModel, MessageModel, UserModel, AgentModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
@@ -58,6 +58,24 @@ class Room(MethodView):
         Get all Rooms
         '''
         return RoomModel.query.get_or_404(room_id)
+    
+    #@jwt_required()
+    @blp.arguments(RoomUpdateSchema)
+    def patch(self, room_data, room_id):
+        '''
+        Update a Room
+        '''
+        room = RoomModel.query.get_or_404(room_id)
+
+        if not room_data:
+            abort(400, message="No data was provided")
+
+        for key, value in room_data.items():
+            setattr(room, key, value)
+
+        db.session.commit()
+
+        return {"Success": True}, 201
     
     #@jwt_required(fresh=True)
     def delete(self, room_id):

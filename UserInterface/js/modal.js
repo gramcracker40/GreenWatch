@@ -3,16 +3,23 @@ import { GreenhouseProxy } from "../api/api.js";
 const proxy = new GreenhouseProxy();
 const usersButton = document.getElementById('users-modal-trigger');
 const usersModalBody = document.getElementById('modal-users-body');
+const roomsButton = document.getElementById('rooms-modal-trigger');
+const roomsModalBody = document.getElementById('modal-rooms-body');
 
 usersButton.addEventListener('click', renderUsers);
+roomsButton.addEventListener('click', renderRooms);
 
  // Create a new list for each user card item
- const listGroup = document.createElement('ul');
- listGroup.setAttribute('class', 'list-group');
+ const userListGroup = document.createElement('ul');
+ userListGroup.setAttribute('class', 'list-group');
+
+ // Create a new list to hold each room card item
+ const roomListGroup = document.createElement('ul');
+ roomListGroup.setAttribute('class', 'list-group');
 
 function resetUserList() {
-  while(listGroup.firstChild) {
-    listGroup.removeChild(listGroup.lastChild);
+  while(userListGroup.firstChild) {
+    userListGroup.removeChild(userListGroup.lastChild);
   }
 }
 
@@ -24,18 +31,18 @@ async function renderUsers() {
   const users = await proxy.getUsers();
   console.log(users);
 
-  usersModalBody.append(listGroup);
+  usersModalBody.append(userListGroup);
 
   // Create user cards for user settings modal
   users.forEach(user => {
     const fullname = user['first_name'] + ' ' + user['last_name'];
-    const listGroupItem = document.createElement('li');
+    const userListGroupItem = document.createElement('li');
     const username = document.createElement('div');
     const icons = document.createElement('div');
     const edit = document.createElement('i');
     const trash = document.createElement('i');
 
-    listGroupItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
+    userListGroupItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
     // listGroupItem.setAttribute('id', user['id']);
     // Set username text content
     username.textContent = fullname;
@@ -43,11 +50,13 @@ async function renderUsers() {
     edit.setAttribute('class', 'fa-solid fa-pen-to-square btn btn-outline-dark m-2');
     edit.setAttribute('data-bs-target', '#users-modal-edit');
     edit.setAttribute('data-bs-toggle', 'modal');
-    trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-dark m-2');
+    trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-danger m-2');
+    trash.setAttribute('data-bs-target', '#users-modal-delete');
+    trash.setAttribute('data-bs-toggle', 'modal');
 
-    listGroup.append(listGroupItem);
-    listGroupItem.append(username);
-    listGroupItem.append(icons);
+    userListGroup.append(userListGroupItem);
+    userListGroupItem.append(username);
+    userListGroupItem.append(icons);
     icons.append(edit);
     icons.append(trash);
 
@@ -58,7 +67,9 @@ async function renderUsers() {
     });
 
     trash.addEventListener('click', () => {
-      console.log('Trash Clicked');
+      sessionStorage.setItem('userID', user['id']);
+      const deletedUser = document.getElementById('user-delete-text');
+      deletedUser.textContent = `${fullname}`;
     });
   });
 }
@@ -122,66 +133,63 @@ async function createUser() {
   }
 }
 
+async function deleteUser() {
+  const userID = sessionStorage.getItem('userID');
+  sessionStorage.removeItem('userID');
+
+  proxy.deleteUser(userID);
+}
+
 const saveButton = document.getElementById('save-user-button');
 saveButton.addEventListener('click', editUser);
 
 const createButton = document.getElementById('create-user-button');
 createButton.addEventListener('click', createUser);
 
-// Open Modal when button clicked
-// const modalTrigger = document.querySelector('.modal-trigger');
-// const modalCreate = document.querySelector('.modal-create');
-// const modal = document.querySelector('.modal');
+const deleteButton = document.getElementById('delete-user-button');
+deleteButton.addEventListener('click', deleteUser);
 
-// modalTrigger.addEventListener('click', function() {
-//   modal.style.display = "block";
-// });
+function resetRoomList() {
+  while(roomListGroup.firstChild) {
+    roomListGroup.removeChild(roomListGroup.lastChild);
+  }
+}
 
-// modalCreate.addEventListener('click', function() {
-//   const roomName = document.getElementById("roomnameTextbox").value;
+async function renderRooms() {
+  // Reset current list
+  resetRoomList();
 
-//   console.log(roomName);
+  // Get list of users
+  const rooms = await proxy.listRooms();
+  console.log(rooms);
 
-//   const room = {
-//     "name": roomName,
-//     "greenhouse_id": 1
-//   }
+  roomsModalBody.append(roomListGroup);
 
-//   // Make api post request with room name.
-//   const options = {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(room)
-//   }
+  // Create user cards for user settings modal
+  rooms.forEach(room => {
+    const roomListGroupItem = document.createElement('li');
+    const roomName = document.createElement('div');
+    const icons = document.createElement('div');
+    const trash = document.createElement('i');
 
-//   createRoom(options);
-// });
+    roomListGroupItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
 
-// // Close Modal when close button clicked
-// const closeButton = document.querySelector('.close-button');
+    // Set username text content
+    roomName.textContent = room['name'];
+    // set icon classes, type, and id
+    trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-danger m-2');
+    trash.setAttribute('data-bs-target', '#rooms-modal-delete');
+    trash.setAttribute('data-bs-toggle', 'modal');
 
-// closeButton.addEventListener('click', function() {
-//   modal.style.display = "none";
-// });
+    roomListGroup.append(roomListGroupItem);
+    roomListGroupItem.append(roomName);
+    roomListGroupItem.append(icons);
+    icons.append(trash);
 
-// // Close Modal when user clicks anywhere outside of the modal
-// window.addEventListener('click', function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// });
-
-// function createRoom(options) {
-//   fetch('http://192.168.1.115:5000/rooms', options)
-//   .then((res) => {
-//     if (res.ok) {
-//       setTimeout(function() {
-//         window.location.href = 'roompage.html';
-//       }, 3000);
-//     }else{
-//       console.log(res.body);
-//     }
-//   })
-// }
+    trash.addEventListener('click', () => {
+      sessionStorage.setItem('roomID', room['id']);
+      const deletedRoom = document.getElementById('room-delete-text');
+      deletedRoom.textContent = `${room['name']}`;
+    });
+  });
+}

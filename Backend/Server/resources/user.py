@@ -121,6 +121,7 @@ class User(MethodView):
             db.session.delete(user)
             db.session.commit()
         except SQLAlchemyError as err:
+            print(err)
             abort(500, message=f"Error in DB drivers --> Error code: {err}")
 
         return {"Success": True}, 200

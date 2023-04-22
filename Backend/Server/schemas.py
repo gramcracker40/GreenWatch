@@ -88,6 +88,8 @@ class MessageSchema(PlainMessageSchema):
 class MessageUpdateSchema(Schema):
     body = fields.String(required=True)
 
+class RoomUpdateSchema(Schema):
+    name = fields.Str(30)
 
 class RoomSchema(PlainRoomSchema):
     experiments = fields.List(fields.Nested(PlainExperimentSchema), dump_only=True)

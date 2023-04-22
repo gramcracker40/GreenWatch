@@ -138,6 +138,21 @@ export class GreenhouseProxy {
     }
 
     // Delete user by id
+    async deleteUser(userID) {
+        const options = {
+            method: 'DELETE'
+        }
+
+        try {
+            let response = await fetch(`${url}/users/${userID}`, options);
+            if (response.ok) {
+                console.log("User Deleted Successfully");
+                console.log(await response.json());
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
 
     // ------------------ROOM------------------
