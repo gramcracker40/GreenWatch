@@ -12,8 +12,9 @@ from utilities.rand import rand_string
 from datetime import datetime, date, time
 import os
 
-blp = Blueprint("login", "login", description="provides user interface files for server")
+blp = Blueprint("User-Interface", "ui", description="provides user interface files for server")
 
+# grabbing root directory path
 dir = os.path.dirname(os.path.realpath(__file__))
 root = str(os.path.split(os.path.split(os.path.split(dir)[0])[0])[0])
 
