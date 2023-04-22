@@ -91,6 +91,9 @@ class Measurement(MethodView):
         room = RoomModel.query.get_or_404(room_id)
         agent = AgentModel.query.filter(AgentModel.room_id == room.id).first()
 
+        if agent is None:
+            abort(404, message="Agent not found for room", error="agent_does_not_exist", fix=f"add an agent to {room.name}")
+
 
         key = request.headers.get("Key")
         same = pbkdf2_sha256.verify(key, agent.private_key)

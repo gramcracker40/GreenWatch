@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
@@ -14,6 +14,7 @@ from resources.user import blp as UserBlueprint
 from resources.room import blp as RoomBlueprint
 from resources.experiment import blp as ExperimentBlueprint
 from resources.server import blp as ServerBlueprint
+from resources.ui import blp as UserInterfaceBlueprint
 
 # factory pattern
 def create_app(db_url=None):
@@ -76,6 +77,23 @@ def create_app(db_url=None):
     api.register_blueprint(ExperimentBlueprint)
     api.register_blueprint(GreenhouseBlueprint)
     api.register_blueprint(ServerBlueprint)
+    api.register_blueprint(UserInterfaceBlueprint)
+
+
+
+    # @app.route("/")
+    # def LoginPage(self):
+    #     dir = os.path.dirname(os.path.realpath(__file__))
+    #     print(dir)
+
+    #     home_page_path = os.path.split(os.path.split(dir)[0])[0] + "\\UserInterface\\home.html"
+    #     print(home_page_path)
+
+    #     home_page = open(home_page_path, "r")
+
+    #     print(home_page.readlines())
+
+    #     return render_template(home_page)
 
     return app
 

@@ -9,3 +9,4 @@ flask-migrate
 flask-cors
 requests
 pyinstaller
+Jinja2
