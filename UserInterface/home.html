@@ -2,15 +2,7 @@
 <!-- 
 DOM Events to dynamically create add room card
 Add text in chatbox for a room with no messages
-Settings only visible to admins
-Implent settings dropdown:
-- Users:
-  + Create dynamic user cards in list-group
-Create user:
-  - Transition between seperate modals, look to docs for more information
-  - button in bottom right
-Delete User
--->
+
 
 
 <!DOCTYPE html>
@@ -102,7 +94,8 @@ Delete User
           <!-- User List -->
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-bs-target="#users-modal-create" data-bs-toggle="modal">Add User</button>
+          <button type="button" class="btn btn-success" data-bs-target="#users-modal-create" data-bs-toggle="modal"
+          id="add-user-button">Add User</button>
         </div>
       </div>
     </div>
@@ -203,8 +196,7 @@ Delete User
         </div>
         <div class="modal-footer justify-content-between" id="users-modal-create-footer">
           <p id="user-create-invalid-text" style="color: red; visibility: hidden;">
-            Current input fields are invalid.<br>
-            Please try again.
+            Input fields cannot be empty.<br>
           </p>
           <div>
             <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal">
@@ -252,6 +244,48 @@ Delete User
         </div>
         <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-rooms-body">
           <!-- Room List -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-target="#rooms-modal-create" data-bs-toggle="modal">Add Room</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Create Room-->
+  <div class="modal fade" id="rooms-modal-create" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Create Room</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-create-room-body">
+          <!-- User Options -->
+          <form>
+            <div class="mb-3">
+              <label for="first-name" class="col-form-label">Room Name</label>
+              <input type="text" class="form-control" id="create-room-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="first-name" class="col-form-label">Greenhouse ID</label>
+              <input type="text" class="form-control" id="create-greenhouse-id" placeholder="e.x.: 1" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between" id="rooms-modal-create-footer">
+          <p id="user-create-invalid-text" style="color: red; visibility: hidden;">
+            Current input fields are invalid.<br>
+            Please try again.
+          </p>
+          <div>
+            <button type="button" class="btn btn-secondary" data-bs-target="#rooms-modal" data-bs-toggle="modal">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-outline-success" data-bs-target="#rooms-modal" data-bs-toggle="modal" 
+            id="create-user-button">Create</button>
+          </div>
+          <!-- <input type="submit" id="create-user-button"> -->
         </div>
       </div>
     </div>

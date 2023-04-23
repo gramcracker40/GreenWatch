@@ -22,22 +22,46 @@ createUserList();
 
 async function generateDropdownItems() {
   const rooms = await proxy.listRooms();
+  
+  // console.log(rooms);
 
-  rooms.forEach(room => {
+  // Check if there are any rooms
+  // If not, then don't generate the dropdown menu
+  if (rooms.length) {
+    // console.log("There are no rooms...");
+    const defaultOption = document.createElement('option')
+    defaultOption.setAttribute('selected', 'selected');
+    defaultOption.setAttribute('disabled', 'disabled');
+    defaultOption.setAttribute('hidden', 'hidden');
+    defaultOption.value = "";
+    defaultOption.textContent = "Select Room";
+    chatbox_dropdown.append(defaultOption);
 
-    // Item based on bootstrap dropdown
-    // const item = document.createElement('li');
-    // item.setAttribute('class', 'dropdown-item');
-    // item.setAttribute('id', `${room['id']}`);
-    // item.textContent = `${room["name"]}`;
-    // document.getElementById('dropdown-menu').append(item);
+    rooms.forEach(room => {
 
-    // Item based on html option selector
-    const option = document.createElement('option');
-    option.setAttribute('value', `${room['id']}`);
-    option.textContent = `${room['name']}`;
-    chatbox_dropdown.append(option);
-  });
+      // Item based on bootstrap dropdown
+      // const item = document.createElement('li');
+      // item.setAttribute('class', 'dropdown-item');
+      // item.setAttribute('id', `${room['id']}`);
+      // item.textContent = `${room["name"]}`;
+      // document.getElementById('dropdown-menu').append(item);
+  
+      // Item based on html option selector
+      const option = document.createElement('option');
+      option.setAttribute('value', `${room['id']}`);
+      option.textContent = `${room['name']}`;
+      chatbox_dropdown.append(option);
+    });
+  }else{
+    const defaultOption = document.createElement('option')
+    defaultOption.setAttribute('selected', 'selected');
+    defaultOption.setAttribute('disabled', 'disabled');
+    defaultOption.setAttribute('hidden', 'hidden');
+    defaultOption.value = "";
+    defaultOption.textContent = "No Rooms Exist";
+    chatbox_dropdown.append(defaultOption);
+    chatbox_dropdown.setAttribute('disabled', 'disabled');
+  }
 }
 
 function resetChatbox() {

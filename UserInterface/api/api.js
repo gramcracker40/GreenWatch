@@ -111,8 +111,13 @@ export class GreenhouseProxy {
 
     // Get all users
     async getUsers() {
-        let response = await fetch(`${url}/users`);
-        return await response.json();
+        try {
+            let response = await fetch(`${url}/users`);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
 
     // Update user by id
@@ -157,8 +162,13 @@ export class GreenhouseProxy {
 
     // ------------------ROOM------------------
     async listRooms() {
-        let response = await fetch(`${url}/rooms`);
-        return await response.json();
+        try {
+            let response = await fetch(`${url}/rooms`);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
 
     createRoom(name) {
@@ -252,11 +262,12 @@ export class GreenhouseProxy {
             }
         }
       
-        let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
-      
-        // console.log(data);
-      
-        return await response.json();
+        try {
+            let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // Create new room message by room id

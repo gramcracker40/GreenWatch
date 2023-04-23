@@ -97,11 +97,11 @@ async function editUser() {
     "email": email.value
   }
 
-  Object.keys(user);
+  const keys = Object.keys(user);
 
-  for (const key in user) {
+  for (const key in keys) {
     if (user[key] == "") {
-      // user[key] = previousUser[key];
+      user[key] = previousUser[key];
     }
   }
 
@@ -119,32 +119,41 @@ async function editUser() {
   email.value = "";
 }
 
-async function createUser() {
-  const userCreateModal = document.getElementById('users-modal-create-footer');
-
-  const password = document.getElementById('create-password').value
-  const username = document.getElementById('create-username').value
-  const isAdmin = document.getElementById('create-admin-status').value
-  const firstName = document.getElementById('create-first-name').value
-  const lastName = document.getElementById('create-last-name').value
-  const email = document.getElementById('create-email').value
+function checkCreateInputFields() {
+  const emptyFieldsText = document.getElementById('user-create-invalid-text');
+  const password = document.getElementById('create-password')
+  const username = document.getElementById('create-username')
+  const isAdmin = document.getElementById('create-admin-status')
+  const firstName = document.getElementById('create-first-name')
+  const lastName = document.getElementById('create-last-name')
+  const email = document.getElementById('create-email')
 
   const user = {
-    "password": password,
-    "username": username,
-    "is_admin": Boolean(isAdmin),
-    "first_name": firstName,
-    "last_name": lastName,
-    "email": email
+    "password": password.value,
+    "username": username.value,
+    "is_admin": Boolean(isAdmin).value,
+    "first_name": firstName.value,
+    "last_name": lastName.value,
+    "email": email.value
   }
 
   // Loop through input fields and check if they are empty.
   // If they are, then disable the create button and signify that the credentials are invalid.
-  // for (const field in user) {
-  //   if (field == "") {
-  //     createButton.ariaDisabled = true;
-  //   }
-  // }
+  const keys = Object.keys(user);
+  console.log(keys);
+
+  for (const key in keys) {
+    if (user[key] == null) {
+      createButton.disabled = true;
+      emptyFieldsText.style.visibility = 'visible';
+    }
+  }
+}
+
+async function createUser() {
+  const userCreateModal = document.getElementById('users-modal-create-footer');
+
+  checkCreateInputFields();
 }
 
 async function deleteUser() {
@@ -156,6 +165,9 @@ async function deleteUser() {
 
 const saveButton = document.getElementById('save-user-button');
 saveButton.addEventListener('click', editUser);
+
+const addUserButton = document.getElementById('add-user-button');
+addUserButton.addEventListener('click', checkCreateInputFields);
 
 const createButton = document.getElementById('create-user-button');
 createButton.addEventListener('click', createUser);
