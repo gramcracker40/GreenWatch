@@ -8,10 +8,10 @@ class UserLoginSchema(Schema):
 
 class UserRegisterSchema(Schema):
     id = fields.Int(dump_only=True)
-    username = fields.Str(required=True)
+    username = fields.Str(required=True, unique=True)
     password = fields.Str(required=True, load_only=True)
     is_admin = fields.Boolean(required=True)
-    email = fields.Str(required=True)
+    email = fields.Str(required=True, unique=True)
     first_name = fields.Str(required=True)
     last_name = fields.Str(required=True)
 

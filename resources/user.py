@@ -25,22 +25,23 @@ class UserRegister(MethodView):
         
         if UserModel.query.filter(UserModel.username == user_data["username"]).first():
             abort(409, message="A user with that username already exists")
-
-        user = UserModel(
-            username=user_data['username'], 
-            password=pbkdf2_sha256.hash(user_data['password']),
-            is_admin=user_data['is_admin'],
-            email=user_data['email'],
-            first_name=user_data['first_name'],
-            last_name=user_data["last_name"]
-        )
-
+           
         try:
+            user = UserModel(
+                username=user_data['username'], 
+                password=pbkdf2_sha256.hash(user_data['password']),
+                is_admin=user_data['is_admin'],
+                email=user_data['email'],
+                first_name=user_data['first_name'],
+                last_name=user_data["last_name"]
+            )
+
             db.session.add(user)
             db.session.commit()
-
         except IntegrityError as err:
-            abort(409, message=f"Duplicate resource identified - {err}")
+            duplicate = str(err.orig).split('"')
+            abort(409, message=f"User with - {duplicate[1]} - already exists")
+
         except SQLAlchemyError as err:
             abort(500, message=f"Database error occurred, error: {err}")
 

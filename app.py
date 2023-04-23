@@ -16,8 +16,11 @@ from resources.experiment import blp as ExperimentBlueprint
 from resources.server import blp as ServerBlueprint
 from resources.ui import blp as UserInterfaceBlueprint
 
+from dotenv import dotenv_values
+config = dotenv_values(".flaskenv")
+
 # factory pattern
-def create_app(db_url=None):
+def create_app(db_url=config["DATABASE_URI"]):
     app = Flask(__name__)
     CORS(app)
 
@@ -78,22 +81,6 @@ def create_app(db_url=None):
     api.register_blueprint(GreenhouseBlueprint)
     api.register_blueprint(ServerBlueprint)
     api.register_blueprint(UserInterfaceBlueprint)
-
-
-
-    # @app.route("/")
-    # def LoginPage(self):
-    #     dir = os.path.dirname(os.path.realpath(__file__))
-    #     print(dir)
-
-    #     home_page_path = os.path.split(os.path.split(dir)[0])[0] + "\\UserInterface\\home.html"
-    #     print(home_page_path)
-
-    #     home_page = open(home_page_path, "r")
-
-    #     print(home_page.readlines())
-
-    #     return render_template(home_page)
 
     return app
 

@@ -79,7 +79,7 @@ async function renderRooms() {
   
     card.addEventListener('click', () => {
       // console.log(card.getAttribute('id'));
-      window.location.href = "./roompage.html";
+      window.location.href = `./home/room/${room['id']}`;
     });
   });
 

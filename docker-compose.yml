@@ -2,11 +2,25 @@ version: '3.8'
 
 services:
   web:
-    build: ./Backend/Server
+    build: ./
     command: flask run -h 0.0.0.0
     volumes:
-      - ./Backend/Server/:/usr/src/app/Backend/Server/
+      - ./:/usr/src/app/
     ports:
       - 5000:5000
     env_file:
-      - ./Backend/Server/.flaskenv
+      - .flaskenv
+
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_flask
+      - POSTGRES_PASSWORD=hello_flask
+      - POSTGRES_DB=hello_flask_dev
+
+volumes:
+  postgres_data:
+    
