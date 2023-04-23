@@ -21,7 +21,7 @@ createUserList();
 // console.log(usernames);
 
 async function generateDropdownItems() {
-  const rooms = await proxy.listRooms();
+  const rooms = await proxy.getRooms();
   
   // console.log(rooms);
 

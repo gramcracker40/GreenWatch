@@ -113,47 +113,101 @@ async function editUser() {
   // Reset input field values
   password.value = "";
   username.value = "";
-  isAdmin.value = "0";
+  isAdmin.value = "";
   firstName.value = "";
   lastName.value = "";
   email.value = "";
 }
 
-function checkCreateInputFields() {
+function isStrongPassword(password) {
+  const passwordParamText = document.getElementById('user-create-invalid-password-text');
+  const strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})');
+
+  if (!strongPassword.test(password)) {
+    passwordParamText.style.visibility = 'visible';
+    return false;
+  }
+  passwordParamText.style.visibility = 'hidden';
+  return true;
+}
+
+function isFieldsEmpty(user) {
   const emptyFieldsText = document.getElementById('user-create-invalid-text');
-  const password = document.getElementById('create-password')
-  const username = document.getElementById('create-username')
-  const isAdmin = document.getElementById('create-admin-status')
-  const firstName = document.getElementById('create-first-name')
-  const lastName = document.getElementById('create-last-name')
-  const email = document.getElementById('create-email')
+
+  for (const key in user) {
+    if (user[key] == "") {
+      emptyFieldsText.style.visibility = 'visible';
+      return true;
+    }
+  }
+  emptyFieldsText.style.visibility = 'hidden';
+  return false;
+}
+
+function checkCreateInputFields() {
+  const user = getCreateUserObject();
+
+  // Storing in variables so both functions run 
+  // instead of accidentally short circuiting the other 
+  // within if statement below.
+  const fieldsEmpty = isFieldsEmpty(user);
+  const strongPassword = isStrongPassword(user['password']);
+  
+  // Check if inputfields are empty and if the password is strong.
+  // If both are true, then allow for the creation of the user.
+  if (!fieldsEmpty && strongPassword) {
+    createButton.disabled = false;
+  }else{
+    createButton.disabled = true;
+  }
+}
+
+function resetCreateInputFields() {
+  const password = document.getElementById('create-password');
+  const username = document.getElementById('create-username');
+  const isAdmin = document.getElementById('create-admin-status');
+  const firstName = document.getElementById('create-first-name');
+  const lastName = document.getElementById('create-last-name');
+  const email = document.getElementById('create-email');
+
+  password.value = "";
+  username.value = "";
+  isAdmin.value = "";
+  firstName.value = "";
+  lastName.value = "";
+  email.value = "";
+}
+
+function getCreateUserObject() {
+  const password = document.getElementById('create-password');
+  const username = document.getElementById('create-username');
+  const isAdmin = document.getElementById('create-admin-status');
+  const firstName = document.getElementById('create-first-name');
+  const lastName = document.getElementById('create-last-name');
+  const email = document.getElementById('create-email');
 
   const user = {
     "password": password.value,
     "username": username.value,
-    "is_admin": Boolean(isAdmin).value,
+    "is_admin": isAdmin.value,
     "first_name": firstName.value,
     "last_name": lastName.value,
     "email": email.value
   }
 
-  // Loop through input fields and check if they are empty.
-  // If they are, then disable the create button and signify that the credentials are invalid.
-  const keys = Object.keys(user);
-  console.log(keys);
-
-  for (const key in keys) {
-    if (user[key] == null) {
-      createButton.disabled = true;
-      emptyFieldsText.style.visibility = 'visible';
-    }
-  }
+  return user;
 }
 
 async function createUser() {
-  const userCreateModal = document.getElementById('users-modal-create-footer');
+  // const userCreateModal = document.getElementById('users-modal-create-footer');
+  const user = getCreateUserObject();
 
-  checkCreateInputFields();
+  // Convert admin status to boolean after checking for empty fields.
+  user['is_admin'] = Boolean(user['is_admin']); 
+
+  await proxy.registerUser(user);
+  resetCreateInputFields();
+  renderUsers();
 }
 
 async function deleteUser() {
@@ -163,14 +217,32 @@ async function deleteUser() {
   proxy.deleteUser(userID);
 }
 
+// Event Listeners for modal buttons
+
+// save button
 const saveButton = document.getElementById('save-user-button');
 saveButton.addEventListener('click', editUser);
 
+// add user modal popup
 const addUserButton = document.getElementById('add-user-button');
 addUserButton.addEventListener('click', checkCreateInputFields);
+addUserButton.addEventListener('click', () => {
+  document.addEventListener('keyup', checkCreateInputFields);
+  document.addEventListener('mouseup', checkCreateInputFields);
+});
+
+const cancelCreateUserButton = document.getElementById('create-user-cancel-button');
+cancelCreateUserButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkCreateInputFields);
+  document.removeEventListener('mouseup', checkCreateInputFields);
+})
 
 const createButton = document.getElementById('create-user-button');
 createButton.addEventListener('click', createUser);
+createButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkCreateInputFields);
+  document.removeEventListener('mouseup', checkCreateInputFields);
+});
 
 const deleteButton = document.getElementById('delete-user-button');
 deleteButton.addEventListener('click', deleteUser);
@@ -186,7 +258,7 @@ async function renderRooms() {
   resetRoomList();
 
   // Get list of users
-  const rooms = await proxy.listRooms();
+  const rooms = await proxy.getRooms();
   console.log(rooms);
 
   roomsModalBody.append(roomListGroup);

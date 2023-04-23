@@ -70,7 +70,7 @@ export class GreenhouseProxy {
     }
 
     // ------------------USERS------------------
-    registerUser(user) {
+    async registerUser(user) {
         const options = {
             method: 'POST',
             headers: {
@@ -79,14 +79,14 @@ export class GreenhouseProxy {
             body: JSON.stringify(user)
         }
 
-        fetch(`${url}/register`, options)
-        .then((res) => {
-            if (res.ok) {
-                console.log("User Created Successfully");
-            }else{
-                console.log(res);
-            }
-        })
+        try {
+            let response = await fetch(`${url}/register`, options);
+            // if (response.ok) {
+            //     console.log("User Created Successfully");
+            // }
+        } catch (error) {
+            console.log(error);
+        }        
     }
 
     login() {
@@ -161,7 +161,7 @@ export class GreenhouseProxy {
     
 
     // ------------------ROOM------------------
-    async listRooms() {
+    async getRooms() {
         try {
             let response = await fetch(`${url}/rooms`);
             return await response.json();
@@ -171,9 +171,9 @@ export class GreenhouseProxy {
         
     }
 
-    createRoom(name) {
+    async createRoom(name, greenhouse_id) {
         const room = {
-            "greenhouse_id": 1,
+            "greenhouse_id": greenhouse_id,
             "name": name
         }
 
@@ -185,14 +185,14 @@ export class GreenhouseProxy {
             body: JSON.stringify(room)
         }
 
-        fetch(`${url}/rooms`, options)
-        .then((res) => {
-            if (res.ok) {
+        try {
+            let response = await fetch(`${url}/rooms`, options);
+            if (response.ok) {
                 console.log("Room Created Successfully");
-            }else{
-                console.log(res);
             }
-        })
+        } catch (error) {
+            console.log(error);
+        }        
     }
 
     // Get room by id
@@ -349,7 +349,7 @@ export class GreenhouseProxy {
 // proxy.login();
 // proxy.getUsers();
 // proxy.createRoom("Room 1");
-// proxy.listRooms();
+// proxy.getRooms();
 // proxy.deleteRoom(1);
 // proxy.createMeasurement(1, measurement);
 // proxy.getAllMessages();

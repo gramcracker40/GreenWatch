@@ -6,7 +6,7 @@ const main = document.createElement('main');
 room_grid.append(main);
 
 async function renderRooms() {
-  const rooms = await proxy.listRooms();
+  const rooms = await proxy.getRooms();
   // console.log(rooms);
 
   // forEach room, in rooms, create a card and append it to main.
