@@ -156,9 +156,9 @@ function checkCreateInputFields() {
   // Check if inputfields are empty and if the password is strong.
   // If both are true, then allow for the creation of the user.
   if (!fieldsEmpty && strongPassword) {
-    createButton.disabled = false;
+    createUserButton.disabled = false;
   }else{
-    createButton.disabled = true;
+    createUserButton.disabled = true;
   }
 }
 
@@ -217,11 +217,10 @@ async function deleteUser() {
   proxy.deleteUser(userID);
 }
 
-// Event Listeners for modal buttons
-
+// Event Listeners for user modal buttons
 // save button
-const saveButton = document.getElementById('save-user-button');
-saveButton.addEventListener('click', editUser);
+const saveUserButton = document.getElementById('save-user-button');
+saveUserButton.addEventListener('click', editUser);
 
 // add user modal popup
 const addUserButton = document.getElementById('add-user-button');
@@ -237,15 +236,43 @@ cancelCreateUserButton.addEventListener('click', () => {
   document.removeEventListener('mouseup', checkCreateInputFields);
 })
 
-const createButton = document.getElementById('create-user-button');
-createButton.addEventListener('click', createUser);
-createButton.addEventListener('click', () => {
+const createUserButton = document.getElementById('create-user-button');
+createUserButton.addEventListener('click', createUser);
+createUserButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkCreateInputFields);
   document.removeEventListener('mouseup', checkCreateInputFields);
 });
 
-const deleteButton = document.getElementById('delete-user-button');
-deleteButton.addEventListener('click', deleteUser);
+const deleteUserButton = document.getElementById('delete-user-button');
+deleteUserButton.addEventListener('click', deleteUser);
+
+const saveRoomButton = document.getElementById('save-user-button');
+saveRoomButton.addEventListener('click', editUser);
+
+// Event Listeners for user modal buttons
+// add user modal popup
+const addRoomButton = document.getElementById('add-room-button');
+addRoomButton.addEventListener('click', checkCreateInputFields);
+addRoomButton.addEventListener('click', () => {
+  document.addEventListener('keyup', checkCreateInputFields);
+  document.addEventListener('mouseup', checkCreateInputFields);
+});
+
+const cancelCreateRoomButton = document.getElementById('create-room-cancel-button');
+cancelCreateRoomButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkCreateInputFields);
+  document.removeEventListener('mouseup', checkCreateInputFields);
+})
+
+const createRoomButton = document.getElementById('create-room-button');
+createRoomButton.addEventListener('click', createUser);
+createRoomButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkCreateInputFields);
+  document.removeEventListener('mouseup', checkCreateInputFields);
+});
+
+const deleteRoomButton = document.getElementById('delete-room-button');
+deleteRoomButton.addEventListener('click', deleteUser);
 
 function resetRoomList() {
   while(roomListGroup.firstChild) {
