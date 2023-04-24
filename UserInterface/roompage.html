@@ -41,60 +41,66 @@
   </nav>
 
   <!-- Main Content -->
-  <div class="container my-5">
-    <h1 class="text-center mb-5">Room Name</h1>
-      <div class="container mt-5 mb-5" style="width: 70%;">
-      <div class="row">
-        <div class="col-md-8">
-          
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="chart-selector">Select a Chart:</label>
-            <select class="form-control" id="chart-selector">
-              <option value="temperature">Temperature</option>
-              <option value="humidity">Humidity</option>
-              <option value="air pressure">Air Pressure</option>
-              <option value="Light">Light</option>
-            </select>
-          </div>
-        </div>
-      </div>
+<div class="container my-5">
+  <h1 class="text-center mb-5">Room Name</h1>
+  <div class="row justify-content-between" style="width: 70%;">
+    <div class="col-md-8">
       <div class="card-body">
         <canvas id="myChart">
-           Canvas
+          Canvas
         </canvas>
       </div>
-                        <div class="card-footer d-flex justify-content-between">
-                        <div class="btn-group">
-                            <button class="btn btn-secondary">6h</button>
-                            <button class="btn btn-secondary">12h</button>
-                            <button class="btn btn-secondary">24h</button>
-                        </div>
-                        <button id="export-data-button" class="btn btn-primary" >Export Data</button>
+      <div class="card-footer d-flex justify-content-between">
+        <div class="btn-group">
+          <button class="btn btn-secondary">6h</button>
+          <button class="btn btn-secondary">12h</button>
+          <button class="btn btn-secondary">24h</button>
+        </div>
+        <button id="export-data-button" class="btn btn-primary">Export Data</button>
 
-                          <script>
-                            // Get a reference to the chart canvas element
-                            const chartCanvas = document.getElementById('myChart');
+        <script>
+          // Get a reference to the chart canvas element
+          const chartCanvas = document.getElementById('myChart');
 
-                            // Attach an event listener to the export data button
-                            document.getElementById('export-data-button').addEventListener('click', () => {
-                              // Get the chart data as a data URL
-                              const chartDataURL = chartCanvas.toBase64Image();
+          // Attach an event listener to the export data button
+          document.getElementById('export-data-button').addEventListener('click', () => {
+            // Get the chart data as a data URL
+            const chartDataURL = chartCanvas.toBase64Image();
 
-                              // Create a temporary anchor element and set its attributes
-                              const downloadLink = document.createElement('a');
-                              downloadLink.setAttribute('href', chartDataURL);
-                              downloadLink.setAttribute('download', 'chart-data.csv');
+            // Create a temporary anchor element and set its attributes
+            const downloadLink = document.createElement('a');
+            downloadLink.setAttribute('href', chartDataURL);
+            downloadLink.setAttribute('download', 'chart-data.csv');
 
-                              // Programmatically click the anchor element to trigger the download
-                              downloadLink.click();
-                            });
-                          </script>
-                    </div>
-                </div>
+            // Programmatically click the anchor element to trigger the download
+            downloadLink.click();
+          });
+        </script>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="container mt-5">
+        <div class="card mx-auto">
+          <div class="card-header bg-transparent">
+            <div class="d-flex align-items-center justify-content-between">
+              Notes
+              <!-- Dropdown -->
+              <!-- <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="chatbox-dropdown" data-bs-toggle="dropdown">
+                      Select Room
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="chatbox-dropdown" id="dropdown-menu">
+                    </ul>
+                  </div> -->
             </div>
           </div>
+          <script type="module" src="js/chatbox.js"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
             <div class="container">
                 <div class="row mt-4">
@@ -272,40 +278,6 @@
             }
           }
         });
-      // // include setup then config above 
-      // // setup block
-      // const labels = Utils.months({count: 7});
-      // const data = {
-      //   labels: labels,
-      //   datasets: [{
-      //     label: 'My First Dataset',
-      //     data: [65, 59, 80, 81, 56, 55, 40],
-      //     fill: false,
-      //     borderColor: 'rgb(75, 192, 192)',
-      //     tension: 0.1
-      //   }]
-      // };
-
-      // // config block
-      // const config = {
-      //     type: 'line',
-      //     data: data,
-      //   };
-      
-      //   // render block
-      // var lineChart = new Chart(
-      //   document.getElementById('line-chart'),
-      //   config
-      // );
-
-      // var ctx = document.getElementById('line-chart').getContext('2d');
-      // const lineChart = new Chart(ctx, {
-      //   type: 'line',
-      //   data,
-      //   options: {}
-      // });
-
-     
     </script>
 
   </body>
