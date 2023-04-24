@@ -216,7 +216,11 @@
                                 <div class="list-group">
                                     <div class="list-group-item">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">Experiment 1</h6>
+                                            <h5 class="mb-1">Experiment 1</h5>
+                                            <h6 class="mb-2">Temperature High:</h6>
+                                            <h6 class="mb-2">Temperature Low:</h6>
+                                            <h6 class="mb-2">Humidity High:</h6>
+                                            <h6 class="mb-2">Humidity Low:</h6>
                                             <small>2023-04-01 23:09</small>
                                         </div>
                                         <p class="mb-1">Details:</p>
@@ -299,6 +303,68 @@
                                                 </div>
                                               </div>
                                             </div>
+
+                                            <button type="button" class="btn btn-sm btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#view-experiment-modal" >
+                                              View
+                                            </button>
+
+                                              <!-- Modal -->
+                                            <div class="modal fade" id="view-experiment-modal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="viewModalLabel">Experiment</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form>
+                                                      <div class="mb-3">
+                                                        <label for="experimentName" class="form-label">Experiment Name</label>
+                                                        <input type="text" class="form-control" id="experimentName" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="startDate" class="form-label">Start Date</label>
+                                                        <input type="date" class="form-control" id="startDate" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="endDate" class="form-label">End Date</label>
+                                                        <input type="date" class="form-control" id="endDate" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="highThreshold" class="form-label">Temperature High</label>
+                                                        <input type="number" class="form-control" id="highThreshold" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="lowThreshold" class="form-label">Temperature Low</label>
+                                                        <input type="number" class="form-control" id="lowThreshold" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="humhighThreshold" class="form-label">Humidity High</label>
+                                                        <input type="number" class="form-control" id="humhighThreshold" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="humlowThreshold" class="form-label">Humidity Low</label>
+                                                        <input type="number" class="form-control" id="humlowThreshold" disabled>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="experimentDetails" class="form-label">Experiment Details</label>
+                                                        <textarea class="form-control" id="experimentDetails" rows="3" disabled></textarea>
+                                                      </div>
+                                                     <div class="mb-3">
+                                                      <label for="avgTemp">Avg. Temperature: </label>
+                                                      <label for="avgHumid">Avg. Humidity: </label>
+                                                     </div>
+                                                    </form>
+                                                   
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <!-- More experiments can be added here as list items -->
