@@ -1,6 +1,6 @@
 FLASK_APP=app
 FLASK_DEBUG=1
-DATABASE_URI=postgresql://hello_flask:hello_flask@db:5432/hello_flask_dev
+DATABASE_URI=postgresql://hello_flask:hello_flask@db:5432/hello_flask_prod
 SQL_HOST=db
 SQL_PORT=5432
 DATABASE=postgres

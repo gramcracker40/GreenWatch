@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
   web:
-    build: ./
-    command: gunicorn --bind 0.0.0.0:5000 app:app
-    ports:
-      - 5000:5000
+    build:
+      dockerfile: Dockerfile.prod 
+    command: gunicorn --bind 0.0.0.0:5000 --workers=2 'app:create_app()'
+    expose:
+      - 5000
     env_file:
       - .flaskenv
     depends_on:
@@ -17,6 +18,13 @@ services:
       - postgres_data_prod:/var/lib/postgresql/data/
     env_file:
       - ./.flaskenv
+
+  nginx:
+    build: ./services/nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
 
 volumes:
   postgres_data_prod:

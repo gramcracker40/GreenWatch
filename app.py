@@ -1,6 +1,21 @@
+# Main driver of Greenwatch application. Creates the main Flask application. All other onsite deliverables
+# for the backend of an individual Greenhouse object can be found in /Backend 
+#
+# APPLICATION .ENV FILE
+##  All environment variables can be found in .flaskenv , set the postgres connection string uri there to connect the http
+# server to the database. These two seperate components are set up using the "docker-compose build" command. This command 
+# goes and reads the docker-compose.yml file and determines how to setup the development environment based off of the steps
+# listed in the markup.
+# 
+#
+# DOCUMENTATION:
+#  While the development flask server is running on your local machine or in the cloud you can find the documentation
+#  for the API by going to 127.0.0.1:5000/swagger-ui, this is a well written piece of documentation that goes over exactly
+#  how to make each call to the server.
+
 import os
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
@@ -19,8 +34,10 @@ from resources.ui import blp as UserInterfaceBlueprint
 from dotenv import dotenv_values
 config = dotenv_values(".flaskenv")
 
+db_ = config["DATABASE_URI"]
+
 # factory pattern
-def create_app(db_url=config["DATABASE_URI"]):
+def create_app(db_url=None):
     app = Flask(__name__)
     CORS(app)
 
@@ -31,7 +48,7 @@ def create_app(db_url=config["DATABASE_URI"]):
     app.config["OPENAPI_URL_PREFIX"] = "/"
     app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URI", "sqlite:///data.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///data.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
     
