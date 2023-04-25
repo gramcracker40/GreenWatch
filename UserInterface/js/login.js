@@ -23,7 +23,7 @@ function validateUser() {
       document.getElementById("invalidCreds").style.visibility = 'hidden';
       showThankYou();
       setTimeout(function() {
-        window.location.href = 'home.html';
+        window.location.href = '/home';
       }, 3000);
     }else{
       console.log("Invalid Credentials");

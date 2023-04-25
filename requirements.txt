@@ -9,4 +9,5 @@ flask-migrate
 flask-cors
 requests
 pyinstaller
-Jinja2
+psycopg2-binary
+gunicorn

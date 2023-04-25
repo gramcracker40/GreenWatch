@@ -32,18 +32,18 @@
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Room Name</a>
-          </li>
+         
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Main Content -->
+        <!-- Main Content -->
   <div class="container my-5">
     <h1 class="text-center mb-5">Room Name</h1>
-      <div class="container mt-5 mb-5" style="width: 70%;">
+    <div class="container-fluid">
+    
+      <div class="container mt-5 mb-5 justify-content-between" style="width: 80%;">
       <div class="row">
         <div class="col-md-8">
           
@@ -92,9 +92,62 @@
                             });
                           </script>
                     </div>
-                </div>
+                   
+                    
+                
+            </div> 
+            <!-- Notes Chatbox -->
+<div class="container mt-3 d-flex justify-content-end">
+  <div class="row">
+    
+    <div class="col-md-4">
+      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#notes" aria-expanded="false" aria-controls="notes">Notes</button>
+    </div>
+  </div>
+  <div class="collapse mt-3" id="notes">
+    <div class="card card-body">
+      <ul class="list-unstyled">
+        <li class="border-bottom">
+          <div class="d-flex justify-content-between">
+            <div>
+              <span class="fw-bold">John:</span>
+              <span>Work completed</span>
             </div>
+            <small class="text-muted">2023-04-25 09:30 AM</small>
           </div>
+          <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+        </li>
+        <li class="border-bottom">
+          <div class="d-flex justify-content-between">
+            <div>
+              <span class="fw-bold">Jane:</span>
+              <span>Work to be done</span>
+            </div>
+            <small class="text-muted">2023-04-24 05:30 PM</small>
+          </div>
+          <div>Phasellus mollis lorem euismod bibendum consequat.</div>
+        </li>
+      </ul>
+      <form id="notes-form" class="mt-3">
+        <div class="mb-3">
+          <textarea class="form-control" id="notes-textarea" rows="3" placeholder="Enter note..."></textarea>
+        </div>
+        <div class="mb-3">
+          <select class="form-select" id="notes-select">
+            <option value="completed">Work completed</option>
+            <option value="todo">Work to be done</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Note</button>
+      </form>
+    </div>
+  </div>
+</div>
+         
+        </div>
+
+             
+
 
             <div class="container">
                 <div class="row mt-4">
@@ -128,12 +181,20 @@
                                             <input type="date" class="form-control" id="endDate" required>
                                           </div>
                                           <div class="mb-3">
-                                            <label for="highThreshold" class="form-label">Temperature High</label>
-                                            <input type="number" class="form-control" id="highThreshold" required>
+                                            <label for="temphighThreshold" class="form-label">Temperature High</label>
+                                            <input type="number" class="form-control" id="temphighThreshold" required>
                                           </div>
                                           <div class="mb-3">
-                                            <label for="lowThreshold" class="form-label">Temperature Low</label>
-                                            <input type="number" class="form-control" id="lowThreshold" required>
+                                            <label for="templowThreshold" class="form-label">Temperature Low</label>
+                                            <input type="number" class="form-control" id="templowThreshold" required>
+                                          </div>
+                                          <div class="mb-3">
+                                            <label for="humhighThreshold" class="form-label">Humidity High</label>
+                                            <input type="number" class="form-control" id="humhighThreshold" required>
+                                          </div>
+                                          <div class="mb-3">
+                                            <label for="humlowThreshold" class="form-label">Humidity Low</label>
+                                            <input type="number" class="form-control" id="humlowThreshold" required>
                                           </div>
                                           <div class="mb-3">
                                             <label for="experimentDetails" class="form-label">Experiment Details</label>
@@ -155,7 +216,11 @@
                                 <div class="list-group">
                                     <div class="list-group-item">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">Experiment 1</h6>
+                                            <h5 class="mb-1">Experiment 1</h5>
+                                            <h6 class="mb-2">Temperature High:</h6>
+                                            <h6 class="mb-2">Temperature Low:</h6>
+                                            <h6 class="mb-2">Humidity High:</h6>
+                                            <h6 class="mb-2">Humidity Low:</h6>
                                             <small>2023-04-01 23:09</small>
                                         </div>
                                         <p class="mb-1">Details:</p>
@@ -197,6 +262,14 @@
                                                         <input type="number" class="form-control" id="lowThreshold" required>
                                                       </div>
                                                       <div class="mb-3">
+                                                        <label for="humhighThreshold" class="form-label">Humidity High</label>
+                                                        <input type="number" class="form-control" id="humhighThreshold" required>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="humlowThreshold" class="form-label">Humidity Low</label>
+                                                        <input type="number" class="form-control" id="humlowThreshold" required>
+                                                      </div>
+                                                      <div class="mb-3">
                                                         <label for="experimentDetails" class="form-label">Experiment Details</label>
                                                         <textarea class="form-control" id="experimentDetails" rows="3" required></textarea>
                                                       </div>
@@ -230,6 +303,68 @@
                                                 </div>
                                               </div>
                                             </div>
+
+                                            <button type="button" class="btn btn-sm btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#view-experiment-modal" >
+                                              View
+                                            </button>
+
+                                              <!-- Modal -->
+                                            <div class="modal fade" id="view-experiment-modal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="viewModalLabel">Experiment</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form>
+                                                      <div class="mb-3">
+                                                        <label for="experimentName" class="form-label">Experiment Name</label>
+                                                        <input type="text" class="form-control" id="experimentName" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="startDate" class="form-label">Start Date</label>
+                                                        <input type="date" class="form-control" id="startDate" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="endDate" class="form-label">End Date</label>
+                                                        <input type="date" class="form-control" id="endDate" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="highThreshold" class="form-label">Temperature High</label>
+                                                        <input type="number" class="form-control" id="highThreshold" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="lowThreshold" class="form-label">Temperature Low</label>
+                                                        <input type="number" class="form-control" id="lowThreshold" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="humhighThreshold" class="form-label">Humidity High</label>
+                                                        <input type="number" class="form-control" id="humhighThreshold" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="humlowThreshold" class="form-label">Humidity Low</label>
+                                                        <input type="number" class="form-control" id="humlowThreshold" readonly>
+                                                      </div>
+                                                      <div class="mb-3">
+                                                        <label for="experimentDetails" class="form-label">Experiment Details</label>
+                                                        <textarea class="form-control" id="experimentDetails" rows="3" readonly></textarea>
+                                                      </div>
+                                                     <div class="mb-3">
+                                                      <label for="avgTemp">Avg. Temperature: </label>
+                                                      <label for="avgHumid">Avg. Humidity: </label>
+                                                     </div>
+                                                    </form>
+                                                   
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <!-- More experiments can be added here as list items -->
@@ -272,42 +407,20 @@
             }
           }
         });
-      // // include setup then config above 
-      // // setup block
-      // const labels = Utils.months({count: 7});
-      // const data = {
-      //   labels: labels,
-      //   datasets: [{
-      //     label: 'My First Dataset',
-      //     data: [65, 59, 80, 81, 56, 55, 40],
-      //     fill: false,
-      //     borderColor: 'rgb(75, 192, 192)',
-      //     tension: 0.1
-      //   }]
-      // };
-
-      // // config block
-      // const config = {
-      //     type: 'line',
-      //     data: data,
-      //   };
-      
-      //   // render block
-      // var lineChart = new Chart(
-      //   document.getElementById('line-chart'),
-      //   config
-      // );
-
-      // var ctx = document.getElementById('line-chart').getContext('2d');
-      // const lineChart = new Chart(ctx, {
-      //   type: 'line',
-      //   data,
-      //   options: {}
-      // });
-
-     
     </script>
-
+  </div>
   </body>
 </html>
 <html></html>
+
+
+
+<!-- <div class="mb-3">
+  <label for="humhighThreshold" class="form-label">Humidity High</label>
+  <input type="number" class="form-control" id="humhighThreshold" required>
+</div>
+<div class="mb-3">
+  <label for="humlowThreshold" class="form-label">Humidity Low</label>
+  <input type="number" class="form-control" id="humlowThreshold" required>
+</div> -->
+
