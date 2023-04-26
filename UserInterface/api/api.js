@@ -1,4 +1,5 @@
 const url = "http://127.0.0.1:5000"
+const token = `Bearer ${sessionStorage.getItem('jwt')}`;
 
 // const userRegister1 = {
 //     "first_name": "Billy",
@@ -152,7 +153,6 @@ export class GreenhouseProxy {
             let response = await fetch(`${url}/users/${userID}`, options);
             if (response.ok) {
                 console.log("User Deleted Successfully");
-                console.log(await response.json());
             }
         } catch (error) {
             console.log(error);
@@ -171,12 +171,7 @@ export class GreenhouseProxy {
         
     }
 
-    async createRoom(name, greenhouse_id) {
-        const room = {
-            "greenhouse_id": greenhouse_id,
-            "name": name
-        }
-
+    async createRoom(room) {
         const options = {
             method: 'POST',
             headers: {
@@ -197,25 +192,22 @@ export class GreenhouseProxy {
 
     // Get room by id
 
-    deleteRoom(room_id) {
-        const auth = `Bearer ${sessionStorage.getItem('jwt')}`;
-        // console.log(auth);
-
+    async deleteRoom(room_id) {
         const options = {
             method: 'DELETE',
             headers: {
-                'Authorization': auth
+                'Authorization': token
             }
         }
 
-        fetch(`${url}/rooms/${room_id}`, options)
-        .then((res) => {
-            if (res.ok) {
+        try {
+            let response = await fetch(`${url}/rooms/${room_id}`, options);
+            if (response.ok) {
                 console.log("Room Deleted Successfully");
-            }else{
-                console.log(res);
             }
-        })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // Get room measurement by room id

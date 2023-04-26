@@ -73,35 +73,49 @@ function resetChatbox() {
 generateDropdownItems();
 
 async function renderMessages() {
-    // console.log(chatbox_dropdown.value);
-    const roomID = chatbox_dropdown.value;
+  // console.log(chatbox_dropdown.value);
+  const roomID = chatbox_dropdown.value;
+  resetChatbox();
 
+  if (roomID != "") {
     const messages = await proxy.getAllMessagesByRoom(roomID);
+    if (messages.length) {
+      messages.forEach(message => {
+        const user = message["user_id"];
+        const textContainer = document.createElement('div');
+        textContainer.setAttribute('class', 'd-flex align-items-baseline mb-4');
+        const container2 = document.createElement('div');
+        container2.setAttribute('class', 'pe-2');
+        const textCard = document.createElement('div');
+        textCard.setAttribute('class', 'card card-text d-inline-block p-2 px-3 m-1');
+        const date = document.createElement('div');
+        date.setAttribute('class', 'small');
+        date.textContent = usernames[message['user_id']];
 
-    resetChatbox();
-    messages.forEach(message => {
-      const user = message["user_id"];
-      const textContainer = document.createElement('div');
-      textContainer.setAttribute('class', 'd-flex align-items-baseline mb-4');
-      const container2 = document.createElement('div');
-      container2.setAttribute('class', 'pe-2');
-      const textCard = document.createElement('div');
-      textCard.setAttribute('class', 'card card-text d-inline-block p-2 px-3 m-1');
-      const date = document.createElement('div');
-      date.setAttribute('class', 'small');
-      date.textContent = usernames[message['user_id']];
+        textCard.textContent = message["body"];
 
-      textCard.textContent = message["body"];
+        container2.append(textCard);
+        container2.append(date);
 
-      container2.append(textCard);
-      container2.append(date);
-
-      textContainer.append(container2);
-      
-      chatbox_body.append(textContainer);
-    });
+        textContainer.append(container2);
+        
+        chatbox_body.append(textContainer);
+      });
+    }else{
+      const emptyMessagesText = document.createElement('div');
+      emptyMessagesText.textContent = "No Messages Available";
+      emptyMessagesText.setAttribute('style', 'color: grey');
+      chatbox_body.append(emptyMessagesText);
+    }
+    
     // console.log(messages);
+  }else{
+    const emptyMessagesText = document.createElement('div');
+    emptyMessagesText.textContent = "No Messages Available";
+    emptyMessagesText.setAttribute('style', 'color: grey');
+    chatbox_body.append(emptyMessagesText);
+  }
 }
 
-// renderMessages();
+renderMessages();
 chatbox_dropdown.addEventListener("click", renderMessages);

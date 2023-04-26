@@ -12,10 +12,12 @@ roomsButton.addEventListener('click', renderRooms);
  // Create a new list for each user card item
  const userListGroup = document.createElement('ul');
  userListGroup.setAttribute('class', 'list-group');
+ usersModalBody.append(userListGroup);
 
  // Create a new list to hold each room card item
  const roomListGroup = document.createElement('ul');
  roomListGroup.setAttribute('class', 'list-group');
+ roomsModalBody.append(roomListGroup);
 
 function resetUserList() {
   while(userListGroup.firstChild) {
@@ -24,14 +26,14 @@ function resetUserList() {
 }
 
 async function renderUsers() {
+  console.log("rendering users...");
+
   // Reset current list
   resetUserList();
 
   // Get list of users
   const users = await proxy.getUsers();
   console.log(users);
-
-  usersModalBody.append(userListGroup);
 
   // Create user cards for user settings modal
   users.forEach(user => {
@@ -64,6 +66,8 @@ async function renderUsers() {
       sessionStorage.setItem('selectdUser', user);
       const modalTitle = document.getElementById('user-edit-modal-title');
       modalTitle.textContent = `Editing: ${fullname}`;
+      document.addEventListener('keyup', checkEditUserInputFields);
+    document.addEventListener('mouseup', checkEditUserInputFields);
     });
 
     trash.addEventListener('click', () => {
@@ -72,6 +76,8 @@ async function renderUsers() {
       deletedUser.textContent = `${fullname}`;
     });
   });
+
+  console.log("rendered users.");
 }
 
 async function editUser() {
@@ -80,30 +86,21 @@ async function editUser() {
   sessionStorage.removeItem('user');
 
   // Get values from input fields
-  const password = document.getElementById('edit-password')
-  const username = document.getElementById('edit-username')
-  const isAdmin = document.getElementById('edit-admin-status')
-  const firstName = document.getElementById('edit-first-name')
-  const lastName = document.getElementById('edit-last-name')
-  const email = document.getElementById('edit-email')
+  const user = getEditUserObject();
 
-  // Load user object with input field values
-  const user = {
-    "password": password.value,
-    "username": username.value,
-    "is_admin": Boolean(isAdmin.value),
-    "first_name": firstName.value,
-    "last_name": lastName.value,
-    "email": email.value
-  }
+  // password.setAttribute('placeholder', previousUser['password']);
+  // username.setAttribute('placeholder', previousUser['username']);
+  // isAdmin.setAttribute('placeholder', previousUser['is_admin']);
+  // firstName.setAttribute('placeholder', previousUser['firstname']);
+  // lastName.setAttribute('placeholder', previousUser['lastName']);
+  // email.setAttribute('placeholder', previousUser['email']);
 
-  const keys = Object.keys(user);
-
-  for (const key in keys) {
-    if (user[key] == "") {
-      user[key] = previousUser[key];
-    }
-  }
+  password.value = previousUser['password'];
+  username.value = previousUser['username'];
+  isAdmin.value = previousUser['is_admin'];
+  firstName.value = previousUser['firstname'];
+  lastName.value = previousUser['lastName'];
+  email.value = previousUser['email'];
 
   console.log(user);
   console.log(previousUser);
@@ -119,6 +116,58 @@ async function editUser() {
   email.value = "";
 }
 
+function checkEditUserInputFields() {
+  const user = getEditUserObject();
+
+  // Storing in variables so both functions run 
+  // instead of accidentally short circuiting the other 
+  // within if statement below.
+  const fieldsEmpty = isEditUserFieldsEmpty(user);
+  const strongPassword = isStrongPassword(user['password']);
+  
+  // Check if inputfields are empty and if the password is strong.
+  // If both are true, then allow for the creation of the user.
+  if (!fieldsEmpty && strongPassword) {
+    editUserButton.disabled = false;
+  }else{
+    editUserButton.disabled = true;
+  }
+}
+
+function isEditUserFieldsEmpty(user) {
+  const emptyFieldsEditUserText = document.getElementById('user-edit-invalid-text');
+
+  for (const key in user) {
+    if (user[key] == "") {
+      emptyFieldsEditUserText.style.visibility = 'visible';
+      return true;
+    }
+  }
+  emptyFieldsEditUserText.style.visibility = 'hidden';
+  return false;
+}
+
+function getEditUserObject() {
+  const password = document.getElementById('edit-password');
+  const username = document.getElementById('edit-username');
+  const isAdmin = document.getElementById('edit-admin-status');
+  const firstName = document.getElementById('edit-first-name');
+  const lastName = document.getElementById('edit-last-name');
+  const email = document.getElementById('edit-email');
+
+  // Load user object with input field values
+  const user = {
+    "password": password.value,
+    "username": username.value,
+    "is_admin": Boolean(isAdmin.value),
+    "first_name": firstName.value,
+    "last_name": lastName.value,
+    "email": email.value
+  }
+
+  return user;
+}
+
 function isStrongPassword(password) {
   const passwordParamText = document.getElementById('user-create-invalid-password-text');
   const strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})');
@@ -131,26 +180,26 @@ function isStrongPassword(password) {
   return true;
 }
 
-function isFieldsEmpty(user) {
-  const emptyFieldsText = document.getElementById('user-create-invalid-text');
+function isCreateUserFieldsEmpty(user) {
+  const emptyFieldsCreateUserText = document.getElementById('user-create-invalid-text');
 
   for (const key in user) {
     if (user[key] == "") {
-      emptyFieldsText.style.visibility = 'visible';
+      emptyFieldsCreateUserText.style.visibility = 'visible';
       return true;
     }
   }
-  emptyFieldsText.style.visibility = 'hidden';
+  emptyFieldsCreateUserText.style.visibility = 'hidden';
   return false;
 }
 
-function checkCreateInputFields() {
+function checkCreateUserInputFields() {
   const user = getCreateUserObject();
 
   // Storing in variables so both functions run 
   // instead of accidentally short circuiting the other 
   // within if statement below.
-  const fieldsEmpty = isFieldsEmpty(user);
+  const fieldsEmpty = isCreateUserFieldsEmpty(user);
   const strongPassword = isStrongPassword(user['password']);
   
   // Check if inputfields are empty and if the password is strong.
@@ -162,7 +211,7 @@ function checkCreateInputFields() {
   }
 }
 
-function resetCreateInputFields() {
+function resetCreateUserInputFields() {
   const password = document.getElementById('create-password');
   const username = document.getElementById('create-username');
   const isAdmin = document.getElementById('create-admin-status');
@@ -199,14 +248,13 @@ function getCreateUserObject() {
 }
 
 async function createUser() {
-  // const userCreateModal = document.getElementById('users-modal-create-footer');
   const user = getCreateUserObject();
 
   // Convert admin status to boolean after checking for empty fields.
   user['is_admin'] = Boolean(user['is_admin']); 
 
   await proxy.registerUser(user);
-  resetCreateInputFields();
+  resetCreateUserInputFields();
   renderUsers();
 }
 
@@ -214,81 +262,157 @@ async function deleteUser() {
   const userID = sessionStorage.getItem('userID');
   sessionStorage.removeItem('userID');
 
-  proxy.deleteUser(userID);
+  await proxy.deleteUser(userID);
+  renderUsers();
 }
 
-// Event Listeners for user modal buttons
-// save button
-const saveUserButton = document.getElementById('save-user-button');
-saveUserButton.addEventListener('click', editUser);
-
+// -------------------- USER MODAL BUTTONS -------------------- //
 // add user modal popup
 const addUserButton = document.getElementById('add-user-button');
-addUserButton.addEventListener('click', checkCreateInputFields);
+addUserButton.addEventListener('click', checkCreateUserInputFields);
 addUserButton.addEventListener('click', () => {
-  document.addEventListener('keyup', checkCreateInputFields);
-  document.addEventListener('mouseup', checkCreateInputFields);
+  document.addEventListener('keyup', checkCreateUserInputFields);
+  document.addEventListener('mouseup', checkCreateUserInputFields);
 });
 
 const cancelCreateUserButton = document.getElementById('create-user-cancel-button');
 cancelCreateUserButton.addEventListener('click', () => {
-  document.removeEventListener('keyup', checkCreateInputFields);
-  document.removeEventListener('mouseup', checkCreateInputFields);
+  document.removeEventListener('keyup', checkCreateUserInputFields);
+  document.removeEventListener('mouseup', checkCreateUserInputFields);
 })
 
 const createUserButton = document.getElementById('create-user-button');
 createUserButton.addEventListener('click', createUser);
 createUserButton.addEventListener('click', () => {
-  document.removeEventListener('keyup', checkCreateInputFields);
-  document.removeEventListener('mouseup', checkCreateInputFields);
+  document.removeEventListener('keyup', checkCreateUserInputFields);
+  document.removeEventListener('mouseup', checkCreateUserInputFields);
+});
+
+// save button
+const editUserButton = document.getElementById('save-user-button');
+editUserButton.addEventListener('click', editUser);
+editUserButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkEditUserInputFields);
+  document.removeEventListener('mouseup', checkEditUserInputFields);
+});
+
+const cancelEditUserButton = document.getElementById('edit-user-cancel-button');
+cancelEditUserButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkEditUserInputFields);
+  document.removeEventListener('mouseup', checkEditUserInputFields);
 });
 
 const deleteUserButton = document.getElementById('delete-user-button');
 deleteUserButton.addEventListener('click', deleteUser);
 
-const saveRoomButton = document.getElementById('save-user-button');
-saveRoomButton.addEventListener('click', editUser);
-
-// Event Listeners for user modal buttons
-// add user modal popup
+// -------------------- ROOM MODAL BUTTONS -------------------- //
+// add room modal popup
 const addRoomButton = document.getElementById('add-room-button');
-addRoomButton.addEventListener('click', checkCreateInputFields);
+addRoomButton.addEventListener('click', checkCreateRoomInputFields);
 addRoomButton.addEventListener('click', () => {
-  document.addEventListener('keyup', checkCreateInputFields);
-  document.addEventListener('mouseup', checkCreateInputFields);
+  document.addEventListener('keyup', checkCreateRoomInputFields);
 });
 
 const cancelCreateRoomButton = document.getElementById('create-room-cancel-button');
 cancelCreateRoomButton.addEventListener('click', () => {
-  document.removeEventListener('keyup', checkCreateInputFields);
-  document.removeEventListener('mouseup', checkCreateInputFields);
+  document.removeEventListener('keyup', checkCreateRoomInputFields);
 })
 
 const createRoomButton = document.getElementById('create-room-button');
-createRoomButton.addEventListener('click', createUser);
+createRoomButton.addEventListener('click', createRoom);
 createRoomButton.addEventListener('click', () => {
-  document.removeEventListener('keyup', checkCreateInputFields);
-  document.removeEventListener('mouseup', checkCreateInputFields);
+  document.removeEventListener('keyup', checkCreateRoomInputFields);
 });
 
-const deleteRoomButton = document.getElementById('delete-room-button');
-deleteRoomButton.addEventListener('click', deleteUser);
+const saveRoomButton = document.getElementById('edit-room-button');
+saveRoomButton.addEventListener('click', editRoom);
 
-function resetRoomList() {
-  while(roomListGroup.firstChild) {
-    roomListGroup.removeChild(roomListGroup.lastChild);
+const deleteRoomButton = document.getElementById('delete-room-button');
+deleteRoomButton.addEventListener('click', deleteRoom);
+
+// -------------------- ROOM GENERATION FUNCTIONS -------------------- //
+
+// Create room inside database
+async function createRoom() {
+  const room = getCreateRoomObject();
+
+  // Convert greenhouse id to an int from a string
+  room['greenhouse_id'] = parseInt(room['greenhouse_id']);
+
+  await proxy.createRoom(room);
+  resetCreateRoomInputFields();
+  renderRooms();
+}
+
+async function editRoom() {
+  console.log("Room Edited");
+}
+
+// Delete room from database
+async function deleteRoom() {
+  const roomID = sessionStorage.getItem('roomID');
+  sessionStorage.removeItem('roomID');
+
+  await proxy.deleteRoom(roomID);
+  renderRooms();
+}
+
+function isCreateRoomInputFieldsEmpty(room) {
+  const emptyFieldsCreateRoomText = document.getElementById('room-create-invalid-text');
+
+  // loop through returned object to check for empty string
+  for (const key in room) {
+    if (room[key] == "") {
+      emptyFieldsCreateRoomText.style.visibility = 'visible';
+      return true;
+    }
+  }
+  emptyFieldsCreateRoomText.style.visibility = 'hidden';
+  return false;
+}
+
+// Ensure create room inputs are not empty
+function checkCreateRoomInputFields() {
+  const room = getCreateRoomObject();
+  
+  if (isCreateRoomInputFieldsEmpty(room)) {
+    createRoomButton.disabled = true;
+  }else{
+    createRoomButton.disabled = false;
   }
 }
 
+// Returns the values of each input tag for create room as an object
+function getCreateRoomObject() {
+  const greenhouseID = document.getElementById('create-greenhouse-id');
+  const name = document.getElementById('create-room-name');
+
+  const room = {
+    "greenhouse_id": greenhouseID.value,
+    "name": name.value
+  }
+
+  return room;
+}
+
+// Sets the values of the create room input fields to empty string
+function resetCreateRoomInputFields() {
+  const greenhouseID = document.getElementById('create-greenhouse-id');
+  const name = document.getElementById('create-room-name');
+
+  greenhouseID.value = "";
+  name.value = "";
+}
+
+// Visually create and append each room card to the room settings list
 async function renderRooms() {
+  console.log("rendering rooms...");
   // Reset current list
   resetRoomList();
 
-  // Get list of users
+  // Get list of the rooms
   const rooms = await proxy.getRooms();
-  console.log(rooms);
-
-  roomsModalBody.append(roomListGroup);
+  // console.log(rooms);
 
   // Create user cards for user settings modal
   rooms.forEach(room => {
@@ -317,4 +441,12 @@ async function renderRooms() {
       deletedRoom.textContent = `${room['name']}`;
     });
   });
+  console.log("rooms rendered.");
+}
+
+// Reset the list of rooms to be rendered
+function resetRoomList() {
+  while(roomListGroup.firstChild) {
+    roomListGroup.removeChild(roomListGroup.lastChild);
+  }
 }

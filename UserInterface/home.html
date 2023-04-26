@@ -143,9 +143,19 @@ Add text in chatbox for a room with no messages
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal">
-            Cancel
-          </button>
+          <p id="user-edit-invalid-text" style="color: red; visibility: hidden;">
+            Input fields cannot be empty.<br>
+          </p>
+          <p id="user-edit-invalid-password-text" style="color: red; visibility: hidden;">
+            Password must: <br>
+            - contain one uppercase letter <br>
+            - contain one lowercase letter <br>
+            - contain one number <br>
+            - contain one special character <br>
+            - have 8 or more characters <br>
+          </p>
+          <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal"
+          id="edit-user-cancel-button">Cancel</button>
           <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
           id="save-user-button">Save</button>
         </div>
@@ -283,14 +293,50 @@ Add text in chatbox for a room with no messages
         </div>
         <div class="modal-footer justify-content-between" id="rooms-modal-create-footer">
           <p id="room-create-invalid-text" style="color: red; visibility: hidden;">
-            Current input fields are invalid.<br>
-            Please try again.
+            Input fields cannot be empty.<br>
           </p>
           <div>
             <button type="button" class="btn btn-secondary" data-bs-target="#rooms-modal" data-bs-toggle="modal"
             id="create-room-cancel-button">Cancel</button>
             <button type="button" class="btn btn-outline-success" data-bs-target="#rooms-modal" data-bs-toggle="modal" 
             id="create-room-button">Create</button>
+          </div>
+          <!-- <input type="submit" id="create-user-button"> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Room-->
+  <div class="modal fade" id="rooms-modal-create" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Edit Room</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-create-room-body">
+          <!-- User Options -->
+          <form>
+            <div class="mb-3">
+              <label for="first-name" class="col-form-label">Room Name</label>
+              <input type="text" class="form-control" id="create-room-name" required>
+            </div>
+            <!-- <div class="mb-3">
+              <label for="first-name" class="col-form-label">Greenhouse ID</label>
+              <input type="text" class="form-control" id="create-greenhouse-id" placeholder="e.x.: 1" required>
+            </div> -->
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between" id="rooms-modal-create-footer">
+          <p id="room-create-invalid-text" style="color: red; visibility: hidden;">
+            Input fields cannot be empty.<br>
+          </p>
+          <div>
+            <button type="button" class="btn btn-secondary" data-bs-target="#rooms-modal" data-bs-toggle="modal"
+            id="edit-room-cancel-button">Cancel</button>
+            <button type="button" class="btn btn-outline-success" data-bs-target="#rooms-modal" data-bs-toggle="modal" 
+            id="edit-room-button">Save</button>
           </div>
           <!-- <input type="submit" id="create-user-button"> -->
         </div>
@@ -315,7 +361,7 @@ Add text in chatbox for a room with no messages
             Cancel
           </button>
           <button type="button" class="btn btn-outline-danger" data-bs-target="#rooms-modal" data-bs-toggle="modal" 
-          id="delete-user-button">Delete</button>
+          id="delete-room-button">Delete</button>
         </div>
       </div>
     </div>
