@@ -142,10 +142,7 @@ Add text in chatbox for a room with no messages
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <p id="user-edit-invalid-text" style="color: red; visibility: hidden;">
-            Input fields cannot be empty.<br>
-          </p>
+        <div class="modal-footer justify-content-between">
           <p id="user-edit-invalid-password-text" style="color: red; visibility: hidden;">
             Password must: <br>
             - contain one uppercase letter <br>
@@ -154,10 +151,12 @@ Add text in chatbox for a room with no messages
             - contain one special character <br>
             - have 8 or more characters <br>
           </p>
-          <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal"
-          id="edit-user-cancel-button">Cancel</button>
-          <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
-          id="save-user-button">Save</button>
+          <div>
+            <button type="button" class="btn btn-secondary" data-bs-target="#users-modal" data-bs-toggle="modal"
+            id="edit-user-cancel-button">Cancel</button>
+            <button type="button" class="btn btn-dark" data-bs-target="#users-modal" data-bs-toggle="modal" 
+            id="save-user-button">Save</button>
+          </div>
         </div>
       </div>
     </div>

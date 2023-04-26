@@ -63,11 +63,16 @@ async function renderUsers() {
     icons.append(trash);
 
     edit.addEventListener('click', () => {
-      sessionStorage.setItem('selectdUser', user);
+      const userString = JSON.stringify(user);
+      console.log(userString);
+      sessionStorage.setItem('selectedUser', userString);
+      sessionStorage.setItem('selectedUserID', user['id']);
       const modalTitle = document.getElementById('user-edit-modal-title');
       modalTitle.textContent = `Editing: ${fullname}`;
       document.addEventListener('keyup', checkEditUserInputFields);
-    document.addEventListener('mouseup', checkEditUserInputFields);
+      document.addEventListener('mouseup', checkEditUserInputFields);
+      setUserEditPlaceholderValues(user);
+      checkEditUserInputFields();
     });
 
     trash.addEventListener('click', () => {
@@ -81,31 +86,23 @@ async function renderUsers() {
 }
 
 async function editUser() {
-  // Pull user from session storage for use in edit modal
-  const previousUser = sessionStorage.getItem('user');
+  const userID = sessionStorage.getItem('selectedUserID');
   sessionStorage.removeItem('user');
-
-  // Get values from input fields
-  const user = getEditUserObject();
-
-  // password.setAttribute('placeholder', previousUser['password']);
-  // username.setAttribute('placeholder', previousUser['username']);
-  // isAdmin.setAttribute('placeholder', previousUser['is_admin']);
-  // firstName.setAttribute('placeholder', previousUser['firstname']);
-  // lastName.setAttribute('placeholder', previousUser['lastName']);
-  // email.setAttribute('placeholder', previousUser['email']);
-
-  password.value = previousUser['password'];
-  username.value = previousUser['username'];
-  isAdmin.value = previousUser['is_admin'];
-  firstName.value = previousUser['firstname'];
-  lastName.value = previousUser['lastName'];
-  email.value = previousUser['email'];
-
-  console.log(user);
-  console.log(previousUser);
-  // await proxy.editUser(userID, user);
+  const potentialUser = getEditUserObject();
+  const user = populateEmptyFields(potentialUser);
+  await proxy.editUser(userID, user);
   renderUsers();
+
+  resetEditUserInputFields();
+}
+
+function resetEditUserInputFields() {
+  const password = document.getElementById('edit-password');
+  const username = document.getElementById('edit-username');
+  const isAdmin = document.getElementById('edit-admin-status');
+  const firstName = document.getElementById('edit-first-name');
+  const lastName = document.getElementById('edit-last-name');
+  const email = document.getElementById('edit-email');
 
   // Reset input field values
   password.value = "";
@@ -117,34 +114,73 @@ async function editUser() {
 }
 
 function checkEditUserInputFields() {
-  const user = getEditUserObject();
-
+  // console.log("checking edit input fields");
   // Storing in variables so both functions run 
   // instead of accidentally short circuiting the other 
   // within if statement below.
-  const fieldsEmpty = isEditUserFieldsEmpty(user);
-  const strongPassword = isStrongPassword(user['password']);
+  const password = document.getElementById('edit-password');
+  const strongPassword = isStrongPassword(password.value);
   
+  const passwordParamText = document.getElementById('user-edit-invalid-password-text');
+
   // Check if inputfields are empty and if the password is strong.
   // If both are true, then allow for the creation of the user.
-  if (!fieldsEmpty && strongPassword) {
-    editUserButton.disabled = false;
-  }else{
+  if (!strongPassword) {
+    // console.log("weak password");
     editUserButton.disabled = true;
+    passwordParamText.style.visibility = 'visible';
+  }else{
+    // console.log("strong password");
+    editUserButton.disabled = false;
+    passwordParamText.style.visibility = 'hidden';
   }
 }
 
-function isEditUserFieldsEmpty(user) {
-  const emptyFieldsEditUserText = document.getElementById('user-edit-invalid-text');
+function setUserEditPlaceholderValues() {
+  const previousUserString = sessionStorage.getItem('selectedUser');
+  const previousUser = JSON.parse(previousUserString);
+  console.log(previousUser);
 
+  // Get values from input fields
+  // const password = document.getElementById('edit-password');
+  const username = document.getElementById('edit-username');
+  const isAdmin = document.getElementById('edit-admin-status');
+  const firstName = document.getElementById('edit-first-name');
+  const lastName = document.getElementById('edit-last-name');
+  const email = document.getElementById('edit-email');
+
+  // Set placeholder values of inputs
+  // password.setAttribute('placeholder', previousUser['password']);
+  username.setAttribute('placeholder', previousUser['username']);
+  isAdmin.setAttribute('placeholder', previousUser['is_admin']);
+  firstName.setAttribute('placeholder', previousUser['first_name']);
+  lastName.setAttribute('placeholder', previousUser['last_name']);
+  email.setAttribute('placeholder', previousUser['email']);
+}
+
+function populateEmptyFields() {
+  const user = {};
+  // Pull previous user from session storage
+  const previousUserString = sessionStorage.getItem('selectedUser');
+  const previousUser = JSON.parse(previousUserString);
+  // console.log(previousUser);
+  // sessionStorage.removeItem('user');
+
+  // password.value = previousUser['password'];
+  // username.value = previousUser['username'];
+  // isAdmin.value = previousUser['is_admin'];
+  // firstName.value = previousUser['firstname'];
+  // lastName.value = previousUser['lastName'];
+  // email.value = previousUser['email'];
+
+  // Populate any field that is empty
   for (const key in user) {
     if (user[key] == "") {
-      emptyFieldsEditUserText.style.visibility = 'visible';
-      return true;
+      user[key] = previousUser[key];
     }
   }
-  emptyFieldsEditUserText.style.visibility = 'hidden';
-  return false;
+
+  return user;
 }
 
 function getEditUserObject() {
@@ -169,14 +205,12 @@ function getEditUserObject() {
 }
 
 function isStrongPassword(password) {
-  const passwordParamText = document.getElementById('user-create-invalid-password-text');
+  console.log(`Testing: ${password}`);
   const strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})');
 
   if (!strongPassword.test(password)) {
-    passwordParamText.style.visibility = 'visible';
     return false;
   }
-  passwordParamText.style.visibility = 'hidden';
   return true;
 }
 
@@ -201,6 +235,14 @@ function checkCreateUserInputFields() {
   // within if statement below.
   const fieldsEmpty = isCreateUserFieldsEmpty(user);
   const strongPassword = isStrongPassword(user['password']);
+
+  const passwordParamText = document.getElementById('user-create-invalid-password-text');
+
+  if (!strongPassword) {
+    passwordParamText.style.visibility = 'visible';
+  }else{
+    passwordParamText.style.visibility = 'hidden';
+  }
   
   // Check if inputfields are empty and if the password is strong.
   // If both are true, then allow for the creation of the user.
@@ -300,6 +342,7 @@ const cancelEditUserButton = document.getElementById('edit-user-cancel-button');
 cancelEditUserButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkEditUserInputFields);
   document.removeEventListener('mouseup', checkEditUserInputFields);
+  sessionStorage.removeItem('user');
 });
 
 const deleteUserButton = document.getElementById('delete-user-button');
