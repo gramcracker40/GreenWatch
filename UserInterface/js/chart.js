@@ -15,3 +15,21 @@ new Chart("line-chart", {
         }]
     },
 });
+
+// here should be where we actually pull the data into the charts
+// in order to show accurate measurements
+fetch('/api/experiment-data')
+  .then(response => response.json())
+  .then(data => {
+    // Extract data for the chart
+    const labels = data.labels;
+    const temperatureData = data.temperatureData;
+    const humidityData = data.humidityData;
+
+    // Update the chart with the new data
+    myChart.data.labels = labels;
+    myChart.data.datasets[0].data = temperatureData;
+    myChart.data.datasets[1].data = humidityData;
+    myChart.update();
+  })
+  .catch(error => console.error(error));
