@@ -38,15 +38,20 @@ class RouteTester:
 
         #registering and logging in a fake user with admin credentials to test all routes with
         register_url = base_url + "/register"
-        new_user_req = requests.post(register_url, json={"username": username, "password": password, 
-            "first_name":"test", "last_name": "name", "is_admin": True, "email": "test@testmail.com"})
-        new_user = json.loads(new_user_req.text)
-        self.new_user_id = new_user["user_id"]
+        
+        try:
+            fake_user_req = requests.post(register_url, json={"username": username, "password": password, 
+                "first_name":"test", "last_name": "name", "is_admin": True, "email": "test@testmail.com"})
+            
+            self.fake_user_id = json.loads(fake_user_req.text)["user_id"]
 
-        auth_url = base_url + "/login"
-        jwt = json.loads(requests.post(auth_url, json={"username": username, "password": password}).text)
+            auth_url = base_url + "/login"
+            jwt = json.loads(requests.post(auth_url, json={"username": username, "password": password}).text)
 
-        self.headers = {"Authorization": f"Bearer {jwt['access_token']}"}
+            self.headers = {"Authorization": f"Bearer {jwt['access_token']}"}
+
+        except KeyError as err:
+            print(f"Initialization of RouteTester: Error --> {err}")
 
 
     def __del__(self):
@@ -54,7 +59,7 @@ class RouteTester:
         logs out the user created in __init__ for the tests and then deletes the user as well
         '''
         logout_url = self.base_url + "/logout"
-        del_url = self.base_url + f"/users/{self.new_user_id}"
+        del_url = self.base_url + f"/users/{self.fake_user_id}"
         
         logout = requests.post(logout_url, headers=self.headers)
         delete = requests.delete(del_url, headers=self.headers)
@@ -77,7 +82,7 @@ class RouteTester:
         url = self.base_url + uri
         try:    
             if data:
-                req = requests.request(method, url, headers=self.headers, data=data)
+                req = requests.request(method, url, headers=self.headers, json=data)
             else:
                 req = requests.request(method, url, headers=self.headers)
 
@@ -112,13 +117,17 @@ class RouteTester:
             "LOGIN" : ["/login", ["POST"], {"POST": {"username": "test", "password": "testtest"}}],
         }
         '''
-        api_file = open("routes.json", "r")
+        api_file = open(file, "r")
         api = json.loads(api_file)
+
+        # could change based on implemented routes needing data passed as json.
+        data_methods = ("POST", "PATCH", "PUT")
 
         results = {}
         for resource in api:
             for method in api[resource][1]:
-                if method == "POST" or method == "PATCH":
+                # if the request needs data
+                if method in data_methods:
                     test = RouteTester.request(self, api[resource][0], method, data=api[resource][2][method])
                 else:
                     test = RouteTester.request(self, api[resource][0], method)
@@ -133,15 +142,18 @@ class RouteTester:
 
         if json_file_save:
             file = open(f"{json_file_save}.json", "w")
-            json.dump(results, file)
+            json.dump(results, file, indent=2)
+
+        return results
 
 
+test_file_name = "routes.json"
 
 test = RouteTester(base_url=test_url, username=user, password=passw)
-
-real = test.request("/login", "POST", {"username": "test", "password": "testtest"})
-
-print(real)
-
+test_results = test.test_routes(test_file_name, dump=True, json_file_save="test_results")
 
 del test
+#real = test.request("/login", "POST", {"username": "test", "password": "testtest"})
+
+
+
