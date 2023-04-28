@@ -38,22 +38,49 @@ async function renderMeasurements() {
     measurements = measurementsObj['data'];
     console.log(measurements);
     let labels = [];
+    let t_data = [];
+    let h_data = [];
+    let p_data = [];
+    let l_data = [];
 
     measurements.forEach(measurement => {
-      // labels.push(measurement[''])
       var date = new Date(measurement['timestamp']);
-      console.log(date);
+      const day = date.getUTCDate();
+      const month = date.getUTCMonth();
+      const hours = date.getUTCHours();
+      const minutes = date.getUTCMinutes();
+      const seconds = date.getUTCSeconds();
+      const timestamp = `${day} ${month} ${hours}:${minutes}:${seconds}`
+      labels.push(timestamp);
+
+      const temperatureValue = measurement['temperature'];
+      t_data.push(temperatureValue);
+
+      const humidityValue = measurement['humidity'];
+      h_data.push(humidityValue);
+
+      const pressureValue = measurement['pressure'];
+      p_data.push(pressureValue);
+
+      const lightValue = measurement['light'];
+      l_data.push(lightValue);
     });
+
+    console.log("Temperature:\n" + t_data);
+    console.log("Humidity:\n" + h_data);
+    console.log("Pressure:\n" + p_data);
+    console.log("Light:\n" + l_data);
+    console.log("Timestamps:\n" + labels);
 
     const ctx = document.getElementById('myChart');
 
     var chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: labels,
         datasets: [{
           label: 'Temp',
-          data: [75, 78, 81, 84, 81, 73],
+          data: t_data,
           borderWidth: 1
         }]
       },

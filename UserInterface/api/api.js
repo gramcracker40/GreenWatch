@@ -214,7 +214,7 @@ export class GreenhouseProxy {
     // Get room measurement by room id
     async getMeasurementByRoom(roomID, dateObj) {
         const options = {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -235,12 +235,11 @@ export class GreenhouseProxy {
 
     // Create room measurement by room id
     async createMeasurement(roomID, measurement) {
-        console.log(measurement);
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Key': 'X5L50RUAOJ8N4X4DZ4MSHF0L1I5UOXBEQOL0H4KBW5TKNJU6QAB46J07TTY1' // Agent Key for Room 1
+                'Key': 'TRD1IU4G5E45RZU8UOXNNMR7WID34Q7SM0EFHV6FHZS9PQBNYXINTTS1BSR8' // Agent Key for Room 1
             },
             body: JSON.stringify(measurement)
         }
@@ -248,7 +247,7 @@ export class GreenhouseProxy {
         try {
             let response = await fetch(`${url}/rooms/${roomID}/measurement`, options);
             if (response.ok) {
-                console.log("Measurement Created Successfully");
+                // console.log("Measurement Created Successfully");
             }
         } 
         catch (error) {
@@ -568,5 +567,5 @@ async function createRoomMeasurement() {
 
 const createMeasurementButton = document.getElementById('create-measurements-button');
 if (createMeasurementButton) {
-    createMeasurementButton.addEventListener('click', createRoomMeasurement);
+    createMeasurementButton.addEventListener('click', createRoomMeasurements);
 }
