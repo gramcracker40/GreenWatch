@@ -71,21 +71,21 @@
           <div class="form-group">
             <label for="chart-selector">Select a Chart:</label>
             <select class="form-control" id="chart-selector">
-              <option value="temperature">Temperature</option>
-              <option value="humidity">Humidity</option>
-              <option value="air pressure">Air Pressure</option>
-              <option value="Light">Light</option>
+              <option value="0">Temperature</option>
+              <option value="1">Humidity</option>
+              <option value="2">Pressure</option>
+              <option value="3">Light</option>
             </select>
           </div>
         </div>
       </div>
       <!-- Chart -->
       <div class="card-body">
-        <div class="chart-container" style="position: relative; height: 60vh; width: 80vw;">
-          <canvas id="myChart">
+        <div class="chart-container" style="position: relative; height: 60vh; width: 80vw;"
+        id="canvas-div">
+          <!-- <canvas id="main-chart">
             Canvas
-          </canvas>
-          
+          </canvas> -->
         </div>
       </div>
         <div class="card-footer d-flex justify-content-between align-items-center">
@@ -110,7 +110,7 @@
           </div> -->
           <!-- <button id="export-data-button" class="btn btn-primary" >Export Data</button> -->
           <script>
-            const chartCanvas = document.getElementById('myChart');
+            const chartCanvas = document.getElementById('main-chart');
               window.addEventListener('resize', () =>{
                     // redraw chart w/ original size
                     chartCanvas.style.width = '80%';

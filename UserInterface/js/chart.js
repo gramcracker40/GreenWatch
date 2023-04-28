@@ -9,6 +9,9 @@ const roomID = sessionStorage.getItem('roomID');
 const updateChartButton = document.getElementById('update-chart');
 updateChartButton.addEventListener('click', renderMeasurements);
 
+const chartSelector = document.getElementById('chart-selector');
+chartSelector.addEventListener('click', renderMeasurements);
+
 // Aquire measurement data and store in object
 
 async function renderMeasurements() {
@@ -38,7 +41,7 @@ async function renderMeasurements() {
     const measurementsObj = await proxy.getMeasurementByRoom(1, dateObj);
     measurements = measurementsObj['data'];
     console.log(measurements);
-    let labels = [];
+    let dates = [];
     let t_data = [];
     let h_data = [];
     let p_data = [];
@@ -52,7 +55,7 @@ async function renderMeasurements() {
       const minutes = date.getUTCMinutes();
       const seconds = date.getUTCSeconds();
       const timestamp = `${day} ${month} ${hours}:${minutes}:${seconds}`
-      labels.push(timestamp);
+      dates.push(timestamp);
 
       const temperatureValue = measurement['temperature'];
       t_data.push(temperatureValue);
@@ -71,41 +74,53 @@ async function renderMeasurements() {
     console.log("Humidity:\n" + h_data);
     console.log("Pressure:\n" + p_data);
     console.log("Light:\n" + l_data);
-    console.log("Timestamps:\n" + labels);
-  }
+    console.log("Timestamps:\n" + dates);    
 
+    console.log(chartSelector.value);
+    switch(parseInt(chartSelector.value)) {
+      case 0: 
+        updateChart(dates, t_data, 'Temperature');
+        break;
+      case 1:
+        updateChart(dates, h_data, 'Humidity');
+        break;
+      case 2:
+        updateChart(dates, p_data, 'Pressure');
+        break;
+      case 3:
+        updateChart(dates, l_data, 'Light');
+        break;
+      default:
+    }
+  }
 }
 
-function updateChart() {
-  const ctx = document.getElementById('myChart');
+function updateChart(dates, data, key) {
+  console.log("updating chart");
+  // remove current canvas element if one exist
+  const canvasDiv = document.getElementById('canvas-div');
+  if(canvasDiv.firstChild) {
+    canvasDiv.removeChild(canvasDiv.lastChild);
+  }
 
-  var chart = new Chart(ctx, {
+  // create canvas element
+  const canvasElement = document.createElement('canvas');
+  canvasElement.setAttribute('id', 'main-chart');
+  canvasDiv.append(canvasElement);
+
+  // create chart variable
+  var chart = new Chart(canvasElement, {
     type: 'line',
-    // data: {
-    //   labels: labels,
-    //   datasets: [
-    //   {
-    //     label: 'Temperature',
-    //     data: t_data,
-    //     borderWidth: 1
-    //   },
-    //   {
-    //     label: 'Humidity',
-    //     data: h_data,
-    //     borderWidth: 1
-    //   },
-    //   {
-    //     label: 'Pressure',
-    //     data: p_data,
-    //     borderWidth: 1
-    //   },
-    //   {
-    //     label: 'Light',
-    //     data: l_data,
-    //     borderWidth: 1
-    //   }
-    // ]
-    // },
+    data: {
+      labels: dates,
+      datasets: [
+        {
+         label: key,
+         data: data,
+         borderWidth: 1
+        }
+      ]
+    },
     options: {
       scales: {
         y: {
@@ -114,16 +129,15 @@ function updateChart() {
       }
     }
   });
-
-  
-  chart.data.datasets = {
-    // label: 'Temperature',
-    data: t_data,
-    borderWidth: 1
-  }
 }
 
-renderMeasurements();
+function createPlaceholderChart() {
+  const labels = [1,2,3,4,5];
+  const data = [];
+  const key = 'empty';
+  updateChart(labels, data, key);
+}
 
-const chartSelector = document.getElementById('chart-selector');
-chartSelector.addEventListener('click', renderMeasurements);
+createPlaceholderChart();
+
+renderMeasurements();
