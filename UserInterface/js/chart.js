@@ -12,7 +12,8 @@ updateChartButton.addEventListener('click', renderMeasurements);
 // Aquire measurement data and store in object
 
 async function renderMeasurements() {
-  console.log("Rendering measurements...");
+  // console.log("Rendering measurements...");
+  
   const startDate = document.getElementById('startDate');
   const endDate = document.getElementById('endDate');
   let isDateNull = false;
@@ -71,65 +72,58 @@ async function renderMeasurements() {
     console.log("Pressure:\n" + p_data);
     console.log("Light:\n" + l_data);
     console.log("Timestamps:\n" + labels);
+  }
 
-    const ctx = document.getElementById('myChart');
+}
 
-    var chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Temp',
-          data: t_data,
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: false,
-          }
+function updateChart() {
+  const ctx = document.getElementById('myChart');
+
+  var chart = new Chart(ctx, {
+    type: 'line',
+    // data: {
+    //   labels: labels,
+    //   datasets: [
+    //   {
+    //     label: 'Temperature',
+    //     data: t_data,
+    //     borderWidth: 1
+    //   },
+    //   {
+    //     label: 'Humidity',
+    //     data: h_data,
+    //     borderWidth: 1
+    //   },
+    //   {
+    //     label: 'Pressure',
+    //     data: p_data,
+    //     borderWidth: 1
+    //   },
+    //   {
+    //     label: 'Light',
+    //     data: l_data,
+    //     borderWidth: 1
+    //   }
+    // ]
+    // },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false,
         }
       }
-    });
-  }
-  
-  // Need to get timeframe and convert to proper value. e.x.: '2023-04-27'
+    }
+  });
 
-  // Create object
-  // return obj
+  
+  chart.data.datasets = {
+    // label: 'Temperature',
+    data: t_data,
+    borderWidth: 1
+  }
 }
 
 renderMeasurements();
 
-// const obj = {
-//   "experiments": [
-//     {
-//       "room_id": 0,
-//       "id": 0,
-//       "name": "string"
-//     }
-//   ],
-//   "name": "string",
-//   "greenhouse_id": 0,
-//   "messages": [
-//     {
-//       "room_id": 0,
-//       "timestamp": "2023-04-27T19:51:44.677Z",
-//       "id": 0,
-//       "body": "string",
-//       "user_id": 0
-//     }
-//   ],
-//   "id": 0,
-//   "measurements": [
-//     {
-//       "room_id": 0,
-//       "timestamp": "2023-04-27T19:51:44.677Z",
-//       "pressure": 0,
-//       "temperature": 0,
-//       "light": 0,
-//       "humidity": 0
-//     }
-//   ]
-// }
+const chartSelector = document.getElementById('chart-selector');
+chartSelector.addEventListener('click', renderMeasurements);
