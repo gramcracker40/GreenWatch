@@ -193,45 +193,11 @@
                   <div class="card-header d-flex justify-content-between">
                       <h5 class="mb-0">Experiments</h5>
                       <div class="col-auto">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-experiment-modal" style="align-self: flex-end;">Add Experiment   
-                        </button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-experiment-modal" style="align-self: flex-end;"
+                        id="show-create-exp-modal-btn">Add Experiment</button>
                       </div>
-                      
                   </div>
                   <div class="card-body" id="experiment-card-body">
-                      <!-- <div class="list-group">
-                          <div class="list-group-item">
-                              <div class="d-flex w-100 justify-content-between">
-                                  <h5 class="mb-1">Experiment 1</h5>
-                                  <h6 class="mb-2">Temperature High:</h6>
-                                  <h6 class="mb-2">Temperature Low:</h6>
-                                  <h6 class="mb-2">Humidity High:</h6>
-                                  <h6 class="mb-2">Humidity Low:</h6>
-                                  <small>2023-04-01 23:09</small>
-                              </div>
-                              <p class="mb-1">Details:</p>
-                              <div class="text-right d-flex justify-content-end">
-                                  
-                                  <!-- Edit, View, Delete Buttons for expirement card. Can be removed from code. --
-                                  <button type="button" class="btn btn-sm btn-outline-success mr-2" data-bs-toggle="modal" data-bs-target="#edit-experiment-modal" >
-                                    Edit
-                                  </button>
-
-                                  
-                                  <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-experiment-modal">Delete</button>
-
-                                  
-
-                                  <button type="button" class="btn btn-sm btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#view-experiment-modal" >
-                                    View
-                                  </button>
-
-                                  
-
-                              </div>
-                          </div>
-                          <!-- More experiments can be added here as list items --
-                      </div>   -->
                   </div>
               </div>
           </div>
@@ -240,7 +206,7 @@
 
 <!-- Add Experiment Modal -->
 <div class="modal fade" id="add-experiment-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">New Experiment</h5>
@@ -249,42 +215,54 @@
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="experimentName" class="form-label">Experiment Name</label>
-            <input type="text" class="form-control" id="experimentName" required>
+            <label for="experiment-name" class="form-label">Experiment Name</label>
+            <input type="text" class="form-control" id="experiment-name" required>
           </div>
           <div class="mb-3">
-            <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="startDate" required>
+            <label for="start-date" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="start-date" required>
           </div>
           <div class="mb-3">
-            <label for="endDate" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="endDate" required>
+            <label for="end-date" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="end-date" required>
           </div>
           <div class="mb-3">
-            <label for="temphighThreshold" class="form-label">Temperature High</label>
-            <input type="number" class="form-control" id="temphighThreshold" required>
+            <label for="temp-high-threshold" class="form-label">Temperature High</label>
+            <input type="number" class="form-control" id="temp-high-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="templowThreshold" class="form-label">Temperature Low</label>
-            <input type="number" class="form-control" id="templowThreshold" required>
+            <label for="temp-low-threshold" class="form-label">Temperature Low</label>
+            <input type="number" class="form-control" id="temp-low-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="humhighThreshold" class="form-label">Humidity High</label>
-            <input type="number" class="form-control" id="humhighThreshold" required>
+            <label for="hum-high-threshold" class="form-label">Humidity High</label>
+            <input type="number" class="form-control" id="hum-high-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="humlowThreshold" class="form-label">Humidity Low</label>
-            <input type="number" class="form-control" id="humlowThreshold" required>
+            <label for="hum-low-threshold" class="form-label">Humidity Low</label>
+            <input type="number" class="form-control" id="hum-low-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="experimentDetails" class="form-label">Experiment Details</label>
-            <textarea class="form-control" id="experimentDetails" rows="3" required></textarea>
+            <label for="experiment-details" class="form-label">Experiment Details</label>
+            <textarea class="form-control" id="experiment-details" rows="3" required></textarea>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-success">Add Experiment</button>
+      <div class="modal-footer justify-content-between">
+        <div>
+          <p id="exp-create-invalid-text" style="color: red; visibility: hidden;">
+            Input fields cannot be empty.<br>
+          </p>
+          <p id="exp-create-invalid-name-length-text" style="color: red; visibility: hidden;">
+            Experiment name is too long. Must be shorter than 20 characters.<br>
+          </p>
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          id="cancel-create-exp-button">Cancel</button>
+          <button type="submit" class="btn btn-outline-success"
+          id="create-exp-button">Add Experiment</button>
+        </div>
       </div>
     </div>
   </div>
@@ -409,8 +387,10 @@
         <p>Are you sure you want to delete this experiment?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+        id="cancel-delete-exp-button">Cancel</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+        id="delete-exp-button">Delete</button>
       </div>
     </div>
   </div>

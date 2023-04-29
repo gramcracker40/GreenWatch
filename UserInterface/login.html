@@ -7,18 +7,6 @@
 
 </head>
 <body class="body-login">
-<!-- partial:index.partial.html -->
-<!--
-<ul class="nav">
-  <li onclick="showLogin()">Login</li>
- 
-  <!-li onclick="showForgotPassword()">Forgot password</li-->
- 
-  <!--li onclick="showContactUs()">Contact us</li->
-</ul>
--->
-
-<!--div  img src="./images/greenwatchlogo" alt="GreenWatch logo"></div-->
 <img src="./images/greenwatchlogo.png" alt="" style="width: 200px; height: 175px">
 <h1 class="animated-header">GreenWatch</h1>
 <div class="wrapper">
@@ -42,7 +30,7 @@
     <div class="face face-front">
       <div class="content">
         <h2>Sign in</h2>
-        <form onsubmit="event.preventDefault()" action="home.html" value="home" method="POST">
+        <form onsubmit="event.preventDefault()">
           <div class="field-wrapper">
             <input type="text" id="usernameTextbox" name="username" placeholder="username">
             <label>username</label>
@@ -52,8 +40,8 @@
             <label>password</label>
           </div>
           <div class="field-wrapper">
-            <input type="submit" onclick="validateUser()">
-            <script src="js/login.js"></script>
+            <input type="submit" id="submit-btn">
+            <script type="module" src="js/login.js"></script>
           </div>
           <div class="field-wrapper">
             <p class="invalid-paragraph" id="invalidCreds">

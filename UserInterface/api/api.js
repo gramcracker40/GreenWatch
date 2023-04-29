@@ -1,6 +1,6 @@
 
 const url = "http://127.0.0.1:5000"
-const token = `Bearer ${sessionStorage.getItem('jwt')}`;
+const token = `Bearer ${sessionStorage.getItem('access_token')}`;
 
 // const userRegister1 = {
 //     "first_name": "Billy",
@@ -91,7 +91,7 @@ export class GreenhouseProxy {
         }        
     }
 
-    login() {
+    Login() {
         fetch(`${url}/login`, this.o_login)
         .then((res) => {
             if (res.ok) {
@@ -104,7 +104,26 @@ export class GreenhouseProxy {
                 console.log("Invalid Login");
             }
         })
-        // .then((data) => console.log(data));
+    }
+
+    async login(loginObj) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginObj)
+        }
+
+        try {
+            let response = await fetch(`${url}/login`, options);
+            if (response.ok) {
+                let data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // Logout
@@ -316,12 +335,11 @@ export class GreenhouseProxy {
     // ------------------EXPERIMENT------------------
     // Get all experiments
     async getExperiments() {
-
-        
         try {
-            let response = fetch(`${url}/experiments`);
+            let response = await fetch(`${url}/experiments`);
             if (response.ok) {
-                return await response.json();
+                let data = await response.json();
+                return data;
             }
         } catch (error) {
             console.log(error);
@@ -353,6 +371,23 @@ export class GreenhouseProxy {
     // Update experiment by id
 
     // Delete experiment by id
+    async deleteExperiment(experimentID) {
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': token
+            }
+        }
+
+        try {
+            let response = await fetch(`${url}/experiments/${experimentID}`, options);
+            if (response.ok) {
+                console.log("Experiment Deleted Successfully");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Add user to experiment by experiment and user IDs
 
