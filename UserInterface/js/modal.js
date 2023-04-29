@@ -9,15 +9,15 @@ const roomsModalBody = document.getElementById('modal-rooms-body');
 usersButton.addEventListener('click', renderUsers);
 roomsButton.addEventListener('click', renderRooms);
 
- // Create a new list for each user card item
- const userListGroup = document.createElement('ul');
- userListGroup.setAttribute('class', 'list-group');
- usersModalBody.append(userListGroup);
+// Create a new list for each user card item
+const userListGroup = document.createElement('ul');
+userListGroup.setAttribute('class', 'list-group');
+usersModalBody.append(userListGroup);
 
- // Create a new list to hold each room card item
- const roomListGroup = document.createElement('ul');
- roomListGroup.setAttribute('class', 'list-group');
- roomsModalBody.append(roomListGroup);
+// Create a new list to hold each room card item
+const roomListGroup = document.createElement('ul');
+roomListGroup.setAttribute('class', 'list-group');
+roomsModalBody.append(roomListGroup);
 
 function resetUserList() {
   while(userListGroup.firstChild) {

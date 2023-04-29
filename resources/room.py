@@ -142,7 +142,7 @@ class Measurement(MethodView):
     
     #@jwt_required()
     @blp.arguments(DateRangeSchema)
-    def get(self, dates, room_id):
+    def put(self, dates, room_id):
         '''
         Given a start and end date, this method will return all 
         Measurements within a Room in that given period. 

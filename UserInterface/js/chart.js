@@ -1,35 +1,143 @@
-const { Chart } = require("chart.js");
-import { Chart } from "chart.js/dist";
+// const { Chart } = require("chart.js");
+// import Chart from "/dist/chart.umd.min.js";
+import { GreenhouseProxy } from "../api/api.js";
 
-const xValues = [];
-const yValues = [40,50,60,70,80,90,100,110];
+const proxy = new GreenhouseProxy();
 
-new Chart("line-chart", {
-    type: "line",
+const roomID = sessionStorage.getItem('roomID');
+
+const updateChartButton = document.getElementById('update-chart');
+updateChartButton.addEventListener('click', renderMeasurements);
+
+const chartSelector = document.getElementById('chart-selector');
+chartSelector.addEventListener('click', renderMeasurements);
+
+// Aquire measurement data and store in object
+
+async function renderMeasurements() {
+  // console.log("Rendering measurements...");
+  
+  const startDate = document.getElementById('startDate');
+  const endDate = document.getElementById('endDate');
+  let isDateNull = false;
+  let measurements = []
+
+  const dateObj = {
+    "end_date": `${endDate.value}`,
+    "start_date": `${startDate.value}`
+  }
+
+  // Need to ensure that the dates aren't null
+  for (const date in dateObj) {
+    // console.log(dateObj[date]);
+    if (dateObj[date] == "") {
+      isDateNull = true;
+    }
+  }
+
+  console.log(isDateNull);
+  // Get measurements for roomID stored in session storage
+  if (!isDateNull) {
+    const measurementsObj = await proxy.getMeasurementByRoom(1, dateObj);
+    measurements = measurementsObj['data'];
+    console.log(measurements);
+    let dates = [];
+    let t_data = [];
+    let h_data = [];
+    let p_data = [];
+    let l_data = [];
+
+    measurements.forEach(measurement => {
+      var date = new Date(measurement['timestamp']);
+      const day = date.getUTCDate();
+      const month = date.getUTCMonth();
+      const hours = date.getUTCHours();
+      const minutes = date.getUTCMinutes();
+      const seconds = date.getUTCSeconds();
+      const timestamp = `${day} ${month} ${hours}:${minutes}:${seconds}`
+      dates.push(timestamp);
+
+      const temperatureValue = measurement['temperature'];
+      t_data.push(temperatureValue);
+
+      const humidityValue = measurement['humidity'];
+      h_data.push(humidityValue);
+
+      const pressureValue = measurement['pressure'];
+      p_data.push(pressureValue);
+
+      const lightValue = measurement['light'];
+      l_data.push(lightValue);
+    });
+
+    console.log("Temperature:\n" + t_data);
+    console.log("Humidity:\n" + h_data);
+    console.log("Pressure:\n" + p_data);
+    console.log("Light:\n" + l_data);
+    console.log("Timestamps:\n" + dates);    
+
+    console.log(chartSelector.value);
+    switch(parseInt(chartSelector.value)) {
+      case 0: 
+        updateChart(dates, t_data, 'Temperature');
+        break;
+      case 1:
+        updateChart(dates, h_data, 'Humidity');
+        break;
+      case 2:
+        updateChart(dates, p_data, 'Pressure');
+        break;
+      case 3:
+        updateChart(dates, l_data, 'Light');
+        break;
+      default:
+    }
+  }
+}
+
+function updateChart(dates, data, key) {
+  console.log("updating chart");
+  // remove current canvas element if one exist
+  const canvasDiv = document.getElementById('canvas-div');
+  if(canvasDiv.firstChild) {
+    canvasDiv.removeChild(canvasDiv.lastChild);
+  }
+
+  // create canvas element
+  const canvasElement = document.createElement('canvas');
+  canvasElement.setAttribute('id', 'main-chart');
+  canvasDiv.append(canvasElement);
+
+  // create chart variable
+  var chart = new Chart(canvasElement, {
+    type: 'line',
     data: {
-        labels: xValues,
-        datasets: [{
-            backgroundColor: "rgba(0,0,255,1.0)",
-            borderColor: "rgba(0,0,255,0.1)",
-            data: yValues
-        }]
+      labels: dates,
+      datasets: [
+        {
+         label: key,
+         data: data,
+         borderWidth: 1
+        }
+      ]
     },
-});
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false,
+        }
+      }
+    }
+  });
+}
 
-// here should be where we actually pull the data into the charts
-// in order to show accurate measurements
-fetch('/api/experiment-data')
-  .then(response => response.json())
-  .then(data => {
-    // Extract data for the chart
-    const labels = data.labels;
-    const temperatureData = data.temperatureData;
-    const humidityData = data.humidityData;
+function createPlaceholderChart() {
+  const labels = [1,2,3,4,5];
+  const data = [];
+  const key = 'empty';
+  updateChart(labels, data, key);
+}
 
-    // Update the chart with the new data
-    myChart.data.labels = labels;
-    myChart.data.datasets[0].data = temperatureData;
-    myChart.data.datasets[1].data = humidityData;
-    myChart.update();
-  })
-  .catch(error => console.error(error));
+createPlaceholderChart();
+
+renderMeasurements();
