@@ -315,6 +315,16 @@ export class GreenhouseProxy {
 
     // ------------------EXPERIMENT------------------
     // Get all experiments
+    async getExperiments() {
+        
+        
+        try {
+            let response = fetch(`${url}/experiments`);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Create an experiment
 

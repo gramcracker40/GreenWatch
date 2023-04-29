@@ -4,17 +4,6 @@ const apiEndpoint = '/api/experiments';
 // Define the ID of the experiment you want to view
 const experimentId = 123;
 
-// Define a function to fetch experiment data from the API endpoint
-async function fetchExperimentData() {
-  try {
-    const response = await fetch(`${apiEndpoint}/${experimentId}`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`Error fetching experiment data: ${error}`);
-  }
-}
-
 // Define a function to populate the view experiment modal with experiment data
 async function populateViewExperimentModal() {
   const experimentData = await fetchExperimentData();
