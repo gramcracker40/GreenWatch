@@ -127,7 +127,8 @@ export class GreenhouseProxy {
     }
     
 
-    // ------------------ROOM------------------
+    // ------------------ROOM------------------ //
+    // Get all rooms
     async getRooms() {
         try {
             let response = await fetch(`${url}/rooms`);
@@ -138,6 +139,7 @@ export class GreenhouseProxy {
         
     }
 
+    // Create a new room
     async createRoom(room) {
         const options = {
             method: 'POST',
@@ -170,6 +172,7 @@ export class GreenhouseProxy {
         }
     }
 
+    // Delete a room by ID
     async deleteRoom(room_id) {
         const options = {
             method: 'DELETE',
@@ -325,8 +328,37 @@ export class GreenhouseProxy {
     }
 
     // Get experiment by id
+    async getExperimentByID(experimentID) {
+        try {
+            let response = await fetch(`${url}/experiments/${experimentID}`, options);
+            if (response.ok) {
+                let data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Update experiment by id
+    async editExperiment(experimentID, experimentObj) {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(experimentObj)
+        }
+
+        try {
+            let response = await fetch(`${url}/experiments/${experimentID}`, options);
+            if (response.ok) {
+                console.log("Experiment Updated Successfully");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Delete experiment by id
     async deleteExperiment(experimentID) {

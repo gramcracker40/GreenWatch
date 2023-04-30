@@ -132,6 +132,8 @@ class ExperimentSchema(PlainExperimentSchema):
 
 class ExperimentUpdateSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
+
+    name = fields.String()
     
     start = fields.DateTime()
     end = fields.DateTime()

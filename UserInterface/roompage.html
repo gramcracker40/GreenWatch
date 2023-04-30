@@ -116,7 +116,7 @@
               window.addEventListener('resize', () =>{
                     // redraw chart w/ original size
                     chartCanvas.style.width = '80%';
-                    chartCanvas.style.height = '80%';
+                    // chartCanvas.style.height = '80%';
                   });
           </script>
           <!-- <script>
@@ -243,10 +243,10 @@
             <label for="hum-low-threshold" class="form-label">Humidity Low</label>
             <input type="number" class="form-control" id="hum-low-threshold" required>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="experiment-details" class="form-label">Experiment Details</label>
             <textarea class="form-control" id="experiment-details" rows="3" required></textarea>
-          </div>
+          </div> -->
         </form>
       </div>
       <div class="modal-footer justify-content-between">
@@ -270,52 +270,59 @@
 </div>
 
 <!-- Edit Experiment Modal-->
-<div class="modal fade" id="edit-experiment-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit-experiment-modal" tabindex="-1" aria-labelledby="edit-exp-modal-title" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Experiment</h5>
+        <h5 class="modal-title" id="edit-exp-modal-title">Edit Experiment</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="experimentName" class="form-label">Experiment Name</label>
-            <input type="text" class="form-control" id="experimentName" required>
+            <label for="edit-experiment-name" class="form-label">Experiment Name</label>
+            <input type="text" class="form-control" id="edit-experiment-name" required>
           </div>
           <div class="mb-3">
-            <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="startDate" required>
+            <label for="edit-start-date" class="form-label">Start Date</label>
+            <input type="text" class="form-control" id="edit-start-date" required>
           </div>
           <div class="mb-3">
-            <label for="endDate" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="endDate" required>
+            <label for="edit-end-date" class="form-label">End Date</label>
+            <input type="text" class="form-control" id="edit-end-date" required>
           </div>
           <div class="mb-3">
-            <label for="highThreshold" class="form-label">Temperature High</label>
-            <input type="number" class="form-control" id="highThreshold" required>
+            <label for="edit-temp-high-threshold" class="form-label">Temperature High</label>
+            <input type="number" class="form-control" id="edit-temp-high-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="lowThreshold" class="form-label">Temperature Low</label>
-            <input type="number" class="form-control" id="lowThreshold" required>
+            <label for="edit-temp-low-threshold" class="form-label">Temperature Low</label>
+            <input type="number" class="form-control" id="edit-temp-low-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="humhighThreshold" class="form-label">Humidity High</label>
-            <input type="number" class="form-control" id="humhighThreshold" required>
+            <label for="edit-hum-high-threshold" class="form-label">Humidity High</label>
+            <input type="number" class="form-control" id="edit-hum-high-threshold" required>
           </div>
           <div class="mb-3">
-            <label for="humlowThreshold" class="form-label">Humidity Low</label>
-            <input type="number" class="form-control" id="humlowThreshold" required>
+            <label for="edit-hum-low-threshold" class="form-label">Humidity Low</label>
+            <input type="number" class="form-control" id="edit-hum-low-threshold" required>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="experimentDetails" class="form-label">Experiment Details</label>
             <textarea class="form-control" id="experimentDetails" rows="3" required></textarea>
-          </div>
+          </div> -->
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-success">Save Changes</button>
+        <p id="edit-exp-invalid-name-length-text" style="color: red; visibility: hidden;">
+          Experiment name is too long. Must be shorter than 20 characters.<br>
+        </p>
+        <div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          id="cancel-edit-exp-button">Cancel</button>
+          <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"
+          id="edit-exp-button">Save</button>
+        </div>
       </div>
     </div>
   </div>
