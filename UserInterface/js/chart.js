@@ -35,68 +35,71 @@ async function renderMeasurements() {
     }
   }
 
-  console.log(isDateNull);
   // Get measurements for roomID stored in session storage
   if (!isDateNull) {
-    const measurementsObj = await proxy.getMeasurementByRoom(1, dateObj);
+    const measurementsObj = await proxy.getMeasurementByRoom(roomID, dateObj);
     measurements = measurementsObj['data'];
-    console.log(measurements);
-    let dates = [];
-    let t_data = [];
-    let h_data = [];
-    let p_data = [];
-    let l_data = [];
+    // console.log(measurements);
 
-    measurements.forEach(measurement => {
-      var date = new Date(measurement['timestamp']);
-      const day = date.getUTCDate();
-      const month = date.getUTCMonth();
-      const hours = date.getUTCHours();
-      const minutes = date.getUTCMinutes();
-      const seconds = date.getUTCSeconds();
-      const timestamp = `${day} ${month} ${hours}:${minutes}:${seconds}`
-      dates.push(timestamp);
-
-      const temperatureValue = measurement['temperature'];
-      t_data.push(temperatureValue);
-
-      const humidityValue = measurement['humidity'];
-      h_data.push(humidityValue);
-
-      const pressureValue = measurement['pressure'];
-      p_data.push(pressureValue);
-
-      const lightValue = measurement['light'];
-      l_data.push(lightValue);
-    });
-
-    console.log("Temperature:\n" + t_data);
-    console.log("Humidity:\n" + h_data);
-    console.log("Pressure:\n" + p_data);
-    console.log("Light:\n" + l_data);
-    console.log("Timestamps:\n" + dates);    
-
-    console.log(chartSelector.value);
-    switch(parseInt(chartSelector.value)) {
-      case 0: 
-        updateChart(dates, t_data, 'Temperature');
-        break;
-      case 1:
-        updateChart(dates, h_data, 'Humidity');
-        break;
-      case 2:
-        updateChart(dates, p_data, 'Pressure');
-        break;
-      case 3:
-        updateChart(dates, l_data, 'Light');
-        break;
-      default:
+    if (measurements.length) {
+      let dates = [];
+      let t_data = [];
+      let h_data = [];
+      let p_data = [];
+      let l_data = [];
+  
+      measurements.forEach(measurement => {
+        var date = new Date(measurement['timestamp']);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth();
+        const hours = date.getUTCHours();
+        const minutes = date.getUTCMinutes();
+        const seconds = date.getUTCSeconds();
+        const timestamp = `${day} ${month} ${hours}:${minutes}:${seconds}`
+        dates.push(timestamp);
+  
+        const temperatureValue = measurement['temperature'];
+        t_data.push(temperatureValue);
+  
+        const humidityValue = measurement['humidity'];
+        h_data.push(humidityValue);
+  
+        const pressureValue = measurement['pressure'];
+        p_data.push(pressureValue);
+  
+        const lightValue = measurement['light'];
+        l_data.push(lightValue);
+      });
+  
+      // Debug Lines
+      // console.log("Temperature:\n" + t_data);
+      // console.log("Humidity:\n" + h_data);
+      // console.log("Pressure:\n" + p_data);
+      // console.log("Light:\n" + l_data);
+      // console.log("Timestamps:\n" + dates);    
+  
+      switch(parseInt(chartSelector.value)) {
+        case 0: 
+          updateChart(dates, t_data, 'Temperature');
+          break;
+        case 1:
+          updateChart(dates, h_data, 'Humidity');
+          break;
+        case 2:
+          updateChart(dates, p_data, 'Pressure');
+          break;
+        case 3:
+          updateChart(dates, l_data, 'Light');
+          break;
+        default:
+      }
+    }else{
+      createPlaceholderChart('No Measurement Data Available');
     }
   }
 }
 
 function updateChart(dates, data, key) {
-  console.log("updating chart");
   // remove current canvas element if one exist
   const canvasDiv = document.getElementById('canvas-div');
   if(canvasDiv.firstChild) {
@@ -122,6 +125,7 @@ function updateChart(dates, data, key) {
       ]
     },
     options: {
+      animation: false,
       scales: {
         y: {
           beginAtZero: false,
@@ -131,13 +135,12 @@ function updateChart(dates, data, key) {
   });
 }
 
-function createPlaceholderChart() {
+function createPlaceholderChart(key) {
   const labels = [1,2,3,4,5];
   const data = [];
-  const key = 'empty';
   updateChart(labels, data, key);
 }
 
-createPlaceholderChart();
+createPlaceholderChart('empty');
 
 renderMeasurements();
