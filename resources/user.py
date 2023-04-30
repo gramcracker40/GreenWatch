@@ -39,8 +39,8 @@ class UserRegister(MethodView):
             db.session.add(user)
             db.session.commit()
         except IntegrityError as err:
-            duplicate = str(err.orig).split('"')
-            abort(409, message=f"User with - {duplicate[1]} - already exists")
+            duplicate = str(err.orig).split('"')[1]
+            abort(409, message=f"User with - {duplicate} - already exists")
 
         except SQLAlchemyError as err:
             abort(500, message=f"Database error occurred, error: {err}")

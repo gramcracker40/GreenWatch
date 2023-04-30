@@ -1,6 +1,5 @@
 import requests
 import json
-from enum import Enum
 
 test_url = "http://127.0.0.1:5000"
 user = "tester"
@@ -118,24 +117,31 @@ class RouteTester:
         }
         '''
         api_file = open(file, "r")
-        api = json.loads(api_file)
+        api = json.load(api_file)
+
+        # PARSING JSON --- using regex to place proper IDs in any resources URI that needs a variable
 
         # could change based on implemented routes needing data passed as json.
         data_methods = ("POST", "PATCH", "PUT")
 
+        #TODO implement queue that pushes deletes to back of it
         results = {}
         for resource in api:
             for method in api[resource][1]:
-                # if the request needs data
-                if method in data_methods:
-                    test = RouteTester.request(self, api[resource][0], method, data=api[resource][2][method])
-                else:
-                    test = RouteTester.request(self, api[resource][0], method)
+                try:
+                    # if the request needs data
+                    if method in data_methods:
+                        test = RouteTester.request(self, api[resource][0], method, data=api[resource][2][method])
+                    else:
+                        test = RouteTester.request(self, api[resource][0], method)
 
-                try: 
                     results[resource].append(test)
                 except KeyError:
                     results[resource] = [test]
+
+                except IndexError as err:
+                    print(err)
+                    print(err.with_traceback)
 
         if dump:
             json.dumps(results, indent=2)
