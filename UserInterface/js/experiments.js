@@ -79,7 +79,6 @@ async function renderExperimentCards() {
       const hLowCardHeader = document.createElement('div');
       const hLowCardBody = document.createElement('div');
       const icons = document.createElement('div');
-      const view = document.createElement('i');
       const edit = document.createElement('i');
       const trash = document.createElement('i'); 
 
@@ -108,16 +107,31 @@ async function renderExperimentCards() {
       hLowCardHeader.textContent = "Humidity Low";
       hLowCardBody.setAttribute('class', 'card-body justify-content-center');
       hLowCardBody.textContent = experiment['lower_hum'];
+      icons.setAttribute('class', 'col-3 justify-content-between');
 
-      view.setAttribute('class', 'fa-solid fa-eye btn btn-outline-primary m-2');
-      view.setAttribute('data-bs-target', '#view-experiment-modal');
-      view.setAttribute('data-bs-toggle', 'modal');
+      
       edit.setAttribute('class', 'fa-solid fa-pen-to-square btn btn-outline-dark m-2');
       edit.setAttribute('data-bs-target', '#edit-experiment-modal');
       edit.setAttribute('data-bs-toggle', 'modal');
       trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-danger m-2');
       trash.setAttribute('data-bs-target', '#delete-experiment-modal');
       trash.setAttribute('data-bs-toggle', 'modal');
+
+      // Only allow viewing of experiment if it is the active experiment of the room
+      if (experiment['active']) {
+        const view = document.createElement('i');
+
+        view.setAttribute('class', 'fa-solid fa-eye btn btn-outline-primary m-2');
+        view.setAttribute('data-bs-target', '#view-experiment-modal');
+        view.setAttribute('data-bs-toggle', 'modal');
+
+        icons.append(view);
+
+        view.addEventListener('click', () => {
+          // Store the experiment id (and name?)
+          sessionStorage.setItem('experimentID', experiment['id']);
+        });
+      }
 
       experimentListGroup.append(listItem);
       listItem.append(nameDiv);
@@ -136,7 +150,6 @@ async function renderExperimentCards() {
       hLowCard.append(hLowCardHeader);
       hLowCard.append(hLowCardBody);
       listItem.append(icons);
-      icons.append(view);
       icons.append(edit);
       icons.append(trash);
 
@@ -265,3 +278,5 @@ async function createExperiment() {
   resetCreateExperimentFields();
   renderExperimentCards();
 }
+
+// -------------- View Exp Modal Functions -------------- //

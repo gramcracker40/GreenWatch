@@ -60,7 +60,8 @@
 
   <!-- Main Content -->
   <div class="container my-5">
-    <h1 class="text-center mb-5">Room Name</h1>
+    <h1 class="text-center mb-5" 
+    id="room-name-text">Room Name</h1>
     <div class="container-fluid">
     
       <div class="container mt-5 mb-5 justify-content-between">
@@ -322,51 +323,14 @@
 
 <!-- View Experiment Modal -->
 <div class="modal fade" id="view-experiment-modal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-fullscreen">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="viewModalLabel">Experiment</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="experimentName" class="form-label">Experiment Name</label>
-            <input type="text" class="form-control" id="experimentName" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="startDate" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="endDate" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="endDate" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="highThreshold" class="form-label">Temperature High</label>
-            <input type="number" class="form-control" id="highThreshold" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="lowThreshold" class="form-label">Temperature Low</label>
-            <input type="number" class="form-control" id="lowThreshold" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="humhighThreshold" class="form-label">Humidity High</label>
-            <input type="number" class="form-control" id="humhighThreshold" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="humlowThreshold" class="form-label">Humidity Low</label>
-            <input type="number" class="form-control" id="humlowThreshold" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="experimentDetails" class="form-label">Experiment Details</label>
-            <textarea class="form-control" id="experimentDetails" rows="3" readonly></textarea>
-          </div>
-          <div class="mb-3">
-          <label for="avgTemp">Avg. Temperature: </label>
-          <label for="avgHumid">Avg. Humidity: </label>
-          </div>
-        </form>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -433,5 +397,6 @@
   </div>
   <script type="module" src="./js/chart.js"></script>
   <script type="module" src="./js/experiments.js"></script>
+  <script type="module" src="./js/room.js"></script>
   </body>
 </html>

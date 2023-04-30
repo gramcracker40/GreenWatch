@@ -1,58 +1,5 @@
-
 const url = "http://127.0.0.1:5000"
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
-
-// const userRegister1 = {
-//     "first_name": "Billy",
-//     "last_name": "The Hero",
-//     "is_admin": true,
-//     "username": "test1", 
-//     "password":"password1",
-//     "email": "bHero@at.com"
-// }
-
-// const userRegister2 = {
-//     "first_name": "Finn",
-//     "last_name": "The Human",
-//     "is_admin": true,
-//     "username": "finn", 
-//     "password":"pb",
-//     "email": "fHuman@at.com"
-// }
-
-// const userRegister3 = {
-//     "first_name": "Jake",
-//     "last_name": "The Dog",
-//     "is_admin": true,
-//     "username": "jtdoggzone", 
-//     "password":"lady",
-//     "email": "jDog@at.com"
-// }
-
-// const o_user_register = {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(this.userRegister1)
-// }
-
-// const userLogin = {
-//     "username": "test1",
-//     "password": "password1"
-// }
-
-// const o_login = {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(this.userLogin)
-// }
-
-// const o_create_room = {
-
-// }
 
 export class GreenhouseProxy {
     constructor() {}
@@ -211,6 +158,17 @@ export class GreenhouseProxy {
     }
 
     // Get room by id
+    async getRoomByID(roomID) {
+        try {
+            let response = await fetch(`${url}/rooms/${roomID}`);
+            if (response.ok) {
+                let data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async deleteRoom(room_id) {
         const options = {
@@ -437,200 +395,3 @@ export class GreenhouseProxy {
 // proxy.getAllMessagesByRoom(3);
 // proxy.getAllMessagesByRoom(4);
 // proxy.createRoomMessage(4, 1, "That sounds like a great idea. Let's do it!");
-
-// const measurements = [
-//     {
-//         "temperature": 98,
-//         "humidity": 73,
-//         "pressure": 21,
-//         "light": 4
-//     },
-//     {
-//         "temperature": 95,
-//         "humidity": 79,
-//         "pressure": 18,
-//         "light": 3
-//     },
-//     {
-//         "temperature": 97,
-//         "humidity": 74,
-//         "pressure": 19,
-//         "light": 4
-//     },
-//     {
-//         "temperature": 97,
-//         "humidity": 77,
-//         "pressure": 23,
-//         "light": 2
-//     },
-// ]
-
-// let roomID = 1;
-
-// measurements.forEach(measurment => {
-//     proxy.createMeasurement(roomID, measurment);
-//     roomID++;
-// });
-
-async function createRoomMeasurements() {
-    const proxy = new GreenhouseProxy();
-    // const rooms = await proxy.getRooms();
-
-    const measurements = [
-        {
-          "humidity": 88,
-          "temperature": 83,
-          "light": 240,
-          "pressure": 1014.17
-        },
-        {
-          "humidity": 65,
-          "temperature": 36,
-          "light": 19,
-          "pressure": 1009.95
-        },
-        {
-          "humidity": 62,
-          "temperature": 35,
-          "light": 169,
-          "pressure": 1014.13
-        },
-        {
-          "humidity": 89,
-          "temperature": 69,
-          "light": 247,
-          "pressure": 1011.32
-        },
-        {
-          "humidity": 93,
-          "temperature": 74,
-          "light": 60,
-          "pressure": 1018.41
-        },
-        {
-          "humidity": 63,
-          "temperature": 80,
-          "light": 195,
-          "pressure": 1010.96
-        },
-        {
-          "humidity": 52,
-          "temperature": 97,
-          "light": 230,
-          "pressure": 1015.26
-        },
-        {
-          "humidity": 52,
-          "temperature": 38,
-          "light": 142,
-          "pressure": 1015.76
-        },
-        {
-          "humidity": 53,
-          "temperature": 53,
-          "light": 215,
-          "pressure": 1005.65
-        },
-        {
-          "humidity": 63,
-          "temperature": 57,
-          "light": 212,
-          "pressure": 1009.46
-        },
-        {
-          "humidity": 88,
-          "temperature": 60,
-          "light": 76,
-          "pressure": 1017.95
-        },
-        {
-          "humidity": 88,
-          "temperature": 68,
-          "light": 242,
-          "pressure": 1018.35
-        },
-        {
-          "humidity": 79,
-          "temperature": 27,
-          "light": 128,
-          "pressure": 1007.16
-        },
-        {
-          "humidity": 58,
-          "temperature": 32,
-          "light": 121,
-          "pressure": 1016.42
-        },
-        {
-          "humidity": 77,
-          "temperature": 41,
-          "light": 200,
-          "pressure": 1018.28
-        },
-        {
-          "humidity": 93,
-          "temperature": 50,
-          "light": 105,
-          "pressure": 1002.8
-        },
-        {
-          "humidity": 84,
-          "temperature": 79,
-          "light": 13,
-          "pressure": 1017.5
-        },
-        {
-          "humidity": 66,
-          "temperature": 38,
-          "light": 84,
-          "pressure": 1009.73
-        },
-        {
-          "humidity": 92,
-          "temperature": 34,
-          "light": 235,
-          "pressure": 1000.99
-        },
-        {
-          "humidity": 100,
-          "temperature": 82,
-          "light": 121,
-          "pressure": 1008.22
-        }
-      ]
-
-    var counter = 1;
-
-    var interval = setInterval(function() { 
-    if (counter <= 20) { 
-        proxy.createMeasurement(1, measurements[counter-1]);
-        console.log(measurements[counter-1]);
-        counter++;
-    }
-    else { 
-        clearInterval(interval);
-    }
-    }, 5000);
-}
-
-async function createRoomMeasurement() {
-    const proxy = new GreenhouseProxy();
-    // const rooms = await proxy.getRooms();
-
-   
-
-    const measurement = {
-        "humidity": 88,
-        "temperature": 83,
-        "light": 240,
-        "pressure": 1014.17
-    }
-
-    console.log(measurement);
-    proxy.createMeasurement(1, measurement);
-}
-
-const createMeasurementButton = document.getElementById('create-measurements-button');
-if (createMeasurementButton) {
-    createMeasurementButton.addEventListener('click', createRoomMeasurements);
-}
