@@ -26,6 +26,10 @@ cancelCreateExpButton.addEventListener('click', () => {
 
 const createExpButton = document.getElementById('create-exp-button');
 createExpButton.addEventListener('click', createExperiment);
+createExpButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkCreateExperimentFields);
+  document.removeEventListener('mouseup', checkCreateExperimentFields);
+});
 
 // -------------- Delete Exp Modal Button Events -------------- //
 const cancelDeleteExpButton = document.getElementById('cancel-delete-exp-button');
@@ -180,7 +184,7 @@ function getCreateExperimentObj() {
     "name": experimentName.value,
     "upper_temp": tHighThreshold.value,
     "lower_hum": hLowThreshold.value,
-    "room_id": 1 // need to replace this value with actual room id
+    "room_id": sessionStorage.getItem('roomID')
   }
 
   return experiment;
@@ -246,7 +250,18 @@ function resetCreateExperimentFields() {
 
 async function createExperiment() {
   const experiment = getCreateExperimentObj();
+  const roomID = sessionStorage.getItem('roomID');
+
+  experiment['start'] = new Date(experiment['start']).toISOString().slice(0,-1);
+  experiment['end'] = new Date(experiment['end']).toISOString().slice(0,-1);
+  experiment['lower_hum'] = parseInt(experiment['lower_hum']);
+  experiment['lower_temp'] = parseInt(experiment['lower_temp']);
+  experiment['upper_hum'] = parseInt(experiment['upper_hum']);
+  experiment['upper_temp'] = parseInt(experiment['upper_temp']);
+  experiment['room_id'] = parseInt(roomID);
+  console.log(experiment);
 
   await proxy.createExpirement(experiment);
-  
+  resetCreateExperimentFields();
+  renderExperimentCards();
 }

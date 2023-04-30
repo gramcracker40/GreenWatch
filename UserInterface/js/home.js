@@ -90,6 +90,7 @@ async function renderRooms() {
     
       card.addEventListener('click', () => {
         // console.log(card.getAttribute('id'));
+        sessionStorage.setItem('roomID', room['id']);
         window.location.href = "./roompage.html";
       });
     });

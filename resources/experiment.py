@@ -50,8 +50,8 @@ class Experiments(MethodView):
         room = RoomModel.query.get_or_404(experiment_data["room_id"])
         active_experiments = [experiment for experiment in room.experiments
                             if experiment.active]
-        if active_experiments:
-            abort(409, message="There is an experiment already going on in this room.")
+        # if active_experiments:
+        #     abort(409, message="There is an experiment already going on in this room.")
 
         try:
             db.session.add(experiment)
