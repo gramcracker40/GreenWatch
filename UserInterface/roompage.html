@@ -38,7 +38,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
         <ul class="navbar-nav">
           <!-- Settings Dropstart -->
-          <li class="nav-item dropstart">
+          <!-- <li class="nav-item dropstart">
             <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               Settings
             </button>
@@ -52,7 +52,7 @@
                 id="users-modal-trigger">Export Data</button>
               </li>
             </ul>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -68,7 +68,20 @@
       <div class="container mt-5 mb-5 justify-content-between">
       <div class="row">
         <div class="col-md-8">
-          
+          <div class="d-flex align-items-end">
+            <div class="me-3">
+              <label for="startDate" class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="startDate" required>
+            </div>
+            <div class="mx-3">
+              <label for="endDate" class="form-label">End Date</label>
+              <input type="date" class="form-control" id="endDate" required>
+            </div>
+            <div class="ms-3">
+              <button class="btn btn-dark" type="button"
+              id="update-chart">Update Chart</button>
+            </div>
+          </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
@@ -91,54 +104,36 @@
           </canvas> -->
         </div>
       </div>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-          <div class="d-flex">
-            <div class="me-3">
-              <label for="startDate" class="form-label">Start Date</label>
-              <input type="date" class="form-control" id="startDate" required>
-            </div>
-            <div class="ms-3">
-              <label for="endDate" class="form-label">End Date</label>
-              <input type="date" class="form-control" id="endDate" required>
-            </div>
-          </div>
-          <div>
-            <button class="btn btn-dark" type="button"
-            id="update-chart">Update Chart</button>
-          </div>
-          <!-- <div class="btn-group">
-              <button class="btn btn-secondary">6h</button>
-              <button class="btn btn-secondary">12h</button>
-              <button class="btn btn-secondary">24h</button>
-          </div> -->
-          <!-- <button id="export-data-button" class="btn btn-primary" >Export Data</button> -->
-          <script>
-            const chartCanvas = document.getElementById('main-chart');
-              window.addEventListener('resize', () =>{
-                    // redraw chart w/ original size
-                    chartCanvas.style.width = '80%';
-                    // chartCanvas.style.height = '80%';
-                  });
-          </script>
-          <!-- <script>
-            // Get a reference to the chart canvas element
-            const chartCanvas = document.getElementById('myChart');
+      <div class="card-footer d-flex justify-content-between align-items-center">
 
-            // Attach an event listener to the export data button
-            document.getElementById('export-data-button').addEventListener('click', () => {
-              // Get the chart data as a data URL
-              const chartDataURL = chartCanvas.toBase64Image();
+        <!-- <button id="export-data-button" class="btn btn-primary" >Export Data</button> -->
+        <script>
+          const chartCanvas = document.getElementById('main-chart');
+            window.addEventListener('resize', () =>{
+                  // redraw chart w/ original size
+                  chartCanvas.style.width = '80%';
+                  // chartCanvas.style.height = '80%';
+                });
+        </script>
+        <!-- <script>
+          // Get a reference to the chart canvas element
+          const chartCanvas = document.getElementById('myChart');
 
-              // Create a temporary anchor element and set its attributes
-              const downloadLink = document.createElement('a');
-              downloadLink.setAttribute('href', chartDataURL);
-              downloadLink.setAttribute('download', 'chart-data.csv');
+          // Attach an event listener to the export data button
+          document.getElementById('export-data-button').addEventListener('click', () => {
+            // Get the chart data as a data URL
+            const chartDataURL = chartCanvas.toBase64Image();
 
-              // Programmatically click the anchor element to trigger the download
-              downloadLink.click();
-            });
-          </script> -->
-        </div>              
+            // Create a temporary anchor element and set its attributes
+            const downloadLink = document.createElement('a');
+            downloadLink.setAttribute('href', chartDataURL);
+            downloadLink.setAttribute('download', 'chart-data.csv');
+
+            // Programmatically click the anchor element to trigger the download
+            downloadLink.click();
+          });
+        </script> -->
+      </div>              
     </div> 
 <!-- Notes Chatbox
 <div class="container mt-3 d-flex justify-content-end">

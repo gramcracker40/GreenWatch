@@ -163,7 +163,7 @@ async function renderExperimentCards() {
         view.setAttribute('data-bs-target', '#view-experiment-modal');
         view.setAttribute('data-bs-toggle', 'modal');
 
-        icons.append(view);
+        // icons.append(view);
 
         view.addEventListener('click', () => {
           // Store the experiment id (and name?)
