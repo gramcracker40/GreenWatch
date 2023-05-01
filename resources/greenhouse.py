@@ -32,8 +32,12 @@ class Greenhouse(MethodView):
         '''
         greenhouse = GreenhouseModel.query.get_or_404(greenhouse_id)
 
-        for key, value in greenhouse_data.items():
-            setattr(greenhouse, key, value)
+        try:
+            for key, value in greenhouse_data.items():
+                setattr(greenhouse, key, value)
+
+        except IntegrityError as err:
+            return abort(401, message="Another greenhouse has the same name")
 
         db.session.commit()
 
@@ -73,7 +77,9 @@ class Greenhouses(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"An unhandled server error has occurred -> {err}")
 
-        return {"Success": True}, 201
+        new_greenhouse = GreenhouseModel.query.filter(GreenhouseModel.name == greenhouse_data["name"]).first()
+
+        return {"Success": True, "greenhouse_id": new_greenhouse.id}, 201
     
     
     #@jwt_required()

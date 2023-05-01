@@ -32,11 +32,16 @@ class Servers(MethodView):
         try:
             db.session.add(server)
             db.session.commit()
+        
+        except IntegrityError as err:
+            abort(401, message="Resource with unique contraint 'IP Address' already exists.")
 
         except SQLAlchemyError as err:
             abort(500, message=f"An unhandled server error has occurred -> {err}")
 
-        return {"Success": True}, 201
+        new_server = ServerModel.query.filter(ServerModel.name == server_data["name"]).first()
+
+        return {"Success": True, "server_id": new_server.id}, 201
     
 
     #@jwt_required()
@@ -87,7 +92,8 @@ class Agents(MethodView):
         agent = AgentModel(**agent_data)
 
         passcode = rand_string(size=60)
-        agent.private_key = pbkdf2_sha256.hash(passcode)
+        hash = pbkdf2_sha256.hash(passcode)
+        agent.private_key = hash
 
         room = RoomModel.query.get_or_404(agent_data['room_id'])
         if room.agent:
@@ -104,7 +110,9 @@ class Agents(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"An unhandled server error has occurred -> {err}")
 
-        return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id}, 201
+        new_agent = AgentModel.query.filter(AgentModel.private_key == hash).first()
+
+        return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
     
     #@jwt_required()
     @blp.response(200, AgentSchema(many=True))

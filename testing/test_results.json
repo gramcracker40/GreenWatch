@@ -1,0 +1,206 @@
+{
+  "GREENHOUSES": [
+    {
+      "uri": "/greenhouses",
+      "method": "GET",
+      "status_code": 200,
+      "data": []
+    },
+    {
+      "uri": "/greenhouses",
+      "method": "POST",
+      "status_code": 201,
+      "data": {
+        "Success": true,
+        "greenhouse_id": 1
+      }
+    }
+  ],
+  "GREENHOUSE": {
+    "uri": "/greenhouses/1",
+    "method": "DELETE",
+    "status_code": 201,
+    "data": {
+      "Success": true
+    }
+  },
+  "USERS": [
+    {
+      "uri": "/users",
+      "method": "GET",
+      "status_code": 200,
+      "data": [
+        {
+          "email": "gmathers@gmail.commm",
+          "first_name": "n",
+          "id": 1,
+          "is_admin": true,
+          "last_name": "o",
+          "username": "test2"
+        },
+        {
+          "email": "test@testmail.com",
+          "first_name": "test",
+          "id": 2,
+          "is_admin": true,
+          "last_name": "name",
+          "username": "tester"
+        }
+      ]
+    }
+  ],
+  "USER": [
+    {
+      "uri": "/users/2",
+      "method": "PATCH",
+      "status_code": 201,
+      "data": {
+        "Success": true
+      }
+    }
+  ],
+  "ROOMS": [
+    {
+      "uri": "/rooms",
+      "method": "GET",
+      "status_code": 200,
+      "data": []
+    },
+    {
+      "uri": "/rooms",
+      "method": "POST",
+      "status_code": 200,
+      "data": {
+        "Success": true,
+        "room_id": 1
+      }
+    }
+  ],
+  "ROOM": {
+    "uri": "/rooms/1",
+    "method": "DELETE",
+    "status_code": 200,
+    "data": {
+      "message": "room deleted successfully"
+    }
+  },
+  "SERVERS": [
+    {
+      "uri": "/servers",
+      "method": "GET",
+      "status_code": 200,
+      "data": []
+    },
+    {
+      "uri": "/servers",
+      "method": "POST",
+      "status_code": 201,
+      "data": {
+        "Success": true,
+        "server_id": 1
+      }
+    }
+  ],
+  "SERVER": {
+    "uri": "/servers/1",
+    "method": "DELETE",
+    "status_code": 200,
+    "data": {
+      "Success": true
+    }
+  },
+  "AGENTS": [
+    {
+      "uri": "/servers/agents",
+      "method": "GET",
+      "status_code": 200,
+      "data": []
+    },
+    {
+      "uri": "/servers/agents",
+      "method": "POST",
+      "status_code": 201,
+      "data": {
+        "Success": true,
+        "agent_id": 1,
+        "private_key": "QSAV2NDJ9LWZC81NRFGURE0B9OSGRPVMEFZENC6OLIVMFBS2CPZTWQ9EEVM2",
+        "room_id": 1,
+        "server_ip": "172.22.0.1"
+      }
+    }
+  ],
+  "AGENT": {
+    "uri": "/servers/agents/1",
+    "method": "DELETE",
+    "status_code": 200,
+    "data": {
+      "Success": true
+    }
+  },
+  "MESSAGES": [
+    {
+      "uri": "/rooms/messages",
+      "method": "GET",
+      "status_code": 200,
+      "data": []
+    }
+  ],
+  "MESSAGE": [
+    {
+      "uri": "/rooms/1/messages",
+      "method": "POST",
+      "status_code": 201,
+      "data": {
+        "Success": true,
+        "message_id": 1
+      }
+    },
+    {
+      "uri": "/rooms/1/messages",
+      "method": "GET",
+      "status_code": 201,
+      "data": [
+        {
+          "body": "Hello, I am another message of testing",
+          "id": 1,
+          "room_id": 1,
+          "timestamp": "2023-04-29T19:20:10.056921",
+          "user_id": 2
+        }
+      ]
+    }
+  ],
+  "SPECIFICMESSAGE": {
+    "uri": "/rooms/messages/1",
+    "method": "DELETE",
+    "status_code": 200,
+    "data": {
+      "Success": true
+    }
+  },
+  "EXPERIMENTS": [
+    {
+      "uri": "/experiments",
+      "method": "GET",
+      "status_code": 200,
+      "data": []
+    },
+    {
+      "uri": "/experiments",
+      "method": "POST",
+      "status_code": 201,
+      "data": {
+        "Success": true,
+        "experiment_id": 1
+      }
+    }
+  ],
+  "EXPERIMENT": {
+    "uri": "/experiments/1",
+    "method": "DELETE",
+    "status_code": 200,
+    "data": {
+      "Success": true
+    }
+  }
+}

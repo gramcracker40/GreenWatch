@@ -131,13 +131,14 @@ class ExperimentSchema(PlainExperimentSchema):
 
 
 class ExperimentUpdateSchema(Schema):
-    id = fields.Int(dump_only=True, unique=True)
     
     start = fields.DateTime()
     end = fields.DateTime()
 
     upper_temp = fields.Float()
     lower_temp = fields.Float()
+
+    name = fields.String()
 
     lower_hum = fields.Float()
     upper_hum = fields.Float()

@@ -26,7 +26,6 @@ class Rooms(MethodView):
     
     #@jwt_required(fresh=True)
     @blp.arguments(RoomSchema)
-    @blp.response(200, RoomSchema)
     def post(self, room_data):
         '''
         Create new Room
@@ -41,11 +40,13 @@ class Rooms(MethodView):
             db.session.commit()
 
         except IntegrityError as err:
-            abort(400, message=f"Room already exists {err}")
+            abort(400, message=f"Room already exists")
         except SQLAlchemyError as err:
-            abort(500, message=f"Internal server err: {err}")
+            abort(500, message=f"Internal server err --> {err}")
+        
+        new_room = RoomModel.query.filter(RoomModel.name == room_data["name"]).first()
 
-        print("Error 3")
+        return {"Success": True, "room_id" : new_room.id}
 
 
 @blp.route("/rooms/<int:room_id>")
@@ -104,7 +105,9 @@ class Measurement(MethodView):
     def post(self, measurement_data, room_id):
         '''
         Add a Measurement to a Room and any Experiments that are active
-        within the room
+        within the room - Only agents created in the dashboard can add
+        measurements to the room they were created for originally. 
+        Anything else will be rejected.
         '''
         room = RoomModel.query.get_or_404(room_id)
         agent = AgentModel.query.filter(AgentModel.room_id == room.id).first()
@@ -205,11 +208,15 @@ class Message(MethodView):
             db.session.add(message)
             db.session.commit()
 
+        except IntegrityError as err:
+            abort(401, message="A room with that name already exists")
+
         except SQLAlchemyError as err:
             abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
 
+        new_message = MessageModel.query.filter(MessageModel.body == message_data["body"]).first()
 
-        return {"Success":True}, 201
+        return {"Success":True, "message_id": new_message.id}, 201
     
     #@jwt_required()
     @blp.response(201, MessageSchema(many=True))
