@@ -126,7 +126,7 @@ function updateChart(dates, data, key) {
     },
     options: {
       animation: false,
-      aspectRatio: 1,
+      aspectRatio: 1.5,
       scales: {
         y: {
           beginAtZero: false,

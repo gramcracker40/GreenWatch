@@ -18,7 +18,6 @@ function createUserList() {
 }
 
 createUserList();
-// console.log(usernames);
 
 function resetChatbox() {
   while(chatbox_body.firstChild) {
@@ -27,7 +26,7 @@ function resetChatbox() {
 }
 
 async function renderMessages() {
-  const messages = proxy.getAllMessagesByRoom(roomID);
+  const messages = await proxy.getAllMessagesByRoom(roomID);
   console.log(messages);
   resetChatbox();
 
@@ -66,8 +65,13 @@ renderMessages();
 async function sendMessage() {
   const messageBox = document.getElementById('message-input-box');
   const message = messageBox.value;
-  console.log(message);
 
   // Get user ID from access_token
-  Utils.
+  const jwt = Utils.getJwt();
+  const userID = jwt['user_id'];
+
+  await proxy.createRoomMessage(roomID, userID, message);
+  renderMessages();
+
+  messageBox.value = '';
 }

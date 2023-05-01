@@ -19,6 +19,10 @@ async function validateUser() {
   const jwt = await proxy.login(user);
   if (jwt) {
     invalidLoginText.style.visibility = 'hidden';
+
+    const jwtStr = JSON.stringify(jwt);
+    sessionStorage.setItem('jwt', jwtStr);
+
     sessionStorage.setItem('access_token', jwt['access_token']);
     sessionStorage.setItem('refresh_token', jwt['refresh_token']);
     window.location.assign('/home');

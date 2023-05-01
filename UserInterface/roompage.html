@@ -11,21 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/85adf60c1d.js" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.js" 
-    integrity="sha512-Cv3WnEz5uGwmTnA48999hgbYV1ImGjsDWyYQakowKw+skDXEYYSU+rlm9tTflyXc8DbbKamcLFF80Cf89f+vOQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <script type="module" src="/api/api.js"></script>
-    
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" 
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
-    <!-- <link rel="stylesheet" href="./css/style.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/cdb.min.css" /> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script> -->
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 </head>
 <body>
   <!-- Navbar -->
@@ -64,7 +50,12 @@
     id="room-name-text"></h1>
     <script type="module" src="/js/room.js"></script>
     <div class="container-fluid">
-    
+      <div class="row justify-content-end">
+        <!-- Notes Modal Trigger -->
+        <button class="btn btn-lg btn-outline-dark fa-solid fa-comments"
+        id="open-chatbox-btn" data-bs-target="#notes-modal" data-bs-toggle="modal">
+        </button>
+      </div>
       <div class="container mt-5 mb-5 justify-content-between">
       <div class="row">
         <div class="col-md-8">
@@ -105,29 +96,32 @@
             </canvas> -->
           </div>
           <!-- Notes Chatbox -->
-          <div class="container mt-5 col-6">
-            <div class="card mx-auto">
-              <div class="card-header bg-transparent">
-                <div class="d-flex align-items-center justify-content-between">
-                  Notes
+          <!-- <div class="container mt-5 col-6" id="chatbox-content">
+            <form>
+              <div class="card mx-auto">
+                <div class="card-header bg-transparent">
+                  <div class="d-flex align-items-center justify-content-between">
+                    Notes
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
                 </div>
-              </div>
-              <div class="card-body p-4" style="height: 500px; overflow: auto;" id="chat-box-body">
-              </div>
-              <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
-                <div class="input-group">
-                  <input type="text" class="form-control border-0" placeholder="Write a message..."
-                  id="message-input-box">
-                  <div class="input-group-text bg-transparent border-0">
-                    <button class="btn btn-light text-dark"
-                    id="send-message-btn">
-                      <i class="fa-solid fa-paper-plane"></i>
-                    </button>
+                <div class="card-body p-4" style="height: 500px; overflow: auto;" id="chat-box-body">
+                </div>
+                <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
+                  <div class="input-group">
+                    <input type="text" class="form-control border-0" placeholder="Write a message..."
+                    id="message-input-box">
+                    <div class="input-group-text bg-transparent border-0">
+                      <button class="btn btn-light text-dark"
+                      id="send-message-btn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </form>
+          </div> -->
         </div>
 
       <!-- <div class="card-footer d-flex justify-content-between align-items-center"> -->
@@ -161,273 +155,284 @@
         </script> -->
       <!-- </div>               -->
     </div> 
-<!-- Notes Chatbox
-<div class="container mt-3 d-flex justify-content-end">
-  <div class="row">
-    
-    <div class="col-md-4">
-      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#notes" aria-expanded="false" aria-controls="notes">Notes</button>
-    </div>
-  </div>
-  <div class="collapse mt-3" id="notes">
-    <div class="card card-body">
-      <ul class="list-unstyled">
-        <li class="border-bottom">
-          <div class="d-flex justify-content-between">
-            <div>
-              <span class="fw-bold">John:</span>
-              <span>Work completed</span>
-            </div>
-            <small class="text-muted">2023-04-25 09:30 AM</small>
-          </div>
-          <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-        </li>
-        <li class="border-bottom">
-          <div class="d-flex justify-content-between">
-            <div>
-              <span class="fw-bold">Jane:</span>
-              <span>Work to be done</span>
-            </div>
-            <small class="text-muted">2023-04-24 05:30 PM</small>
-          </div>
-          <div>Phasellus mollis lorem euismod bibendum consequat.</div>
-        </li>
-      </ul>
-      <form id="notes-form" class="mt-3">
-        <div class="mb-3">
-          <textarea class="form-control" id="notes-textarea" rows="3" placeholder="Enter note..."></textarea>
-        </div>
-        <div class="mb-3">
-          <select class="form-select" id="notes-select">
-            <option value="completed">Work completed</option>
-            <option value="todo">Work to be done</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Note</button>
-      </form>
-    </div>
-  </div>
-</div> -->
-</div>
-<div class="container">
-    <div class="row mt-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5 class="mb-0">Experiments</h5>
-                    <div class="col-auto">
-                      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-experiment-modal" style="align-self: flex-end;"
-                      id="show-create-exp-modal-btn">Add Experiment</button>
-                    </div>
-                </div>
-                <div class="card-body" id="experiment-card-body">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Add Experiment Modal -->
-<div class="modal fade" id="add-experiment-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Experiment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Notes Chatbox
+  <div class="container mt-3 d-flex justify-content-end">
+    <div class="row">
+      
+      <div class="col-md-4">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#notes" aria-expanded="false" aria-controls="notes">Notes</button>
       </div>
-      <div class="modal-body">
-        <form>
+    </div>
+    <div class="collapse mt-3" id="notes">
+      <div class="card card-body">
+        <ul class="list-unstyled">
+          <li class="border-bottom">
+            <div class="d-flex justify-content-between">
+              <div>
+                <span class="fw-bold">John:</span>
+                <span>Work completed</span>
+              </div>
+              <small class="text-muted">2023-04-25 09:30 AM</small>
+            </div>
+            <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+          </li>
+          <li class="border-bottom">
+            <div class="d-flex justify-content-between">
+              <div>
+                <span class="fw-bold">Jane:</span>
+                <span>Work to be done</span>
+              </div>
+              <small class="text-muted">2023-04-24 05:30 PM</small>
+            </div>
+            <div>Phasellus mollis lorem euismod bibendum consequat.</div>
+          </li>
+        </ul>
+        <form id="notes-form" class="mt-3">
           <div class="mb-3">
-            <label for="experiment-name" class="form-label">Experiment Name</label>
-            <input type="text" class="form-control" id="experiment-name" required>
+            <textarea class="form-control" id="notes-textarea" rows="3" placeholder="Enter note..."></textarea>
           </div>
           <div class="mb-3">
-            <label for="start-date" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="start-date" required>
+            <select class="form-select" id="notes-select">
+              <option value="completed">Work completed</option>
+              <option value="todo">Work to be done</option>
+            </select>
           </div>
-          <div class="mb-3">
-            <label for="end-date" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="end-date" required>
-          </div>
-          <div class="mb-3">
-            <label for="temp-high-threshold" class="form-label">Temperature High</label>
-            <input type="number" class="form-control" id="temp-high-threshold" required>
-          </div>
-          <div class="mb-3">
-            <label for="temp-low-threshold" class="form-label">Temperature Low</label>
-            <input type="number" class="form-control" id="temp-low-threshold" required>
-          </div>
-          <div class="mb-3">
-            <label for="hum-high-threshold" class="form-label">Humidity High</label>
-            <input type="number" class="form-control" id="hum-high-threshold" required>
-          </div>
-          <div class="mb-3">
-            <label for="hum-low-threshold" class="form-label">Humidity Low</label>
-            <input type="number" class="form-control" id="hum-low-threshold" required>
-          </div>
-          <!-- <div class="mb-3">
-            <label for="experiment-details" class="form-label">Experiment Details</label>
-            <textarea class="form-control" id="experiment-details" rows="3" required></textarea>
-          </div> -->
+          <button type="submit" class="btn btn-primary">Add Note</button>
         </form>
       </div>
-      <div class="modal-footer justify-content-between">
-        <div>
-          <p id="exp-create-invalid-text" style="color: red; visibility: hidden;">
-            Input fields cannot be empty.<br>
-          </p>
-          <p id="exp-create-invalid-name-length-text" style="color: red; visibility: hidden;">
+    </div>
+  </div> -->
+  </div>
+  <div class="container">
+      <div class="row mt-4">
+          <div class="col">
+              <div class="card">
+                  <div class="card-header d-flex justify-content-between">
+                      <h5 class="mb-0">Experiments</h5>
+                      <div class="col-auto">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-experiment-modal" style="align-self: flex-end;"
+                        id="show-create-exp-modal-btn">Add Experiment</button>
+                      </div>
+                  </div>
+                  <div class="card-body" id="experiment-card-body">
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+  <!-- Add Experiment Modal -->
+  <div class="modal fade" id="add-experiment-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Experiment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="experiment-name" class="form-label">Experiment Name</label>
+              <input type="text" class="form-control" id="experiment-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="start-date" class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="start-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="end-date" class="form-label">End Date</label>
+              <input type="date" class="form-control" id="end-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="temp-high-threshold" class="form-label">Temperature High</label>
+              <input type="number" class="form-control" id="temp-high-threshold" required>
+            </div>
+            <div class="mb-3">
+              <label for="temp-low-threshold" class="form-label">Temperature Low</label>
+              <input type="number" class="form-control" id="temp-low-threshold" required>
+            </div>
+            <div class="mb-3">
+              <label for="hum-high-threshold" class="form-label">Humidity High</label>
+              <input type="number" class="form-control" id="hum-high-threshold" required>
+            </div>
+            <div class="mb-3">
+              <label for="hum-low-threshold" class="form-label">Humidity Low</label>
+              <input type="number" class="form-control" id="hum-low-threshold" required>
+            </div>
+            <!-- <div class="mb-3">
+              <label for="experiment-details" class="form-label">Experiment Details</label>
+              <textarea class="form-control" id="experiment-details" rows="3" required></textarea>
+            </div> -->
+          </form>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <div>
+            <p id="exp-create-invalid-text" style="color: red; visibility: hidden;">
+              Input fields cannot be empty.<br>
+            </p>
+            <p id="exp-create-invalid-name-length-text" style="color: red; visibility: hidden;">
+              Experiment name is too long. Must be shorter than 20 characters.<br>
+            </p>
+          </div>
+          <div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            id="cancel-create-exp-button">Cancel</button>
+            <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"
+            id="create-exp-button">Add Experiment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Experiment Modal-->
+  <div class="modal fade" id="edit-experiment-modal" tabindex="-1" aria-labelledby="edit-exp-modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-exp-modal-title">Edit Experiment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="edit-experiment-name" class="form-label">Experiment Name</label>
+              <input type="text" class="form-control" id="edit-experiment-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="edit-start-date" class="form-label">Start Date</label>
+              <input type="text" class="form-control" id="edit-start-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="edit-end-date" class="form-label">End Date</label>
+              <input type="text" class="form-control" id="edit-end-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="edit-temp-high-threshold" class="form-label">Temperature High</label>
+              <input type="number" class="form-control" id="edit-temp-high-threshold" required>
+            </div>
+            <div class="mb-3">
+              <label for="edit-temp-low-threshold" class="form-label">Temperature Low</label>
+              <input type="number" class="form-control" id="edit-temp-low-threshold" required>
+            </div>
+            <div class="mb-3">
+              <label for="edit-hum-high-threshold" class="form-label">Humidity High</label>
+              <input type="number" class="form-control" id="edit-hum-high-threshold" required>
+            </div>
+            <div class="mb-3">
+              <label for="edit-hum-low-threshold" class="form-label">Humidity Low</label>
+              <input type="number" class="form-control" id="edit-hum-low-threshold" required>
+            </div>
+            <!-- <div class="mb-3">
+              <label for="experimentDetails" class="form-label">Experiment Details</label>
+              <textarea class="form-control" id="experimentDetails" rows="3" required></textarea>
+            </div> -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p id="edit-exp-invalid-name-length-text" style="color: red; visibility: hidden;">
             Experiment name is too long. Must be shorter than 20 characters.<br>
           </p>
+          <div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            id="cancel-edit-exp-button">Cancel</button>
+            <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"
+            id="edit-exp-button">Save</button>
+          </div>
         </div>
-        <div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Experiment Modal -->
+  <div class="modal fade" id="view-experiment-modal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewModalLabel">Experiment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Experiment Modal -->
+  <div class="modal fade" id="delete-experiment-modal" tabindex="-1" aria-labelledby="delete-experiment-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="delete-experiment-modal-label">Delete Experiment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this experiment?</p>
+        </div>
+        <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-          id="cancel-create-exp-button">Cancel</button>
-          <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"
-          id="create-exp-button">Add Experiment</button>
+          id="cancel-delete-exp-button">Cancel</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+          id="delete-exp-button">Delete</button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Edit Experiment Modal-->
-<div class="modal fade" id="edit-experiment-modal" tabindex="-1" aria-labelledby="edit-exp-modal-title" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="edit-exp-modal-title">Edit Experiment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="edit-experiment-name" class="form-label">Experiment Name</label>
-            <input type="text" class="form-control" id="edit-experiment-name" required>
+  <!-- Notes Modal -->
+  <div class="modal fade" id="notes-modal" tabindex="-1" aria-labelledby="notes-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notes-modal-label">Notes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- Notes Chatbox -->
+        <!-- <div class="container mt-5 col-6" id="chatbox-content">
+          <div class="card mx-auto">
+            <div class="card-header bg-transparent">
+              <div class="d-flex align-items-center justify-content-between">
+                Notes
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </div> -->
+            <div class="card-body p-4" style="height: 500px; overflow: auto;" id="chat-box-body">
+            </div>
+            <!-- <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
+              
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="edit-start-date" class="form-label">Start Date</label>
-            <input type="text" class="form-control" id="edit-start-date" required>
+        </div> -->
+        <div class="modal-footer">
+          <div class="input-group">
+            <input type="text" class="form-control border-0" placeholder="Write a message..."
+            id="message-input-box">
+            <div class="input-group-text bg-transparent border-0">
+              <button class="btn btn-light text-dark"
+              id="send-message-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="edit-end-date" class="form-label">End Date</label>
-            <input type="text" class="form-control" id="edit-end-date" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-temp-high-threshold" class="form-label">Temperature High</label>
-            <input type="number" class="form-control" id="edit-temp-high-threshold" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-temp-low-threshold" class="form-label">Temperature Low</label>
-            <input type="number" class="form-control" id="edit-temp-low-threshold" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-hum-high-threshold" class="form-label">Humidity High</label>
-            <input type="number" class="form-control" id="edit-hum-high-threshold" required>
-          </div>
-          <div class="mb-3">
-            <label for="edit-hum-low-threshold" class="form-label">Humidity Low</label>
-            <input type="number" class="form-control" id="edit-hum-low-threshold" required>
-          </div>
-          <!-- <div class="mb-3">
-            <label for="experimentDetails" class="form-label">Experiment Details</label>
-            <textarea class="form-control" id="experimentDetails" rows="3" required></textarea>
-          </div> -->
-        </form>
-      </div>
-      <div class="modal-footer">
-        <p id="edit-exp-invalid-name-length-text" style="color: red; visibility: hidden;">
-          Experiment name is too long. Must be shorter than 20 characters.<br>
-        </p>
-        <div>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-          id="cancel-edit-exp-button">Cancel</button>
-          <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal"
-          id="edit-exp-button">Save</button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- View Experiment Modal -->
-<div class="modal fade" id="view-experiment-modal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-fullscreen">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewModalLabel">Experiment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+  
+    
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 </div>
-
-<!-- Delete Experiment Modal -->
-<div class="modal fade" id="delete-experiment-modal" tabindex="-1" aria-labelledby="delete-experiment-modal-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="delete-experiment-modal-label">Delete Experiment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this experiment?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-        id="cancel-delete-exp-button">Cancel</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-        id="delete-exp-button">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-   
-    <!-- <script src="./js/script.js"></script> -->
-    
-    <!-- <script src="../node_modules/chart.js/dist/chart.umd.js"></script> -->
-    
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.0/chart.umd.js"></script> -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"  -->
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
-    <!-- <script>
-      const ctx = document.getElementById('myChart');
-
-        var chart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-              label: 'Temp',
-              data: [75, 78, 81, 84, 81, 73],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: false,
-              }
-            }
-          }
-        });
-    </script> -->
-  </div>
   <script type="module" src="/js/chart.js"></script>
   <script type="module" src="/js/experiments.js"></script>
   <script type="module" src="/js/roomMessages.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- <script src="/js/chat.js"></script> -->
   </body>
 </html>

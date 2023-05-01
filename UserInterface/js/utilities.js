@@ -11,7 +11,7 @@ export function getUserObj() {
   return user;
 }
 
-export function parseJwt (token) {
+export function parseJwt(token) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
@@ -21,6 +21,8 @@ export function parseJwt (token) {
   return JSON.parse(jsonPayload);
 }
 
-// export function getJwt(obj) {
-//   return JSON.parse(obj)["access_token"];
-// }
+export function getJwt() {
+  const jwtStr = sessionStorage.getItem('jwt');
+  const jwt = JSON.parse(jwtStr);
+  return jwt;
+}
