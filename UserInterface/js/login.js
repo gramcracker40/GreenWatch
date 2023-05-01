@@ -1,6 +1,13 @@
-function validateUser() {
-  event.preventDefault();
+import { GreenhouseProxy } from "../api/api.js";
 
+const proxy = new GreenhouseProxy();
+
+const submitBtn = document.getElementById('submit-btn');
+submitBtn.addEventListener('click', validateUser);
+
+const invalidLoginText = document.getElementById('invalidCreds');
+
+async function validateUser() {
   const username = document.getElementById('usernameTextbox').value;
   const password = document.getElementById('passwordTextbox').value;
 
@@ -9,25 +16,15 @@ function validateUser() {
     "password": password
   }
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(user)
+  const jwt = await proxy.login(user);
+  if (jwt) {
+    invalidLoginText.style.visibility = 'hidden';
+    sessionStorage.setItem('access_token', jwt['access_token']);
+    sessionStorage.setItem('refresh_token', jwt['refresh_token']);
+    window.location.assign('home.html');
+  }else{
+    invalidLoginText.style.visibility = 'visible';
+    // console.log("login failed");
   }
-
-  fetch('http://127.0.0.1:5000/login', options)
-  .then((res) => {
-    if (res.ok) {
-      document.getElementById("invalidCreds").style.visibility = 'hidden';
-      showThankYou();
-      setTimeout(function() {
-        window.location.href = '/home';
-      }, 3000);
-    }else{
-      console.log("Invalid Credentials");
-      document.getElementById("invalidCreds").style.visibility = 'visible';
-    }
-  })
+  // console.log(jwt);
 }

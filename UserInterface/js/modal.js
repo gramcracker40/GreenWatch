@@ -64,7 +64,7 @@ async function renderUsers() {
 
     edit.addEventListener('click', () => {
       const userString = JSON.stringify(user);
-      console.log(userString);
+      // console.log(userString);
       sessionStorage.setItem('selectedUser', userString);
       sessionStorage.setItem('selectedUserID', user['id']);
       const modalTitle = document.getElementById('user-edit-modal-title');

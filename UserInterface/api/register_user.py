@@ -2,10 +2,10 @@ import requests, json
 
 
 body = {
-    "username": "test1", 
-    "password":"password1",
-    "last_name": "The Hero",
-    "first_name": "Billy",
+    "username": "user1", 
+    "password":"Password_1",
+    "last_name": "1",
+    "first_name": "",
     "email": "bHero@at.com",
     "is_admin": True
   }
