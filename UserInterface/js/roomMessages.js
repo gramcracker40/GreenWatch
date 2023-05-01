@@ -27,7 +27,7 @@ function resetChatbox() {
 
 async function renderMessages() {
   const messages = await proxy.getAllMessagesByRoom(roomID);
-  console.log(messages);
+  // console.log(messages);
   resetChatbox();
 
   if (messages.length) {

@@ -16,7 +16,7 @@ Add text in chatbox for a room with no messages
    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/85adf60c1d.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="./css/home.css">
+  <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
   <!-- Navbar -->
@@ -29,7 +29,7 @@ Add text in chatbox for a room with no messages
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
         <ul class="navbar-nav">
           <!-- Settings Dropstart -->
-          <li class="nav-item dropstart">
+          <li class="nav-item dropstart" id="settings-dropstart">
             <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               Settings
             </button>
@@ -37,6 +37,10 @@ Add text in chatbox for a room with no messages
               <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#users-modal" id="users-modal-trigger">Users</button></li>
               <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#rooms-modal" id="rooms-modal-trigger">Rooms</button></li>
             </ul>
+          </li>
+          <!-- Logout Link -->
+          <li class="nav-item">
+            <a class="nav-link" href="/" id="logout-link">Logout <span class="sr-only">(current)</span></a>
           </li>
         </ul>
       </div>

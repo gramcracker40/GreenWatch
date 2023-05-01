@@ -2,6 +2,7 @@ import * as Utils from "../js/utilities.js";
 
 const url = "http://127.0.0.1:5000"
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
+let debugMode = false;
 
 
 
@@ -53,9 +54,9 @@ export class GreenhouseProxy {
 
         try {
             let response = await fetch(`${url}/register`, options);
-            // if (response.ok) {
-            //     console.log("User Created Successfully");
-            // }
+            if (response.ok && debugMode) {
+                console.log("User Created Successfully");
+            }
         } catch (error) {
             console.log(error);
         }        
@@ -73,6 +74,10 @@ export class GreenhouseProxy {
         try {
             let response = await fetch(`${url}/login`, options);
             if (response.ok) {
+                if (debugMode) {
+                    console.log("Login Successful");
+                }
+
                 let data = await response.json();
                 return data;
             }
@@ -89,7 +94,17 @@ export class GreenhouseProxy {
     async getUsers() {
         try {
             let response = await fetch(`${url}/users`);
-            return await response.json();
+            if (response.ok) {
+                let data = await response.json();
+
+                if (debugMode) {
+                    console.log("Successfully Aquired Users");
+                    console.log(data);
+                }
+
+                return data;
+            }
+            
         } catch (error) {
             console.log(error);
         }
@@ -108,7 +123,7 @@ export class GreenhouseProxy {
         
         try {
             let response = await fetch(`${url}/users/${userID}`, options);
-            if (response.ok) {
+            if (response.ok && debugMode) {
                 console.log("User Successfully Updated");
                 console.log(await response.json());
             }

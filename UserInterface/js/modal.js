@@ -1,4 +1,5 @@
 import { GreenhouseProxy } from "../api/api.js";
+import * as Utils from "../js/utilities.js";
 import { renderRoomCards } from "./home.js";
 
 const proxy = new GreenhouseProxy();
@@ -58,8 +59,12 @@ async function renderUsers() {
     userListGroup.append(userListGroupItem);
     userListGroupItem.append(username);
     userListGroupItem.append(icons);
+
+    if (user['id'] != Utils.getJwt()['user_id'] && !user['is_admin']) {
+      icons.append(trash);
+    }
+
     icons.append(edit);
-    icons.append(trash);
 
     edit.addEventListener('click', () => {
       const userString = JSON.stringify(user);
@@ -202,7 +207,7 @@ function getEditUserObject() {
 }
 
 function isStrongPassword(password) {
-  console.log(`Testing: ${password}`);
+  // console.log(`Testing: ${password}`);
   const strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})');
 
   if (!strongPassword.test(password)) {
@@ -288,9 +293,10 @@ function getCreateUserObject() {
 
 async function createUser() {
   const user = getCreateUserObject();
-
+  console.log(user);
   // Convert admin status to boolean after checking for empty fields.
-  user['is_admin'] = Boolean(user['is_admin']); 
+  user['is_admin'] = Boolean(parseInt(user['is_admin'])); 
+  console.log(user);
 
   await proxy.registerUser(user);
   resetCreateUserInputFields();

@@ -26,3 +26,7 @@ export function getJwt() {
   const jwt = JSON.parse(jwtStr);
   return jwt;
 }
+
+export function logout() {
+  sessionStorage.clear();
+}
