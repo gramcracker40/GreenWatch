@@ -5,6 +5,6 @@ SQL_HOST=db
 SQL_PORT=5432
 DATABASE=postgres
 DBUSER=adminadminSECURE!!!
-DBPASS="ThisIsProductionBaby$"
+DBPASS=ThisIsProductionBaby$
 DBNAME=greenwatch_production
 SECRET_KEY=317aed4a0352d37253f433dc475fa5e7e306de7ad657add546d34f4e7c8b046c

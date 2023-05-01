@@ -11,3 +11,4 @@ requests
 pyinstaller
 psycopg2-binary
 gunicorn
+fcntl
