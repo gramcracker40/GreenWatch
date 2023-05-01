@@ -1,7 +1,6 @@
 FLASK_APP=app:app
 FLASK_DEBUG=0
-DBHOST=postgres://kvfppxebqw:ThisIsProductionBaby$@greenwatch-server.postgres.database.azure.com/postgres?sslmode=require
-SQL_HOST=db
+DBHOST=postgresql://adminadminSECURE!!!:ThisIsProductionBaby$@db:5432/greenwatch_production
 SQL_PORT=5432
 DATABASE=postgres
 DBUSER=adminadminSECURE!!!
