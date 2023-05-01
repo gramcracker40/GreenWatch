@@ -1,5 +1,5 @@
 FLASK_APP=app:app
-FLASK_DEBUG=1
+FLASK_DEBUG=0
 DBHOST=postgres://kvfppxebqw:ThisIsProductionBaby$@greenwatch-server.postgres.database.azure.com/postgres?sslmode=require
 SQL_HOST=db
 SQL_PORT=5432
