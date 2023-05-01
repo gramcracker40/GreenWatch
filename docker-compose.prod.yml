@@ -20,7 +20,9 @@ services:
       - ./.flaskenv
 
   nginx:
-    build: ./services/nginx
+    build: 
+      context: ./services/nginx
+      dockerfile: Dockerfile
     ports:
       - 1337:80
     depends_on:
