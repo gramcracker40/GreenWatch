@@ -1,57 +1,50 @@
-[
-  {
-    "GREENHOUSES": ["/greenhouse", ["GET", "POST"], {"POST": {"name": "test", "location": "test site bravo"}}],
+{
+    "GREENHOUSES": ["/greenhouses", ["GET", "POST"], {"POST": {"name": "test", "location": "test site bravo"}}],
 
-    "GREENHOUSE": ["", [], {"headers": {}}]
-  }, 
-  {
+    "GREENHOUSE": ["/greenhouses/'greenhouse_id'", ["GET", "PATCH", "DELETE"], {"PATCH": {"name": "testING MORE", "location": "test site alpha"}}],
+
     "USERS": ["/users", ["GET"], {}],
         
-    "USER": ["/users/<int:user_id>", ["DELETE", "PATCH"]],
+    "USER": ["/users/'user_id'", ["PATCH"], {"PATCH": {"email": "ThisPrettyMuchConfirmsTheTest@gmail.com"}}],
 
-    "ROOMS": ["/rooms", ["GET", "POST"], {"POST": {"name": "testOG", "greenhouse_id": ""}}],
+    "ROOMS": ["/rooms", ["GET", "POST"], {"POST": {"name": "testOG", "greenhouse_id": "greenhouse_id"}}],
       
-    "ROOM": ["/rooms/<int:room_id>", ["GET", "DELETE", "PATCH"], {"PATCH": {"name": "testtestest"}}],
+    "ROOM": ["/rooms/'room_id'", ["GET", "DELETE", "PATCH"], {"PATCH": {"name": "testtestesttest"}}],
 
-    "SERVERS": ["/servers", ["GET", "POST"], {}],
+    "SERVERS": ["/servers", ["GET", "POST"], {"POST": {"ip_address": "172.22.0.1", "name": "south_building", "greenhouse_id": "greenhouse_id"}}],
 
-    "SERVER": ["", [], {}]
-  },
-  {
-    "AGENTS": ["", [], {}],
+    "SERVER": ["/servers/'server_id'", ["DELETE", "PATCH"], {"PATCH": {"name": "test_building"}}],
 
-    "AGENT": ["", [], {}],
+    "AGENTS": ["/servers/agents", ["GET", "POST"], {"POST": {"duration": "00:00:23.000000","ip_address": "127.0.0.1","room_id": "room_id","server_id": "server_id"}}],
+
+    "AGENT": ["/servers/agents/'agent_id'", ["PATCH", "DELETE"], {"PATCH": {"duration": "0:00:15.00000"}}],
 
     "MESSAGES": ["/rooms/messages", ["GET"]],
     
-    "MESSAGE": ["/rooms/<int:room_id>/messages", ["POST", "GET"], {"POST": {"user_id": 1, "body": "Hello, I am another message of testing"}}],
+    "MESSAGE": ["/rooms/'room_id'/messages", ["POST", "GET"], {"POST": {"user_id": "user_id", "body": "Hello, I am another message of testing"}}],
     
-    "SPECIFICMESSAGE": ["/rooms/messages/<int:message_id>", ["DELETE", "PATCH"], {"PATCH": {"body":"a test message"}}],
+    "SPECIFICMESSAGE": ["/rooms/messages/'message_id'", ["DELETE", "PATCH"], {"PATCH": {"body":"a test message - and changing it, a lot"}}],
    
     "EXPERIMENTS": ["/experiments", ["GET", "POST"], {"POST": {
         "upper_temp": 40,
         "alert_on": true,
         "lower_hum": 70,
-        "room_id": 1,
+        "room_id": "room_id",
         "name": "test",
         "upper_hum": 90,
         "lower_temp": 30,
-        "start": "2023-04-12T18:45:35.085Z",
-        "end": "2023-04-15T18:45:35.085Z"
+        "start": "2023-04-12T18:45:35.085",
+        "end": "2023-04-15T18:45:35.085"
       }}],
     
-    "EXPERIMENT": ["/experiments/<int:experiment_id>", ["GET", "PATCH", "DELETE"], {"PATCH": {
+    "EXPERIMENT": ["/experiments/'experiment_id'", ["GET", "PATCH", "DELETE"], {"PATCH": {
         "upper_temp": 30,
         "alert_on": false,
         "lower_hum": 60,
-        "room_id": 1,
         "name": "string",
         "upper_hum": 100,
         "lower_temp": 20,
-        "start": "2023-04-12T18:45:35.085Z",
-        "end": "2023-04-17T18:45:35.085Z"
-      }}],
-    
-    "EXPERIMENTUSERS": [""]
-  }
-]
+        "start": "2023-04-12T18:45:35.085",
+        "end": "2023-04-17T18:45:35.085"
+      }}]
+}

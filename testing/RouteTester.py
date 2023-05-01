@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 
 test_url = "http://127.0.0.1:5000"
 user = "tester"
@@ -9,6 +10,9 @@ passw = "testtest"
 class RouteTester:
     '''
     Implements methods used to test the Greenwatch REST API
+
+    Testing will be done in stages, some resources we are testing creation of
+    rely on other resources becoming created first. 
 
     init    --> pass the 'base_url' aka "IP:port"
                  as well as passing the username and password. 
@@ -96,7 +100,7 @@ class RouteTester:
         return {"uri": uri, "method": method, "status_code": req.status_code, "data": obj}
 
 
-    def test_routes(self, file:str, dump:bool=True, json_file_save:str=None):
+    def test_routes(self, file:str, dump:bool=True, json_file_save:str=None) -> dict:
         '''
         file            : str  --> path to the formatted JSON file, examples below
         dump            : bool --> determines if test_routes dumps results to terminal
@@ -106,6 +110,9 @@ class RouteTester:
         accepts the path to a specific formatted JSON file. Below will detail
         the format. test_routes should be able to be made to work
         for any JSON based REST API. 
+
+        stage_variables --> able to parse variables needed for the individual calls by tracking all keys returned 
+        by POST methods. All POST methods Greenwatch will return the id of the newly created resource
 
         {
             "URI-Name": ["/uri", [methods implemented], {"method": {"data": "dataaa"}}]
@@ -124,25 +131,85 @@ class RouteTester:
         # could change based on implemented routes needing data passed as json.
         data_methods = ("POST", "PATCH", "PUT")
 
-        #TODO implement queue that pushes deletes to back of it
+        #TODO implement queue that pushes deletes to back of it - use priority queue
         results = {}
+        stage_variables = {"user_id": self.fake_user_id}
+        delete_tests = []
         for resource in api:
             for method in api[resource][1]:
+                uri = api[resource][0]
+
+                if "'" in uri:
+                    uri_parts = uri.split("'")
+                    print(f"URI parts: {uri_parts}")
+
+                    # determining the variables in the resources URI, then finding the matching
+                    # stage variable and replacing it. 
+                    id_vars = [(count,var) for count, var in enumerate(uri_parts) if "id" in var]
+                    id_vals = [(id_var[0], stage_variables[id_var[1]]) for id_var in id_vars]
+                    print(id_vals)
+
+                    for part, value in id_vals:
+                        uri_parts[part] = value
+
+                    print(f"URI parts: {uri_parts}")
+                    uri = ""
+                    for each in uri_parts:
+                        uri += str(each)
+
+                    print(f"URI: {uri}")
+
+                # all delete methods will run at end of all tests
+                if method == "DELETE":
+                    delete_tests.append((resource, uri))
+                    continue
+     
                 try:
                     # if the request needs data
                     if method in data_methods:
-                        test = RouteTester.request(self, api[resource][0], method, data=api[resource][2][method])
+                        # see if the test_data needs a stage variable to be valid. if so, parse it and replace in parsed_data
+                        test_data = api[resource][2][method]
+                        print(test_data)
+                        parsed_data = {each_key: (stage_variables[each_key] if each_key in stage_variables else test_data[each_key])
+                                  for each_key in test_data}
+                        print(parsed_data)
+                        test = RouteTester.request(self, uri, method, data=parsed_data)
                     else:
-                        test = RouteTester.request(self, api[resource][0], method)
+                        test = RouteTester.request(self, uri, method)
+                    
+                    print("TEST RESULTS")
+                    print(test)
+                    
+                    try:
+                        if method == "POST" and type(test["data"]) == dict:
+                            for key in test["data"]:
+                                stage_variables[key] = test["data"][key]
+                    except KeyError as err:
+                        pass
 
-                    results[resource].append(test)
-                except KeyError:
-                    results[resource] = [test]
+                    print(f"Stage variables: {stage_variables}")
+
+                    if resource in results:
+                        results[resource].append(test)
+                    else: 
+                        results[resource] = [test]
+
+
+                except KeyError as err:
+                    print(err)
+                    print(err.with_traceback)
 
                 except IndexError as err:
                     print(err)
                     print(err.with_traceback)
 
+        # now run all delete methods to purge database of all testing resources created.
+        # run it in reverse because deleting the greenhouse object cascades to all other resources
+        for each in reversed(delete_tests):  # each[1] = uri   each[0] = resource
+            test = RouteTester.request(self, each[1], "DELETE")
+            results[each[0]] = test
+
+        # outputting options in params
         if dump:
             json.dumps(results, indent=2)
 

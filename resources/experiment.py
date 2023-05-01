@@ -25,7 +25,6 @@ class Experiments(MethodView):
     
     #@jwt_required(fresh=True)
     @blp.arguments(ExperimentSchema)
-    @blp.response(200, PlainExperimentSchema)
     def post(self, experiment_data):
         '''
         Create a new experiment in greenhouse
@@ -62,7 +61,9 @@ class Experiments(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"Unhandled server err: --> {err}")
 
-        return {"Success": True}, 201
+        new_experiment = ExperimentModel.query.filter(ExperimentModel.name == experiment_data["name"]).first()
+
+        return {"Success": True, "experiment_id": new_experiment.id}, 201
         
 
 @blp.route("/experiments/<int:experiment_id>")

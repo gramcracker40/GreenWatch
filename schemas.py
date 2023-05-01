@@ -141,6 +141,8 @@ class ExperimentUpdateSchema(Schema):
     upper_temp = fields.Float()
     lower_temp = fields.Float()
 
+    name = fields.String()
+
     lower_hum = fields.Float()
     upper_hum = fields.Float()
 
