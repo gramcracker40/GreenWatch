@@ -1,5 +1,9 @@
 # Mini flask app that is going to be running on-site for individual greenhouses. 
-# Handles transferring the measurements from the LAN at MSU 
+# Handles transferring the measurements from the LAN at MSU. Will produce a small 
+# Dockerfile to produce an nginx server with gunicorn reverse proxying the requests coming
+# from the agents. 
+# With this, we only need wifi to one device, the rasberry pi 4 that we have. It will be able to
+# connect to wifi and relay requests to the GreenWatch home server. Wherever that may be.  
 
 
 from flask import Flask, jsonify, request

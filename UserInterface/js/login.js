@@ -21,7 +21,7 @@ async function validateUser() {
     invalidLoginText.style.visibility = 'hidden';
     sessionStorage.setItem('access_token', jwt['access_token']);
     sessionStorage.setItem('refresh_token', jwt['refresh_token']);
-    window.location.assign('home.html');
+    window.location.assign('/home');
   }else{
     invalidLoginText.style.visibility = 'visible';
     // console.log("login failed");

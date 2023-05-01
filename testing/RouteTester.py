@@ -126,12 +126,9 @@ class RouteTester:
         api_file = open(file, "r")
         api = json.load(api_file)
 
-        # PARSING JSON --- using regex to place proper IDs in any resources URI that needs a variable
-
         # could change based on implemented routes needing data passed as json.
         data_methods = ("POST", "PATCH", "PUT")
 
-        #TODO implement queue that pushes deletes to back of it - use priority queue
         results = {}
         stage_variables = {"user_id": self.fake_user_id}
         delete_tests = []
@@ -141,23 +138,18 @@ class RouteTester:
 
                 if "'" in uri:
                     uri_parts = uri.split("'")
-                    print(f"URI parts: {uri_parts}")
 
                     # determining the variables in the resources URI, then finding the matching
                     # stage variable and replacing it. 
                     id_vars = [(count,var) for count, var in enumerate(uri_parts) if "id" in var]
                     id_vals = [(id_var[0], stage_variables[id_var[1]]) for id_var in id_vars]
-                    print(id_vals)
 
                     for part, value in id_vals:
                         uri_parts[part] = value
 
-                    print(f"URI parts: {uri_parts}")
                     uri = ""
                     for each in uri_parts:
                         uri += str(each)
-
-                    print(f"URI: {uri}")
 
                 # all delete methods will run at end of all tests
                 if method == "DELETE":
@@ -169,16 +161,13 @@ class RouteTester:
                     if method in data_methods:
                         # see if the test_data needs a stage variable to be valid. if so, parse it and replace in parsed_data
                         test_data = api[resource][2][method]
-                        print(test_data)
                         parsed_data = {each_key: (stage_variables[each_key] if each_key in stage_variables else test_data[each_key])
                                   for each_key in test_data}
-                        print(parsed_data)
+                        
                         test = RouteTester.request(self, uri, method, data=parsed_data)
                     else:
                         test = RouteTester.request(self, uri, method)
-                    
-                    print("TEST RESULTS")
-                    print(test)
+
                     
                     try:
                         if method == "POST" and type(test["data"]) == dict:
@@ -187,19 +176,21 @@ class RouteTester:
                     except KeyError as err:
                         pass
 
-                    print(f"Stage variables: {stage_variables}")
 
                     if resource in results:
                         results[resource].append(test)
                     else: 
                         results[resource] = [test]
 
-
                 except KeyError as err:
                     print(err)
                     print(err.with_traceback)
 
                 except IndexError as err:
+                    print(err)
+                    print(err.with_traceback)
+
+                except requests.exceptions.RequestException as err:
                     print(err)
                     print(err.with_traceback)
 
