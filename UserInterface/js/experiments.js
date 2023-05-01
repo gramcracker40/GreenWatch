@@ -67,8 +67,6 @@ editExpButton.addEventListener('click', () => {
 function hideExperimentsBtn() {
   const jwt = Utils.getJwt();
   const token = Utils.parseJwt(JSON.stringify(jwt));
-  console.log(token);
-  console.log(jwt['user_id']);
 
   const addExpBtn = document.getElementById('show-create-exp-modal-btn');
   if (token['admin']) {
@@ -88,7 +86,7 @@ async function renderExperimentCards() {
 
   // Get all experiments
   const experiments = await proxy.getExperiments();
-  console.log(experiments);
+  // console.log(experiments);
 
   // Get the current roomID
   const currentRoom = sessionStorage.getItem('roomID');

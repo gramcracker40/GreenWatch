@@ -30,3 +30,14 @@ export function getJwt() {
 export function logout() {
   sessionStorage.clear();
 }
+
+export function toStandardTime(_hours) {
+  let hours = _hours;
+  if (hours > 12) {
+    hours -= 12;
+  } else if (hours == 0) {
+    timeValue= "12";
+  }
+  
+  return hours;
+}

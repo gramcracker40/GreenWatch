@@ -33,7 +33,7 @@ async function renderUsers() {
 
   // Get list of users
   const users = await proxy.getUsers();
-  console.log(users);
+  // console.log(users);
 
   // Create user cards for user settings modal
   users.forEach(user => {

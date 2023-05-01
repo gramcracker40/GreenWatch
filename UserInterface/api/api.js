@@ -306,7 +306,7 @@ export class GreenhouseProxy {
 
         try {
             let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
-            if (response.ok) {
+            if (response.ok && debugMode) {
                 console.log("Messages Created Successfully");
             }
         } catch (error) {

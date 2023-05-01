@@ -26,22 +26,22 @@ Add text in chatbox for a room with no messages
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDarkDropdown">
+      <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
         <ul class="navbar-nav">
-          <!-- Settings Dropstart -->
-          <li class="nav-item dropstart" id="settings-dropstart">
-            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              Settings
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#users-modal" id="users-modal-trigger">Users</button></li>
-              <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#rooms-modal" id="rooms-modal-trigger">Rooms</button></li>
-            </ul>
-          </li>
           <!-- Logout Link -->
           <li class="nav-item">
-            <a class="nav-link" href="/" id="logout-link">Logout <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/" id="logout-link">Logout <span class="sr-only"></span></a>
           </li>
+        </ul>
+      </div>
+      <!-- Settings Dropstart -->
+      <div class="nav-item dropstart" id="settings-dropstart">
+        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Settings
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+          <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#users-modal" id="users-modal-trigger">Users</button></li>
+          <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#rooms-modal" id="rooms-modal-trigger">Rooms</button></li>
         </ul>
       </div>
     </div>
