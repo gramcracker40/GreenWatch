@@ -1,4 +1,5 @@
 import { GreenhouseProxy } from "../api/api.js";
+import * as Utils from "../js/utilities.js";
 
 const proxy = new GreenhouseProxy();
 
@@ -63,6 +64,20 @@ editExpButton.addEventListener('click', () => {
   document.removeEventListener('mouseup', checkEditExperimentFields);
 });
 
+function hideExperimentsBtn() {
+  const jwt = Utils.getJwt();
+  const token = Utils.parseJwt(JSON.stringify(jwt));
+
+  const addExpBtn = document.getElementById('show-create-exp-modal-btn');
+  if (token['admin']) {
+    addExpBtn.style.visibility = "visible";
+  }else{
+    addExpBtn.style.visibility = "hidden";
+  }
+}
+
+hideExperimentsBtn();
+
 // Create cards for experiments
 async function renderExperimentCards() {
   // console.log("Rendering experiments");
@@ -71,7 +86,7 @@ async function renderExperimentCards() {
 
   // Get all experiments
   const experiments = await proxy.getExperiments();
-  console.log(experiments);
+  // console.log(experiments);
 
   // Get the current roomID
   const currentRoom = sessionStorage.getItem('roomID');

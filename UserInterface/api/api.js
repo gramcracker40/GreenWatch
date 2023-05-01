@@ -1,21 +1,45 @@
+import * as Utils from "../js/utilities.js";
+
 const url = "http://127.0.0.1:5000"
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
+let debugMode = false;
+
+
 
 export class GreenhouseProxy {
-    constructor() {}
+    constructor() {
+        // this.debugMode = false;
 
-    parseJwt (token) {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-    
-        return JSON.parse(jsonPayload);
-    }
-    
-    getJwt(obj) {
-        return JSON.parse(obj)["access_token"];
+        // const optionsPost = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(user)
+        // }
+
+        // const options = {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(dateObj)
+        // }
+
+        // const optionsPatch = {
+        //     method: 'PATCH',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(userData)
+        // }
+
+        // const optionsDelete = {
+        //     method: 'DELETE',
+        //     headers: {
+        //         'Authorization': token
+        //     }
+        // }
     }
 
     // ------------------USERS------------------
@@ -30,27 +54,12 @@ export class GreenhouseProxy {
 
         try {
             let response = await fetch(`${url}/register`, options);
-            // if (response.ok) {
-            //     console.log("User Created Successfully");
-            // }
+            if (response.ok && debugMode) {
+                console.log("User Created Successfully");
+            }
         } catch (error) {
             console.log(error);
         }        
-    }
-
-    Login() {
-        fetch(`${url}/login`, this.o_login)
-        .then((res) => {
-            if (res.ok) {
-                console.log("Login Successful");
-                // console.log(res.body);
-                res.text()
-                .then((result) => sessionStorage.setItem('jwt', this.getJwt(result)));
-                // console.log(res);
-            }else{
-                console.log("Invalid Login");
-            }
-        })
     }
 
     async login(loginObj) {
@@ -65,6 +74,10 @@ export class GreenhouseProxy {
         try {
             let response = await fetch(`${url}/login`, options);
             if (response.ok) {
+                if (debugMode) {
+                    console.log("Login Successful");
+                }
+
                 let data = await response.json();
                 return data;
             }
@@ -81,7 +94,17 @@ export class GreenhouseProxy {
     async getUsers() {
         try {
             let response = await fetch(`${url}/users`);
-            return await response.json();
+            if (response.ok) {
+                let data = await response.json();
+
+                if (debugMode) {
+                    console.log("Successfully Aquired Users");
+                    console.log(data);
+                }
+
+                return data;
+            }
+            
         } catch (error) {
             console.log(error);
         }
@@ -100,7 +123,7 @@ export class GreenhouseProxy {
         
         try {
             let response = await fetch(`${url}/users/${userID}`, options);
-            if (response.ok) {
+            if (response.ok && debugMode) {
                 console.log("User Successfully Updated");
                 console.log(await response.json());
             }
@@ -257,14 +280,17 @@ export class GreenhouseProxy {
       
         try {
             let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
-            return await response.json();
+            if (response.ok) {
+                let data = await response.json();
+                return data;
+            }
         } catch (error) {
             console.log(error);
         }
     }
 
     // Create new room message by room id
-    createRoomMessage(roomID, userID, message) {
+    async createRoomMessage(roomID, userID, message) {
         const _body = {
             "user_id": userID,
             "body": message
@@ -278,14 +304,14 @@ export class GreenhouseProxy {
             body: JSON.stringify(_body)
         }
 
-        fetch(`${url}/rooms/${roomID}/messages`, options)
-        .then((res) => {
-            if (res.ok) {
-                console.log("Message Successfully Created");
-            }else{
-                console.log(res);
+        try {
+            let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+            if (response.ok && debugMode) {
+                console.log("Messages Created Successfully");
             }
-        });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // Update a message by message id

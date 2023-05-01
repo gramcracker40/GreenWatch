@@ -1,4 +1,6 @@
 import { GreenhouseProxy } from "../api/api.js";
+import * as Utils from "../js/utilities.js";
+import { renderRoomCards } from "./home.js";
 
 const proxy = new GreenhouseProxy();
 const usersButton = document.getElementById('users-modal-trigger');
@@ -26,14 +28,12 @@ function resetUserList() {
 }
 
 async function renderUsers() {
-  console.log("rendering users...");
-
   // Reset current list
   resetUserList();
 
   // Get list of users
   const users = await proxy.getUsers();
-  console.log(users);
+  // console.log(users);
 
   // Create user cards for user settings modal
   users.forEach(user => {
@@ -59,8 +59,12 @@ async function renderUsers() {
     userListGroup.append(userListGroupItem);
     userListGroupItem.append(username);
     userListGroupItem.append(icons);
+
+    if (user['id'] != Utils.getJwt()['user_id'] && !user['is_admin']) {
+      icons.append(trash);
+    }
+
     icons.append(edit);
-    icons.append(trash);
 
     edit.addEventListener('click', () => {
       const userString = JSON.stringify(user);
@@ -81,8 +85,6 @@ async function renderUsers() {
       deletedUser.textContent = `${fullname}`;
     });
   });
-
-  console.log("rendered users.");
 }
 
 async function editUser() {
@@ -205,7 +207,7 @@ function getEditUserObject() {
 }
 
 function isStrongPassword(password) {
-  console.log(`Testing: ${password}`);
+  // console.log(`Testing: ${password}`);
   const strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})');
 
   if (!strongPassword.test(password)) {
@@ -291,9 +293,10 @@ function getCreateUserObject() {
 
 async function createUser() {
   const user = getCreateUserObject();
-
+  console.log(user);
   // Convert admin status to boolean after checking for empty fields.
-  user['is_admin'] = Boolean(user['is_admin']); 
+  user['is_admin'] = Boolean(parseInt(user['is_admin'])); 
+  console.log(user);
 
   await proxy.registerUser(user);
   resetCreateUserInputFields();
@@ -366,6 +369,7 @@ createRoomButton.addEventListener('click', createRoom);
 createRoomButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkCreateRoomInputFields);
 });
+// createRoomButton.addEventListener('click', renderRoomCards); 
 
 const saveRoomButton = document.getElementById('edit-room-button');
 saveRoomButton.addEventListener('click', editRoom);
@@ -385,6 +389,7 @@ async function createRoom() {
   await proxy.createRoom(room);
   resetCreateRoomInputFields();
   renderRooms();
+  renderRoomCards();
 }
 
 async function editRoom() {
@@ -398,6 +403,7 @@ async function deleteRoom() {
 
   await proxy.deleteRoom(roomID);
   renderRooms();
+  renderRoomCards();
 }
 
 function isCreateRoomInputFieldsEmpty(room) {
@@ -449,7 +455,6 @@ function resetCreateRoomInputFields() {
 
 // Visually create and append each room card to the room settings list
 async function renderRooms() {
-  console.log("rendering rooms...");
   // Reset current list
   resetRoomList();
 
@@ -484,7 +489,6 @@ async function renderRooms() {
       deletedRoom.textContent = `${room['name']}`;
     });
   });
-  console.log("rooms rendered.");
 }
 
 // Reset the list of rooms to be rendered

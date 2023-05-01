@@ -1,6 +1,7 @@
 // const { Chart } = require("chart.js");
 // import Chart from "/dist/chart.umd.min.js";
 import { GreenhouseProxy } from "../api/api.js";
+import * as Utils from "../js/utilities.js";
 
 const proxy = new GreenhouseProxy();
 
@@ -13,6 +14,20 @@ const chartSelector = document.getElementById('chart-selector');
 chartSelector.addEventListener('click', renderMeasurements);
 
 // Aquire measurement data and store in object
+
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Nov",
+  "Dec"
+]
 
 async function renderMeasurements() {
   // console.log("Rendering measurements...");
@@ -55,7 +70,7 @@ async function renderMeasurements() {
         const hours = date.getUTCHours();
         const minutes = date.getUTCMinutes();
         const seconds = date.getUTCSeconds();
-        const timestamp = `${day} ${month} ${hours}:${minutes}:${seconds}`
+        const timestamp = `${day} ${months[month]} ${Utils.toStandardTime(hours)}:${minutes}:${seconds}`
         dates.push(timestamp);
   
         const temperatureValue = measurement['temperature'];
@@ -79,19 +94,68 @@ async function renderMeasurements() {
       // console.log("Timestamps:\n" + dates);    
   
       switch(parseInt(chartSelector.value)) {
-        case 0: 
+        case 1: 
           updateChart(dates, t_data, 'Temperature');
           break;
-        case 1:
+        case 2:
           updateChart(dates, h_data, 'Humidity');
           break;
-        case 2:
+        case 3:
           updateChart(dates, p_data, 'Pressure');
           break;
-        case 3:
+        case 4:
           updateChart(dates, l_data, 'Light');
           break;
         default:
+          // remove current canvas element if one exist
+          const canvasDiv = document.getElementById('canvas-div');
+          if(canvasDiv.firstChild) {
+            canvasDiv.removeChild(canvasDiv.lastChild);
+          }
+          
+          // create canvas element
+          const canvasElement = document.createElement('canvas');
+          canvasElement.setAttribute('id', 'main-chart');
+          canvasDiv.append(canvasElement);
+          
+          // create chart variable
+          var chart = new Chart(canvasElement, {
+            type: 'line',
+            data: {
+              labels: dates,
+              datasets: [
+                {
+                label: 'Temperature',
+                data: t_data,
+                borderWidth: 1
+                },
+                {
+                  label: 'Humidity',
+                  data: h_data,
+                  borderWidth: 1
+                },
+                {
+                  label: 'Pressure',
+                  data: p_data,
+                  borderWidth: 1
+                },
+                {
+                  label: 'Light',
+                  data: l_data,
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              animation: false,
+              aspectRatio: 1.5,
+              scales: {
+                y: {
+                  beginAtZero: false,
+                }
+              }
+            }
+          });
       }
     }else{
       createPlaceholderChart('No Measurement Data Available');
@@ -126,6 +190,7 @@ function updateChart(dates, data, key) {
     },
     options: {
       animation: false,
+      aspectRatio: 1.5,
       scales: {
         y: {
           beginAtZero: false,

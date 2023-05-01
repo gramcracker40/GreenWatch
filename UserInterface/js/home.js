@@ -1,11 +1,37 @@
 import { GreenhouseProxy } from "../api/api.js";
+import * as Utils from "../js/utilities.js";
 
 const proxy = new GreenhouseProxy();
 const room_grid = document.getElementById('room-grid');
 const main = document.createElement('main');
 room_grid.append(main);
 
-async function renderRooms() {
+function hideSettings() {
+  const jwt = Utils.getJwt();
+  const token = Utils.parseJwt(JSON.stringify(jwt));
+
+  const settingsDropstart = document.getElementById('settings-dropstart');
+  if (token['admin']) {
+    settingsDropstart.style.visibility = "visible";
+  }else{
+    settingsDropstart.style.visibility = "hidden";
+  }
+}
+
+hideSettings();
+
+const logoutLink = document.getElementById('logout-link');
+logoutLink.addEventListener('click', Utils.logout);
+
+function resetRoomsList() {
+  while(main.firstChild) {
+    main.removeChild(main.lastChild);
+  }
+}
+
+export async function renderRoomCards() {
+  resetRoomsList();
+
   const rooms = await proxy.getRooms();
   // console.log(rooms);
 
@@ -132,5 +158,5 @@ function renderNewRoomCard() {
   main.append(card);
 }
 
-renderRooms();
+renderRoomCards();
 // renderNewRoomCard();
