@@ -11,7 +11,7 @@
 # DOCUMENTATION:
 #  While the development flask server is running on your local machine or in the cloud you can find the documentation
 #  for the API by going to 127.0.0.1:5000/swagger-ui, this is a well written piece of documentation that goes over exactly
-#  how to make each call to the server.
+#  how to make each call to the server...
 
 import os
 
