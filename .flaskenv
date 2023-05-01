@@ -1,4 +1,4 @@
-FLASK_APP=app
+FLASK_APP=app:app
 FLASK_DEBUG=1
 DBHOST=postgresql://adminadminSECURE!!!:C18BHHIT8EE32P0N06QIAV526@db:5432/greenwatch_production
 SQL_HOST=db
