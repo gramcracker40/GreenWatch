@@ -37,7 +37,7 @@ config = dotenv_values(".flaskenv")
 db_ = config["DATABASE_URI"]
 
 # factory pattern
-def create_app(db_url=None):
+def app(db_url=None):
     app = Flask(__name__)
     CORS(app)
 
@@ -56,7 +56,7 @@ def create_app(db_url=None):
 
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = "127890032121005302028413019624734207168"
+    app.config["JWT_SECRET_KEY"] = config["SECRET_KEY"]
     jwt = JWTManager(app)
 
     @jwt.token_in_blocklist_loader
