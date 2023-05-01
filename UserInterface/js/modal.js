@@ -1,4 +1,5 @@
 import { GreenhouseProxy } from "../api/api.js";
+import { renderRoomCards } from "./home.js";
 
 const proxy = new GreenhouseProxy();
 const usersButton = document.getElementById('users-modal-trigger');
@@ -26,8 +27,6 @@ function resetUserList() {
 }
 
 async function renderUsers() {
-  console.log("rendering users...");
-
   // Reset current list
   resetUserList();
 
@@ -81,8 +80,6 @@ async function renderUsers() {
       deletedUser.textContent = `${fullname}`;
     });
   });
-
-  console.log("rendered users.");
 }
 
 async function editUser() {
@@ -366,6 +363,7 @@ createRoomButton.addEventListener('click', createRoom);
 createRoomButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkCreateRoomInputFields);
 });
+// createRoomButton.addEventListener('click', renderRoomCards); 
 
 const saveRoomButton = document.getElementById('edit-room-button');
 saveRoomButton.addEventListener('click', editRoom);
@@ -385,6 +383,7 @@ async function createRoom() {
   await proxy.createRoom(room);
   resetCreateRoomInputFields();
   renderRooms();
+  renderRoomCards();
 }
 
 async function editRoom() {
@@ -398,6 +397,7 @@ async function deleteRoom() {
 
   await proxy.deleteRoom(roomID);
   renderRooms();
+  renderRoomCards();
 }
 
 function isCreateRoomInputFieldsEmpty(room) {
@@ -449,7 +449,6 @@ function resetCreateRoomInputFields() {
 
 // Visually create and append each room card to the room settings list
 async function renderRooms() {
-  console.log("rendering rooms...");
   // Reset current list
   resetRoomList();
 
@@ -484,7 +483,6 @@ async function renderRooms() {
       deletedRoom.textContent = `${room['name']}`;
     });
   });
-  console.log("rooms rendered.");
 }
 
 // Reset the list of rooms to be rendered

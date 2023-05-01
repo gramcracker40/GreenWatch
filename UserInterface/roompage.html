@@ -83,7 +83,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 align-items-end">
           <div class="form-group">
             <label for="chart-selector">Select a Chart:</label>
             <select class="form-control" id="chart-selector">
@@ -95,16 +95,42 @@
           </div>
         </div>
       </div>
-      <!-- Chart -->
-      <div class="card-body">
-        <div class="chart-container" style="position: relative; height: 60vh; width: 80vw;"
-        id="canvas-div">
-          <!-- <canvas id="main-chart">
-            Canvas
-          </canvas> -->
+
+        <!-- Chart -->
+        <div class="card-body d-flex">
+          <div class="chart-container" style="position: relative; height: 60vh; width: 80vw;"
+          id="canvas-div">
+            <!-- <canvas id="main-chart">
+              Canvas
+            </canvas> -->
+          </div>
+          <!-- Notes Chatbox -->
+          <div class="container mt-5 col-6">
+            <div class="card mx-auto">
+              <div class="card-header bg-transparent">
+                <div class="d-flex align-items-center justify-content-between">
+                  Notes
+                </div>
+              </div>
+              <div class="card-body p-4" style="height: 500px; overflow: auto;" id="chat-box-body">
+              </div>
+              <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
+                <div class="input-group">
+                  <input type="text" class="form-control border-0" placeholder="Write a message..."
+                  id="message-input-box">
+                  <div class="input-group-text bg-transparent border-0">
+                    <button class="btn btn-light text-dark"
+                    id="send-message-btn">
+                      <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="card-footer d-flex justify-content-between align-items-center">
+
+      <!-- <div class="card-footer d-flex justify-content-between align-items-center"> -->
 
         <!-- <button id="export-data-button" class="btn btn-primary" >Export Data</button> -->
         <script>
@@ -133,7 +159,7 @@
             downloadLink.click();
           });
         </script> -->
-      </div>              
+      <!-- </div>               -->
     </div> 
 <!-- Notes Chatbox
 <div class="container mt-3 d-flex justify-content-end">
@@ -183,23 +209,25 @@
   </div>
 </div> -->
 </div>
-  <div class="container">
-      <div class="row mt-4">
-          <div class="col">
-              <div class="card">
-                  <div class="card-header d-flex justify-content-between">
-                      <h5 class="mb-0">Experiments</h5>
-                      <div class="col-auto">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-experiment-modal" style="align-self: flex-end;"
-                        id="show-create-exp-modal-btn">Add Experiment</button>
-                      </div>
-                  </div>
-                  <div class="card-body" id="experiment-card-body">
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="mb-0">Experiments</h5>
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-experiment-modal" style="align-self: flex-end;"
+                      id="show-create-exp-modal-btn">Add Experiment</button>
+                    </div>
+                </div>
+                <div class="card-body" id="experiment-card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Add Experiment Modal -->
 <div class="modal fade" id="add-experiment-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -400,5 +428,6 @@
   </div>
   <script type="module" src="/js/chart.js"></script>
   <script type="module" src="/js/experiments.js"></script>
+  <script type="module" src="/js/roomMessages.js"></script>
   </body>
 </html>

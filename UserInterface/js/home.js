@@ -5,7 +5,15 @@ const room_grid = document.getElementById('room-grid');
 const main = document.createElement('main');
 room_grid.append(main);
 
-async function renderRooms() {
+function resetRoomsList() {
+  while(main.firstChild) {
+    main.removeChild(main.lastChild);
+  }
+}
+
+export async function renderRoomCards() {
+  resetRoomsList();
+
   const rooms = await proxy.getRooms();
   // console.log(rooms);
 
@@ -132,5 +140,5 @@ function renderNewRoomCard() {
   main.append(card);
 }
 
-renderRooms();
+renderRoomCards();
 // renderNewRoomCard();
