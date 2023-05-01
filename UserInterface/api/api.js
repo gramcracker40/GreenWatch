@@ -1,6 +1,6 @@
 import * as Utils from "../js/utilities.js";
 
-const url = "http://127.0.0.1:5000"
+const url = "https://greenwatch.azurewebsites.net"
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
 let debugMode = false;
 

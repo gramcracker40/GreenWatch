@@ -34,7 +34,7 @@ from resources.ui import blp as UserInterfaceBlueprint
 from dotenv import dotenv_values
 config = dotenv_values(".flaskenv")
 
-db_ = config["DATABASE_URI"]
+db_ = config["DBHOST"]
 
 # factory pattern
 def app(db_url=None):
