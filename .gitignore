@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#SSH Key file for Azure VM
+greenwatch_key.pem

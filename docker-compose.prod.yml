@@ -3,8 +3,9 @@ version: '3.8'
 services:
   web:
     build:
+      context: ./
       dockerfile: Dockerfile.prod 
-    command: gunicorn --bind 0.0.0.0:5000 --workers=2 'app:app'
+    command: gunicorn --bind 0.0.0.0:5000 --workers=2 'wsgi:application'
     expose:
       - 5000
     env_file:
@@ -17,7 +18,7 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
     env_file:
-      - ./.flaskenv
+      - .flaskenv
 
   nginx:
     build: 
