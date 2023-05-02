@@ -1,3 +1,5 @@
+export const MAX_NAME_LENGTH = 30;
+
 export const months = [
   "Jan",
   "Feb",

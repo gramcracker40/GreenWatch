@@ -4,42 +4,39 @@ const url = "http://127.0.0.1:5000"
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
 let debugMode = false;
 
+const optionsPost = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
 
+const optionsPut = {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+const optionsPatch = {
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+const optionsDelete = {
+    method: 'DELETE',
+    headers: {
+        'Authorization': token
+    }
+}
 
 export class GreenhouseProxy {
     constructor() {
         // this.debugMode = false;
 
-        // const optionsPost = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(user)
-        // }
-
-        // const options = {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(dateObj)
-        // }
-
-        // const optionsPatch = {
-        //     method: 'PATCH',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(userData)
-        // }
-
-        // const optionsDelete = {
-        //     method: 'DELETE',
-        //     headers: {
-        //         'Authorization': token
-        //     }
-        // }
+        
     }
 
     // ------------------USERS------------------
@@ -192,6 +189,32 @@ export class GreenhouseProxy {
             }
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    // Update a room by ID
+    async editRoom(roomID, name) {
+        const roomName = {
+            "name": name
+        }
+
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(roomName)
+        }
+
+        try {
+            let response = await fetch(`${url}/rooms/${roomID}`, options);
+            if (response.ok && debugMode) {
+                console.log("Room Successfully Updated");
+            }
+        } catch (error) {
+            if (debugMode) {
+                console.log(error);
+            }
         }
     }
 

@@ -3,8 +3,6 @@ import * as Utils from "../js/utilities.js";
 
 const proxy = new GreenhouseProxy();
 
-const MAX_NAME_LENGTH = 30;
-
 // Get experiments card-body to list each experiment
 const experimentCardBody = document.getElementById('experiment-card-body')
 
@@ -259,7 +257,7 @@ function isObjFieldsEmpty(experiment) {
 
 function isExperimentNameTooLong(name) {
   const invalidNameLengthText = document.getElementById('exp-create-invalid-name-length-text');
-  if (name.length > MAX_NAME_LENGTH) {
+  if (name.length > Utils.MAX_NAME_LENGTH) {
     invalidNameLengthText.style.visibility = 'visible';
     return true;
   }
@@ -420,7 +418,7 @@ function resetEditExperimentFields() {
 
 function isEditExperimentNameTooLong(name) {
   const invalidNameLengthText = document.getElementById('edit-exp-invalid-name-length-text');
-  if (name.length > MAX_NAME_LENGTH) {
+  if (name.length > Utils.MAX_NAME_LENGTH) {
     invalidNameLengthText.style.visibility = 'visible';
     return true;
   }

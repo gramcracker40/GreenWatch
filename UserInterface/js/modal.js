@@ -371,37 +371,97 @@ createRoomButton.addEventListener('click', () => {
 });
 // createRoomButton.addEventListener('click', renderRoomCards); 
 
+const cancelEditRoomButton = document.getElementById('edit-room-cancel-button');
+cancelEditRoomButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkEditRoomInputFields);
+});
+
+const editRoomButton = document.getElementById('edit-room-button');
+editRoomButton.addEventListener('click', () => {
+  document.removeEventListener('keyup', checkEditRoomInputFields);
+  editRoom();
+});
+
+
 const saveRoomButton = document.getElementById('edit-room-button');
-saveRoomButton.addEventListener('click', editRoom);
+saveRoomButton.addEventListener('click', checkEditRoomInputFields);
 
 const deleteRoomButton = document.getElementById('delete-room-button');
 deleteRoomButton.addEventListener('click', deleteRoom);
 
 // -------------------- ROOM GENERATION FUNCTIONS -------------------- //
+// Visually create and append each room card to the room settings list
+async function renderRooms() {
+  // Reset current list
+  resetRoomList();
 
+  // Get list of the rooms
+  const rooms = await proxy.getRooms();
+  // console.log(rooms);
+
+  // Create user cards for user settings modal
+  rooms.forEach(room => {
+    const roomListGroupItem = document.createElement('li');
+    const roomName = document.createElement('div');
+    const icons = document.createElement('div');
+    const edit = document.createElement('i');
+    const trash = document.createElement('i');
+
+    roomListGroupItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
+
+    // Set room text content
+    roomName.textContent = room['name'];
+
+    // set icon classes, type, and id
+    edit.setAttribute('class', 'fa-solid fa-pen-to-square btn btn-outline-dark m-2');
+    edit.setAttribute('data-bs-target', '#rooms-modal-edit');
+    edit.setAttribute('data-bs-toggle', 'modal');
+
+    trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-danger m-2');
+    trash.setAttribute('data-bs-target', '#rooms-modal-delete');
+    trash.setAttribute('data-bs-toggle', 'modal');
+
+    roomListGroup.append(roomListGroupItem);
+    roomListGroupItem.append(roomName);
+    roomListGroupItem.append(icons);
+    icons.append(edit);
+    icons.append(trash);
+
+    edit.addEventListener('click', () => {
+      const roomStr = JSON.stringify(room);
+      sessionStorage.setItem('room', roomStr);
+      const editedRoom = document.getElementById('room-edit-modal-title');
+      editedRoom.textContent = `Editing: ${room['name']}`;
+      document.addEventListener('keyup', checkEditRoomInputFields);
+      setRoomEditPlaceholderValues(room);
+      checkEditRoomInputFields();
+    });
+
+    trash.addEventListener('click', () => {
+      sessionStorage.setItem('roomID', room['id']);
+      const deletedRoom = document.getElementById('room-delete-text');
+      deletedRoom.textContent = `${room['name']}`;
+    });
+  });
+}
+
+// Reset the list of rooms to be rendered
+function resetRoomList() {
+  while(roomListGroup.firstChild) {
+    roomListGroup.removeChild(roomListGroup.lastChild);
+  }
+}
+
+// -------------------- Create Room -------------------- //
 // Create room inside database
 async function createRoom() {
   const room = getCreateRoomObject();
 
   // Convert greenhouse id to an int from a string
-  room['greenhouse_id'] = parseInt(room['greenhouse_id']);
+  // room['greenhouse_id'] = parseInt(room['greenhouse_id']);
 
   await proxy.createRoom(room);
   resetCreateRoomInputFields();
-  renderRooms();
-  renderRoomCards();
-}
-
-async function editRoom() {
-  console.log("Room Edited");
-}
-
-// Delete room from database
-async function deleteRoom() {
-  const roomID = sessionStorage.getItem('roomID');
-  sessionStorage.removeItem('roomID');
-
-  await proxy.deleteRoom(roomID);
   renderRooms();
   renderRoomCards();
 }
@@ -437,7 +497,7 @@ function getCreateRoomObject() {
   const name = document.getElementById('create-room-name');
 
   const room = {
-    "greenhouse_id": greenhouseID.value,
+    "greenhouse_id": 1, // Disabled input for now
     "name": name.value
   }
 
@@ -453,47 +513,91 @@ function resetCreateRoomInputFields() {
   name.value = "";
 }
 
-// Visually create and append each room card to the room settings list
-async function renderRooms() {
-  // Reset current list
-  resetRoomList();
-
-  // Get list of the rooms
-  const rooms = await proxy.getRooms();
-  // console.log(rooms);
-
-  // Create user cards for user settings modal
-  rooms.forEach(room => {
-    const roomListGroupItem = document.createElement('li');
-    const roomName = document.createElement('div');
-    const icons = document.createElement('div');
-    const trash = document.createElement('i');
-
-    roomListGroupItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
-
-    // Set username text content
-    roomName.textContent = room['name'];
-    // set icon classes, type, and id
-    trash.setAttribute('class', 'fa-solid fa-trash btn btn-outline-danger m-2');
-    trash.setAttribute('data-bs-target', '#rooms-modal-delete');
-    trash.setAttribute('data-bs-toggle', 'modal');
-
-    roomListGroup.append(roomListGroupItem);
-    roomListGroupItem.append(roomName);
-    roomListGroupItem.append(icons);
-    icons.append(trash);
-
-    trash.addEventListener('click', () => {
-      sessionStorage.setItem('roomID', room['id']);
-      const deletedRoom = document.getElementById('room-delete-text');
-      deletedRoom.textContent = `${room['name']}`;
-    });
-  });
+// -------------------- Edit Room -------------------- //
+function setRoomEditPlaceholderValues(prevRoom) {
+  const name = document.getElementById('edit-room-name');
+  name.setAttribute('placeholder', prevRoom['name']);
 }
 
-// Reset the list of rooms to be rendered
-function resetRoomList() {
-  while(roomListGroup.firstChild) {
-    roomListGroup.removeChild(roomListGroup.lastChild);
+function populateEditEmptyFields() {
+  const prevRoomStr = sessionStorage.getItem('room');
+  const prevRoom = JSON.parse(prevRoomStr);
+
+  const currentRoom = getEditRoomObject();
+
+  if (currentRoom['name'] == '') {
+    currentRoom['name'] == prevRoom['name'];
   }
+
+  return currentRoom;
 }
+
+function getEditRoomObject() {
+  const name = document.getElementById('edit-room-name');
+
+  const room = {
+    "name": name.value
+  }
+
+  return room;
+}
+
+// function isEditRoomInputFieldsEmpty(room) {
+//   const roomNameEmptyText = document.getElementById('room-edit-invalid-text');
+
+//   if (room['name'] == '') {
+//     roomNameEmptyText.style.visibility = 'visible';
+//     return true;
+//   }
+//   roomNameEmptyText.style.visibility = 'hidden';
+//   return false;
+// }
+
+function isEditRoomNameTooLong(name) {
+  const invalidNameLengthText = document.getElementById('room-edit-invalid-name-length-text');
+
+  if (name.length > Utils.MAX_NAME_LENGTH) {
+    invalidNameLengthText.style.visibility = 'visible';
+    return true;
+  }
+  invalidNameLengthText.style.visibility = 'hidden';
+  return false;
+}
+
+function checkEditRoomInputFields() {
+  const room = getEditRoomObject();
+
+  // const isEmpty = isEditRoomInputFieldsEmpty(room);
+  const isTooLong = isEditRoomNameTooLong(room['name']);
+
+  if (!isTooLong) {
+    editRoomButton.disabled = false;
+  }
+  editRoomButton.disabled = true;
+}
+
+function resetEditRoomInputFields() {
+  const name = document.getElementById('edit-room-name');
+  name.value = '';  
+}
+
+async function editRoom() {
+  const room = populateEditEmptyFields();
+
+  await proxy.editRoom(room);
+  resetEditRoomInputFields();
+  renderRooms();
+  renderRoomCards();
+}
+
+// -------------------- Delete Room -------------------- //
+// Delete room from database
+async function deleteRoom() {
+  const roomID = sessionStorage.getItem('roomID');
+  sessionStorage.removeItem('roomID');
+
+  await proxy.deleteRoom(roomID);
+  renderRooms();
+  renderRoomCards();
+}
+

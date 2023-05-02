@@ -285,13 +285,13 @@ Add text in chatbox for a room with no messages
           <!-- User Options -->
           <form>
             <div class="mb-3">
-              <label for="first-name" class="col-form-label">Room Name</label>
+              <label for="create-room-name" class="col-form-label">Room Name</label>
               <input type="text" class="form-control" id="create-room-name" required>
             </div>
-            <div class="mb-3">
-              <label for="first-name" class="col-form-label">Greenhouse ID</label>
+            <!-- <div class="mb-3">
+              <label for="create-greenhouse-id" class="col-form-label">Greenhouse ID</label>
               <input type="text" class="form-control" id="create-greenhouse-id" placeholder="e.x.: 1" required>
-            </div>
+            </div> -->
           </form>
         </div>
         <div class="modal-footer justify-content-between" id="rooms-modal-create-footer">
@@ -311,30 +311,35 @@ Add text in chatbox for a room with no messages
   </div>
 
   <!-- Modal Edit Room-->
-  <div class="modal fade" id="rooms-modal-create" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal fade" id="rooms-modal-edit" tabindex="-1" aria-labelledby="room-edit-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modal-title">Edit Room</h5>
+          <h5 class="modal-title" id="room-edit-modal-title">Edit Room</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
         </div>
         <div class="modal-body" style="height: 800px; overflow: auto;" id="modal-create-room-body">
           <!-- User Options -->
           <form>
             <div class="mb-3">
-              <label for="first-name" class="col-form-label">Room Name</label>
-              <input type="text" class="form-control" id="create-room-name" required>
+              <label for="edit-room-name" class="col-form-label">Room Name</label>
+              <input type="text" class="form-control" id="edit-room-name" required>
             </div>
             <!-- <div class="mb-3">
-              <label for="first-name" class="col-form-label">Greenhouse ID</label>
-              <input type="text" class="form-control" id="create-greenhouse-id" placeholder="e.x.: 1" required>
+              <label for="edit-greenhouse-id" class="col-form-label">Greenhouse ID</label>
+              <input type="text" class="form-control" id="edit-greenhouse-id" placeholder="e.x.: 1" required>
             </div> -->
           </form>
         </div>
-        <div class="modal-footer justify-content-between" id="rooms-modal-create-footer">
-          <p id="room-create-invalid-text" style="color: red; visibility: hidden;">
-            Input fields cannot be empty.<br>
-          </p>
+        <div class="modal-footer justify-content-between" id="rooms-modal-edit-footer">
+          <div>
+            <!-- <p id="room-edit-invalid-text" style="color: red; visibility: hidden;">
+              Input fields cannot be empty.<br>
+            </p> -->
+            <p id="room-edit-invalid-name-length-text" style="color: red; visibility: hidden;">
+              Name is too long.<br>
+            </p>
+          </div>
           <div>
             <button type="button" class="btn btn-secondary" data-bs-target="#rooms-modal" data-bs-toggle="modal"
             id="edit-room-cancel-button">Cancel</button>
