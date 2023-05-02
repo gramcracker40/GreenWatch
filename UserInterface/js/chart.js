@@ -1,5 +1,3 @@
-// const { Chart } = require("chart.js");
-// import Chart from "/dist/chart.umd.min.js";
 import { GreenhouseProxy } from "../api/api.js";
 import * as Utils from "../js/utilities.js";
 
@@ -13,21 +11,8 @@ updateChartButton.addEventListener('click', renderMeasurements);
 const chartSelector = document.getElementById('chart-selector');
 chartSelector.addEventListener('click', renderMeasurements);
 
-// Aquire measurement data and store in object
-
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Nov",
-  "Dec"
-]
+const exportDataBtn = document.getElementById('export-data-btn');
+exportDataBtn.disabled = true;
 
 async function renderMeasurements() {
   // console.log("Rendering measurements...");
@@ -54,9 +39,19 @@ async function renderMeasurements() {
   if (!isDateNull) {
     const measurementsObj = await proxy.getMeasurementByRoom(roomID, dateObj);
     measurements = measurementsObj['data'];
-    // console.log(measurements);
+    console.log(measurements);
 
     if (measurements.length) {
+      // Enable export data button
+      exportDataBtn.disabled = false;
+      exportDataBtn.addEventListener('click', () => {
+        const csvData = Utils.csvMaker(measurements);
+        console.log(csvData);
+
+        
+        Utils.download(csvData['csv_data'], csvData['file_name']);
+      });
+
       let dates = [];
       let t_data = [];
       let h_data = [];
@@ -70,7 +65,7 @@ async function renderMeasurements() {
         const hours = date.getUTCHours();
         const minutes = date.getUTCMinutes();
         const seconds = date.getUTCSeconds();
-        const timestamp = `${day} ${months[month]} ${Utils.toStandardTime(hours)}:${minutes}:${seconds}`
+        const timestamp = `${day} ${Utils.months[month]} ${Utils.toStandardTime(hours)}:${minutes}:${seconds}`;
         dates.push(timestamp);
   
         const temperatureValue = measurement['temperature'];

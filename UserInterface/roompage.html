@@ -26,8 +26,9 @@
           <li class="nav-item active">
             <a class="nav-link" href="/home">Home <span class="sr-only"></span></a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/" onclick="clearSessionStorage()">Logout <span class="sr-only"></span></a>
+          <!-- Logout Link -->
+          <li class="nav-item">
+            <a class="nav-link" href="/" id="logout-link">Logout <span class="sr-only"></span></a>
           </li>
           <script type="module" src="/js/utilities.js"></script>
           <!-- Settings Dropstart -->
@@ -48,6 +49,9 @@
           </li> -->
         </ul>
       </div>
+      <button class="btn btn-dark">
+        Agent
+      </button>
     </div>
   </nav>
 
@@ -77,7 +81,11 @@
             </div>
             <div class="ms-3">
               <button class="btn btn-dark" type="button"
-              id="update-chart">Update Chart</button>
+              id="update-chart">Update Date Range</button>
+            </div>
+            <div class="ms-3">
+              <button class="btn btn-dark" type="button"
+              id="export-data-btn">Export Data</button>
             </div>
           </div>
         </div>
@@ -440,7 +448,7 @@
   <script type="module" src="/js/chart.js"></script>
   <script type="module" src="/js/experiments.js"></script>
   <script type="module" src="/js/roomMessages.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
   <!-- <script src="/js/chat.js"></script> -->
   </body>
 </html>

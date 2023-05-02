@@ -1,4 +1,5 @@
 import { GreenhouseProxy } from "../api/api.js";
+import * as Utils from "../js/utilities.js";
 
 const proxy = new GreenhouseProxy();
 
@@ -13,3 +14,6 @@ async function setRoomName() {
 }
 
 setRoomName();
+
+const logoutLink = document.getElementById('logout-link');
+logoutLink.addEventListener('click', Utils.logout);
