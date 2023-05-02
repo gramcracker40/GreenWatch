@@ -217,7 +217,6 @@ test = RouteTester(base_url=test_url, username=user, password=passw)
 test_results = test.test_routes(test_file_name, dump=True, json_file_save="test_results")
 
 del test
-#real = test.request("/login", "POST", {"username": "test", "password": "testtest"})
 
 
 
