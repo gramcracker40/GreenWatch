@@ -1,6 +1,8 @@
 import * as Utils from "../js/utilities.js";
 
-const url = "http://127.0.0.1:5000"
+var thisFile = document.getElementById('api-script');
+
+const url = thisFile.getAttribute('server_ip');
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
 let debugMode = false;
 
