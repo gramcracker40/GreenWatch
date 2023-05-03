@@ -130,6 +130,3 @@ dmypy.json
 
 #SSH Key file for Azure VM
 greenwatch_key.pem
-
-#that specific instances blocklist
-blocklist.txt
