@@ -70,7 +70,7 @@ async function renderMeasurements() {
         if (seconds < 10) {
           seconds = '0' + seconds;
         }
-        const timestamp = `${day} ${Utils.months[month]} ${Utils.toStandardTime(hours)['hours']}:${minutes}:${seconds}`;
+        const timestamp = `${Utils.months[month]} ${day} ${Utils.toStandardTime(hours)['hours']}:${minutes}:${seconds}`;
         dates.push(timestamp);
   
         const temperatureValue = measurement['temperature'];

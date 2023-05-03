@@ -449,13 +449,13 @@ async function editExp() {
   const prevExperimentStr = sessionStorage.getItem('selectedExp');
   const prevExperiment = JSON.parse(prevExperimentStr);
   // sessionStorage.removeItem('selectedExp');
-  console.log(prevExperiment);
+  // console.log(prevExperiment);
 
   const potentialExp = getEditExperimentInputFields();
-  console.log(potentialExp);
+  // console.log(potentialExp);
 
   const exp = populateEmptyFields(potentialExp);
-  console.log(exp);
+  // console.log(exp);
 
   exp['start'] = new Date(exp['start']).toISOString().slice(0,-1);
   exp['end'] = new Date(exp['end']).toISOString().slice(0,-1);
@@ -463,7 +463,7 @@ async function editExp() {
   exp['lower_temp'] = parseInt(exp['lower_temp']);
   exp['upper_hum'] = parseInt(exp['upper_hum']);
   exp['upper_temp'] = parseInt(exp['upper_temp']);
-  console.log(exp);
+  // console.log(exp);
 
   await proxy.editExperiment(prevExperiment['id'], exp);
 

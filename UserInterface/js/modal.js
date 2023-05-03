@@ -296,10 +296,10 @@ function getCreateUserObject() {
 
 async function createUser() {
   const user = getCreateUserObject();
-  console.log(user);
+  // console.log(user);
   // Convert admin status to boolean after checking for empty fields.
   user['is_admin'] = Boolean(parseInt(user['is_admin'])); 
-  console.log(user);
+  // console.log(user);
 
   await proxy.registerUser(user);
   resetCreateUserInputFields();
