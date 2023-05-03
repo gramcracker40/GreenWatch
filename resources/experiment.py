@@ -28,8 +28,8 @@ class Experiments(MethodView):
         '''
         Create a new experiment in greenhouse
         '''
-        if(get_jwt()['admin'] == False):
-            abort(403, message=f"User trying to create an experiment is not an admin")
+        # if(get_jwt()['admin'] == False):
+        #     abort(403, message=f"User trying to create an experiment is not an admin")
 
 
         experiment = ExperimentModel(**experiment_data)
