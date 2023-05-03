@@ -130,15 +130,15 @@ function checkEditUserInputFields() {
 
   // Check if inputfields are empty and if the password is strong.
   // If both are true, then allow for the creation of the user.
-  if (!strongPassword) {
-    // console.log("weak password");
-    editUserButton.disabled = true;
-    passwordParamText.style.visibility = 'visible';
-  }else{
-    // console.log("strong password");
-    editUserButton.disabled = false;
-    passwordParamText.style.visibility = 'hidden';
-  }
+  // if (!strongPassword) {
+  //   // console.log("weak password");
+  //   editUserButton.disabled = true;
+  //   passwordParamText.style.visibility = 'visible';
+  // }else{
+  //   // console.log("strong password");
+  //   editUserButton.disabled = false;
+  //   passwordParamText.style.visibility = 'hidden';
+  // }
 }
 
 function setUserEditPlaceholderValues() {
@@ -164,7 +164,7 @@ function setUserEditPlaceholderValues() {
 }
 
 function populateEmptyFields() {
-  const user = getEditUserObject();
+  let user = getEditUserObject();
   // Pull previous user from session storage
   const previousUserString = sessionStorage.getItem('selectedUser');
   const previousUser = JSON.parse(previousUserString);
@@ -183,6 +183,10 @@ function populateEmptyFields() {
     if (user[key] == "" && key != "password") {
       user[key] = previousUser[key];
     }
+  }
+
+  if (user['password'] == '') {
+    delete user['password'];
   }
   console.log(user);
   return user;
