@@ -49,13 +49,23 @@ export function logout() {
 
 export function toStandardTime(_hours) {
   let hours = _hours;
+  let amPm = '';
   if (hours > 12) {
+    amPm = 'AM';
     hours -= 12;
   } else if (hours == 0) {
-    timeValue= "12";
+    amPm = 'AM';
+    hours = "12";
+  }else{
+    amPm = 'PM';
   }
-  
-  return hours;
+
+  const hoursObj = {
+    hours: hours,
+    amPm: amPm
+  }
+
+  return hoursObj;
 }
 
 export function download(data, filename) {

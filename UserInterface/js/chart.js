@@ -47,7 +47,7 @@ async function renderMeasurements() {
       exportDataBtn.addEventListener('click', () => {
         const csvData = Utils.csvMaker(measurements);
         // console.log(csvData);
-        
+
         Utils.download(csvData['csv_data'], csvData['file_name']);
       });
 
@@ -62,9 +62,15 @@ async function renderMeasurements() {
         const day = date.getUTCDate();
         const month = date.getUTCMonth();
         const hours = date.getUTCHours();
-        const minutes = date.getUTCMinutes();
-        const seconds = date.getUTCSeconds();
-        const timestamp = `${day} ${Utils.months[month]} ${Utils.toStandardTime(hours)}:${minutes}:${seconds}`;
+        let minutes = date.getUTCMinutes();
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
+        let seconds = date.getUTCSeconds();
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+        const timestamp = `${day} ${Utils.months[month]} ${Utils.toStandardTime(hours)['hours']}:${minutes}:${seconds}`;
         dates.push(timestamp);
   
         const temperatureValue = measurement['temperature'];

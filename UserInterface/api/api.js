@@ -47,6 +47,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
@@ -92,8 +93,14 @@ export class GreenhouseProxy {
 
     // Get all users
     async getUsers() {
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        }
+
         try {
-            let response = await fetch(`/users`);
+            let response = await fetch(`/users`, options);
             if (response.ok) {
                 let data = await response.json();
 
@@ -116,6 +123,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'PATCH',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(userData)
@@ -136,7 +144,10 @@ export class GreenhouseProxy {
     // Delete user by id
     async deleteUser(userID) {
         const options = {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': token
+            }
         }
 
         try {
@@ -153,8 +164,14 @@ export class GreenhouseProxy {
     // ------------------ROOM------------------ //
     // Get all rooms
     async getRooms() {
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        }
+
         try {
-            let response = await fetch(`/rooms`);
+            let response = await fetch(`/rooms`, options);
             return await response.json();
         } catch (error) {
             console.log(error);
@@ -167,6 +184,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(room)
@@ -184,8 +202,14 @@ export class GreenhouseProxy {
 
     // Get room by id
     async getRoomByID(roomID) {
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        }
+
         try {
-            let response = await fetch(`/rooms/${roomID}`);
+            let response = await fetch(`/rooms/${roomID}`, options);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -201,6 +225,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'PATCH',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(name)
@@ -242,6 +267,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'PUT',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(dateObj)
@@ -263,6 +289,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json',
                 'Key': 'TRD1IU4G5E45RZU8UOXNNMR7WID34Q7SM0EFHV6FHZS9PQBNYXINTTS1BSR8' // Agent Key for Room 1
             },
@@ -284,6 +311,7 @@ export class GreenhouseProxy {
     getAllMessages() {
         const options = {
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             }
         }
@@ -297,6 +325,7 @@ export class GreenhouseProxy {
     async getAllMessagesByRoom(roomID) {
         const options = {
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             }
         }
@@ -322,6 +351,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(_body)
@@ -344,8 +374,14 @@ export class GreenhouseProxy {
     // ------------------EXPERIMENT------------------
     // Get all experiments
     async getExperiments() {
+        const options = {
+            headers: {
+                'Authorization': token,
+            }
+        }
+
         try {
-            let response = await fetch(`/experiments`);
+            let response = await fetch(`/experiments`, options);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -360,6 +396,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(experimentObj)
@@ -377,6 +414,12 @@ export class GreenhouseProxy {
 
     // Get experiment by id
     async getExperimentByID(experimentID) {
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        }
+
         try {
             let response = await fetch(`/experiments/${experimentID}`, options);
             if (response.ok) {
@@ -393,6 +436,7 @@ export class GreenhouseProxy {
         const options = {
             method: 'PATCH',
             headers: {
+                'Authorization': token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(experimentObj)
@@ -459,19 +503,3 @@ export class GreenhouseProxy {
 
     // Delete an agent by id
 }
-
-// const proxy = new GreenhouseProxy();
-// proxy.registerUser(userRegister2);
-// proxy.registerUser(userRegister3);
-// proxy.login();
-// proxy.getUsers();
-// proxy.createRoom("Room 1");
-// proxy.getRooms();
-// proxy.deleteRoom(1);
-// proxy.createMeasurement(1, measurement);
-// proxy.getAllMessages();
-// proxy.getAllMessagesByRoom(1);
-// proxy.getAllMessagesByRoom(2);
-// proxy.getAllMessagesByRoom(3);
-// proxy.getAllMessagesByRoom(4);
-// proxy.createRoomMessage(4, 1, "That sounds like a great idea. Let's do it!");
