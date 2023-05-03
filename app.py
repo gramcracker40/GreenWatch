@@ -32,6 +32,7 @@ from resources.room import blp as RoomBlueprint
 from resources.experiment import blp as ExperimentBlueprint
 from resources.server import blp as ServerBlueprint
 from resources.ui import blp as UserInterfaceBlueprint
+from utilities.rand import rand_string
 
 # Environment variables
 from dotenv import dotenv_values
@@ -39,6 +40,9 @@ config = dotenv_values(".flaskenv")
 
 production = bool(int(config["PRODUCTION"]))
 db_uri = config["DBHOST"] if production else None
+
+# Grabbing all old access tokens
+
 
 # factory pattern --> .flaskenv FLASK_APP, allows for simple "flask run" 
 # command when running the app locally
@@ -66,7 +70,7 @@ def app():
 
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = config["SECRET_KEY"]
+    app.config["JWT_SECRET_KEY"] = rand_string(size=60)
     jwt = JWTManager(app)
 
     @jwt.token_in_blocklist_loader

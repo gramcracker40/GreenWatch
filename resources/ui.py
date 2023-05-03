@@ -1,15 +1,6 @@
-from flask import request, render_template, send_file, send_from_directory
+from flask import render_template, send_file, send_from_directory
 from flask.views import MethodView
-from flask_smorest import Blueprint, abort
-from schemas import GreenhouseSchema
-from models import GreenhouseModel
-from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
-from db import db
-from blocklist import BLOCKLIST
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from utilities.rand import rand_string
-from datetime import datetime, date, time
+from flask_smorest import Blueprint
 import os
 from dotenv import dotenv_values
 
@@ -20,21 +11,17 @@ blp = Blueprint("User-Interface", "ui",
 dir = os.path.dirname(os.path.realpath(__file__))
 root = str(os.path.split(dir)[0])
 
+# grabbing runtime environment variables
 flask_env_path = root + "/.flaskenv"
 config = dotenv_values(flask_env_path)
-
 
 home_page_path = root + "/UserInterface/home.html"
 login_page_path = root + "\\UserInterface\\login.html"
 room_page_path = root + "/UserInterface/roompage.html"
-
-
 image_directory = root + "/UserInterface/images"
 css_directory = root + "/UserInterface/css"
 js_directory = root + "/UserInterface/js"
 api_directory = root + "/UserInterface/api"
-#C:\Users\Tyler\Desktop\GreenhouseProject\UserInterface
-
 
 @blp.route("/")
 class LoginPage(MethodView):

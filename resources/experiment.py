@@ -6,7 +6,6 @@ from models import ExperimentModel, UserModel, RoomModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import db
-from blocklist import BLOCKLIST
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from utilities.rand import rand_string
 from datetime import datetime, date, time
@@ -98,7 +97,7 @@ class Experiment(MethodView):
         return {"Success": True}, 200
     
 
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(ExperimentUpdateSchema)
     def patch(self, experiment_data, experiment_id):
         '''

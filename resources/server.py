@@ -6,7 +6,6 @@ from models import ServerModel, AgentModel, RoomModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import db
-from blocklist import BLOCKLIST
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from utilities.rand import rand_string
 from datetime import datetime, date, time
@@ -20,7 +19,7 @@ blp = Blueprint("server", "server", description="Operations on servers")
 
 @blp.route("/servers")
 class Servers(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(ServerSchema())
     def post(self, server_data):
         '''
@@ -44,7 +43,7 @@ class Servers(MethodView):
         return {"Success": True, "server_id": new_server.id}, 201
     
 
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, ServerSchema(many=True))
     def get(self):
         return ServerModel.query.all()
@@ -52,7 +51,7 @@ class Servers(MethodView):
 
 @blp.route("/servers/<int:server_id>")
 class Server(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def delete(self, server_id):
         server = ServerModel.query.get_or_404(server_id)
 
@@ -64,7 +63,7 @@ class Server(MethodView):
 
         return {"Success": True}, 200
     
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(ServerUpdateSchema())
     def patch(self, server_data, server_id):
         '''
@@ -82,7 +81,7 @@ class Server(MethodView):
 
 @blp.route("/servers/agents")
 class Agents(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(AgentSchema())
     def post(self, agent_data):
         '''
@@ -114,7 +113,7 @@ class Agents(MethodView):
 
         return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
     
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, AgentSchema(many=True))
     def get(self):
         return AgentModel.query.all()
@@ -123,7 +122,7 @@ class Agents(MethodView):
 @blp.route("/servers/agents/<int:agent_id>")
 class Agent(MethodView):
 
-    #@jwt_required()
+    @jwt_required()
     def get(self, agent_id):
         '''
         performed directly after post method for agent, takes private key
@@ -212,7 +211,7 @@ class Agent(MethodView):
                     pass
 
 
-    #@jwt_required(fresh=True)
+    @jwt_required(fresh=True)
     def delete(self, agent_id):
         '''
         delete an agent by id
