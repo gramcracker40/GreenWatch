@@ -164,9 +164,13 @@ async function renderExperimentCards() {
       thresholdDiv.append(hLowCard);
       hLowCard.append(hLowCardHeader);
       hLowCard.append(hLowCardBody);
-      listItem.append(icons);
-      icons.append(edit);
-      icons.append(trash);
+
+      // if the user is an admin, then append the icons
+      if (Utils.parseJwt(Utils.getJwt()['access_token'])['admin']) {
+        listItem.append(icons);
+        icons.append(edit);
+        icons.append(trash);
+      }
 
       // Only allow viewing of experiment if it is the active experiment of the room
       // if (experiment['active']) {

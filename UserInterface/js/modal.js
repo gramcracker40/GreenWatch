@@ -59,12 +59,15 @@ async function renderUsers() {
     userListGroup.append(userListGroupItem);
     userListGroupItem.append(username);
     userListGroupItem.append(icons);
-
-    if (user['id'] != Utils.getJwt()['user_id'] && !user['is_admin']) {
-      icons.append(trash);
-    }
-
     icons.append(edit);
+    icons.append(trash);
+
+    // if the user is an admin, then append the icons
+    // if (user['id'] != Utils.getJwt()['user_id'] && !user['is_admin']) {
+    //   userListGroupItem.append(icons);
+    //   icons.append(trash);
+    //   icons.append(edit);
+    // }
 
     edit.addEventListener('click', () => {
       const userString = JSON.stringify(user);
@@ -89,12 +92,12 @@ async function renderUsers() {
 
 async function editUser() {
   const userID = sessionStorage.getItem('selectedUserID');
-  sessionStorage.removeItem('user');
+  sessionStorage.removeItem('selectedUserID');
   const potentialUser = getEditUserObject();
   const user = populateEmptyFields(potentialUser);
+  // console.log(user);
   await proxy.editUser(userID, user);
   renderUsers();
-
   resetEditUserInputFields();
 }
 
@@ -141,7 +144,7 @@ function checkEditUserInputFields() {
 function setUserEditPlaceholderValues() {
   const previousUserString = sessionStorage.getItem('selectedUser');
   const previousUser = JSON.parse(previousUserString);
-  console.log(previousUser);
+  // console.log(previousUser);
 
   // Get values from input fields
   // const password = document.getElementById('edit-password');
@@ -161,7 +164,7 @@ function setUserEditPlaceholderValues() {
 }
 
 function populateEmptyFields() {
-  const user = {};
+  const user = getEditUserObject();
   // Pull previous user from session storage
   const previousUserString = sessionStorage.getItem('selectedUser');
   const previousUser = JSON.parse(previousUserString);
@@ -174,14 +177,14 @@ function populateEmptyFields() {
   // firstName.value = previousUser['firstname'];
   // lastName.value = previousUser['lastName'];
   // email.value = previousUser['email'];
-
+  console.log(user);
   // Populate any field that is empty
   for (const key in user) {
-    if (user[key] == "") {
+    if (user[key] == "" && key != "password") {
       user[key] = previousUser[key];
     }
   }
-
+  console.log(user);
   return user;
 }
 
@@ -339,13 +342,16 @@ editUserButton.addEventListener('click', editUser);
 editUserButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkEditUserInputFields);
   document.removeEventListener('mouseup', checkEditUserInputFields);
+  sessionStorage.removeItem('selectedUserID');
+  sessionStorage.removeItem('selectedUser');
 });
 
 const cancelEditUserButton = document.getElementById('edit-user-cancel-button');
 cancelEditUserButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkEditUserInputFields);
   document.removeEventListener('mouseup', checkEditUserInputFields);
-  sessionStorage.removeItem('user');
+  sessionStorage.removeItem('selectedUserID');
+  sessionStorage.removeItem('selectedUser');
 });
 
 const deleteUserButton = document.getElementById('delete-user-button');
@@ -374,12 +380,14 @@ createRoomButton.addEventListener('click', () => {
 const cancelEditRoomButton = document.getElementById('edit-room-cancel-button');
 cancelEditRoomButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkEditRoomInputFields);
+  sessionStorage.removeItem('room');
 });
 
 const editRoomButton = document.getElementById('edit-room-button');
 editRoomButton.addEventListener('click', () => {
   document.removeEventListener('keyup', checkEditRoomInputFields);
   editRoom();
+  sessionStorage.removeItem('room');
 });
 
 
@@ -506,10 +514,10 @@ function getCreateRoomObject() {
 
 // Sets the values of the create room input fields to empty string
 function resetCreateRoomInputFields() {
-  const greenhouseID = document.getElementById('create-greenhouse-id');
+  // const greenhouseID = document.getElementById('create-greenhouse-id');
   const name = document.getElementById('create-room-name');
 
-  greenhouseID.value = "";
+  // greenhouseID.value = "";
   name.value = "";
 }
 
@@ -524,10 +532,13 @@ function populateEditEmptyFields() {
   const prevRoom = JSON.parse(prevRoomStr);
 
   const currentRoom = getEditRoomObject();
-
+  console.log(currentRoom);
+  console.log(prevRoom);
   if (currentRoom['name'] == '') {
+    console.log
     currentRoom['name'] == prevRoom['name'];
   }
+  console.log(currentRoom);
 
   return currentRoom;
 }
@@ -572,8 +583,9 @@ function checkEditRoomInputFields() {
 
   if (!isTooLong) {
     editRoomButton.disabled = false;
+  }else{
+    editRoomButton.disabled = true;
   }
-  editRoomButton.disabled = true;
 }
 
 function resetEditRoomInputFields() {
@@ -583,8 +595,13 @@ function resetEditRoomInputFields() {
 
 async function editRoom() {
   const room = populateEditEmptyFields();
+  const roomStr = sessionStorage.getItem('room')
+  const roomID = JSON.parse(roomStr)['id'];
+  
 
-  await proxy.editRoom(room);
+  console.log(room);
+  console.log(roomID);
+  await proxy.editRoom(roomID, room);
   resetEditRoomInputFields();
   renderRooms();
   renderRoomCards();
