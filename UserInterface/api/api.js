@@ -7,6 +7,11 @@ import * as Utils from "../js/utilities.js";
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
 let debugMode = false;
 
+const default_headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+}
+
 const optionsPost = {
     method: 'POST',
     headers: {
@@ -94,9 +99,7 @@ export class GreenhouseProxy {
     // Get all users
     async getUsers() {
         const options = {
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {
@@ -165,9 +168,7 @@ export class GreenhouseProxy {
     // Get all rooms
     async getRooms() {
         const options = {
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {

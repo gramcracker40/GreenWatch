@@ -16,7 +16,7 @@ blp = Blueprint("users", "users", description="Operations on users")
 
 @blp.route("/register")
 class UserRegister(MethodView):
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(UserRegisterSchema)
     def post(self, user_data):
         '''

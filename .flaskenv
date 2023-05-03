@@ -1,5 +1,5 @@
 FLASK_APP=app:app
-FLASK_DEBUG=0
+FLASK_DEBUG=1
 PRODUCTION=0
 DBHOST=postgresql://adminadminSECURE!!!:ThisIsProductionBaby!!@db:5432/greenwatch_production
 SQL_PORT=5432
