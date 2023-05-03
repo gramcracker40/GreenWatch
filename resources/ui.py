@@ -13,7 +13,8 @@ from datetime import datetime, date, time
 import os
 from dotenv import dotenv_values
 
-blp = Blueprint("User-Interface", "ui", description="provides user interface files for server")
+blp = Blueprint("User-Interface", "ui", 
+    description="provides user interface files for server")
 
 # grabbing root directory path
 dir = os.path.dirname(os.path.realpath(__file__))
@@ -21,12 +22,10 @@ root = str(os.path.split(dir)[0])
 
 flask_env_path = root + "/.flaskenv"
 config = dotenv_values(flask_env_path)
-print("I am flask env")
-print(config["SERVER_IP"])
 
 
 home_page_path = root + "/UserInterface/home.html"
-login_page_path = root + "/UserInterface/login.html"
+login_page_path = root + "\\UserInterface\\login.html"
 room_page_path = root + "/UserInterface/roompage.html"
 
 
@@ -34,6 +33,7 @@ image_directory = root + "/UserInterface/images"
 css_directory = root + "/UserInterface/css"
 js_directory = root + "/UserInterface/js"
 api_directory = root + "/UserInterface/api"
+#C:\Users\Tyler\Desktop\GreenhouseProject\UserInterface
 
 
 @blp.route("/")
@@ -41,10 +41,8 @@ class LoginPage(MethodView):
     '''
     describe the login page
     '''
-
     def get(self):
-        
-        return send_file(login_page_path)
+        return render_template("login.html", server_ip=config['SERVER_IP'])
     
 
 @blp.route("/home")
@@ -53,6 +51,7 @@ class HomePage(MethodView):
     describe the home page 
     '''
     def get(self):
+
         return send_file(home_page_path)
 
 
@@ -88,5 +87,4 @@ class ImageFiles(MethodView):
 @blp.route("/api/<string:api_file>")
 class JSAPIFiles(MethodView):
     def get(self, api_file):
-        # config['SERVER_IP']
         return send_from_directory(api_directory, api_file)

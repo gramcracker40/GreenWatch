@@ -1,8 +1,9 @@
 import * as Utils from "../js/utilities.js";
 
-var thisFile = document.getElementById('api-script');
+// var thisFile = document.getElementById('api-script');
 
-const url = thisFile.getAttribute('server_ip');
+// const url = thisFile.getAttribute('server_ip');
+// console.log(url)
 const token = `Bearer ${sessionStorage.getItem('access_token')}`;
 let debugMode = false;
 
@@ -52,7 +53,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/register`, options);
+            let response = await fetch(`/register`, options);
             if (response.ok && debugMode) {
                 console.log("User Created Successfully");
             }
@@ -71,7 +72,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/login`, options);
+            let response = await fetch(`/login`, options);
             if (response.ok) {
                 if (debugMode) {
                     console.log("Login Successful");
@@ -92,7 +93,7 @@ export class GreenhouseProxy {
     // Get all users
     async getUsers() {
         try {
-            let response = await fetch(`${url}/users`);
+            let response = await fetch(`/users`);
             if (response.ok) {
                 let data = await response.json();
 
@@ -121,7 +122,7 @@ export class GreenhouseProxy {
         }
         
         try {
-            let response = await fetch(`${url}/users/${userID}`, options);
+            let response = await fetch(`/users/${userID}`, options);
             if (response.ok && debugMode) {
                 console.log("User Successfully Updated");
                 console.log(await response.json());
@@ -139,7 +140,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/users/${userID}`, options);
+            let response = await fetch(`/users/${userID}`, options);
             if (response.ok) {
                 console.log("User Deleted Successfully");
             }
@@ -153,7 +154,7 @@ export class GreenhouseProxy {
     // Get all rooms
     async getRooms() {
         try {
-            let response = await fetch(`${url}/rooms`);
+            let response = await fetch(`/rooms`);
             return await response.json();
         } catch (error) {
             console.log(error);
@@ -172,7 +173,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/rooms`, options);
+            let response = await fetch(`/rooms`, options);
             if (response.ok) {
                 console.log("Room Created Successfully");
             }
@@ -184,7 +185,7 @@ export class GreenhouseProxy {
     // Get room by id
     async getRoomByID(roomID) {
         try {
-            let response = await fetch(`${url}/rooms/${roomID}`);
+            let response = await fetch(`/rooms/${roomID}`);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -209,7 +210,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/rooms/${roomID}`, options);
+            let response = await fetch(`/rooms/${roomID}`, options);
             if (response.ok && debugMode) {
                 console.log("Room Successfully Updated");
             }
@@ -230,7 +231,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/rooms/${room_id}`, options);
+            let response = await fetch(`/rooms/${room_id}`, options);
             if (response.ok) {
                 console.log("Room Deleted Successfully");
             }
@@ -250,7 +251,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/rooms/${roomID}/measurement`, options);
+            let response = await fetch(`/rooms/${roomID}/measurement`, options);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -272,7 +273,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/rooms/${roomID}/measurement`, options);
+            let response = await fetch(`/rooms/${roomID}/measurement`, options);
             if (response.ok) {
                 // console.log("Measurement Created Successfully");
             }
@@ -290,7 +291,7 @@ export class GreenhouseProxy {
             }
         }
 
-        fetch(`${url}/rooms/messages`, options)
+        fetch(`/rooms/messages`, options)
         .then((res) => res.json())
         .then((data) => console.log(data));
     }
@@ -304,7 +305,7 @@ export class GreenhouseProxy {
         }
       
         try {
-            let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+            let response = await fetch(`/rooms/${roomID}/messages`, options);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -330,7 +331,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/rooms/${roomID}/messages`, options);
+            let response = await fetch(`/rooms/${roomID}/messages`, options);
             if (response.ok && debugMode) {
                 console.log("Messages Created Successfully");
             }
@@ -347,7 +348,7 @@ export class GreenhouseProxy {
     // Get all experiments
     async getExperiments() {
         try {
-            let response = await fetch(`${url}/experiments`);
+            let response = await fetch(`/experiments`);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -368,7 +369,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/experiments`, options);
+            let response = await fetch(`/experiments`, options);
             if (response.ok) {
                 console.log("Experiment Created Successfully");
             }
@@ -380,7 +381,7 @@ export class GreenhouseProxy {
     // Get experiment by id
     async getExperimentByID(experimentID) {
         try {
-            let response = await fetch(`${url}/experiments/${experimentID}`, options);
+            let response = await fetch(`/experiments/${experimentID}`, options);
             if (response.ok) {
                 let data = await response.json();
                 return data;
@@ -401,7 +402,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/experiments/${experimentID}`, options);
+            let response = await fetch(`/experiments/${experimentID}`, options);
             if (response.ok) {
                 console.log("Experiment Updated Successfully");
             }
@@ -420,7 +421,7 @@ export class GreenhouseProxy {
         }
 
         try {
-            let response = await fetch(`${url}/experiments/${experimentID}`, options);
+            let response = await fetch(`/experiments/${experimentID}`, options);
             if (response.ok) {
                 console.log("Experiment Deleted Successfully");
             }

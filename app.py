@@ -43,7 +43,7 @@ db_uri = config["DBHOST"] if production else None
 # factory pattern --> .flaskenv FLASK_APP, allows for simple "flask run" 
 # command when running the app locally
 def app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="UserInterface")
     CORS(app)
 
     if production: # If deploying multiple domains with proxy servers you would need change
