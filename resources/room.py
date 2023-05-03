@@ -19,7 +19,7 @@ def admin_check(jwt_obj):
 
 @blp.route("/rooms")
 class Rooms(MethodView):
-    #@jwt_required()
+    ##@jwt_required()
     @blp.response(200, RoomSchema(many=True))
     def get(self):
         '''
@@ -28,7 +28,7 @@ class Rooms(MethodView):
         #admin_check(get_jwt())
         return RoomModel.query.all()
     
-    #@jwt_required(fresh=True)
+    ##@jwt_required(fresh=True)
     @blp.arguments(RoomSchema)
     def post(self, room_data):
         '''
@@ -56,7 +56,7 @@ class Rooms(MethodView):
 @blp.route("/rooms/<int:room_id>")
 class Room(MethodView):
 
-    @jwt_required()
+    #@jwt_required()
     @blp.response(200, RoomSchema)
     def get(self, room_id):
         '''
@@ -64,7 +64,7 @@ class Room(MethodView):
         '''
         return RoomModel.query.get_or_404(room_id)
     
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(RoomUpdateSchema)
     def patch(self, room_data, room_id):
         '''
@@ -82,7 +82,7 @@ class Room(MethodView):
 
         return {"Success": True}, 201
     
-    @jwt_required(fresh=True)
+    #@jwt_required(fresh=True)
     def delete(self, room_id):
         '''
         Delete a Room -- admin user required and JWT must be fresh
@@ -147,7 +147,7 @@ class Measurement(MethodView):
 
         return {"message": "Successfully added new measurement", "duration": agent.duration.second}, 201
     
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(DateRangeSchema)
     def put(self, dates, room_id):
         '''
@@ -175,7 +175,7 @@ class Measurement(MethodView):
 
 @blp.route("/rooms/messages")
 class Messages(MethodView):
-    @jwt_required()
+    #@jwt_required()
     @blp.response(200, MessageSchema(many=True))
     def get(self):
         '''
@@ -190,7 +190,7 @@ class Message(MethodView):
     Used to work with messages in the seperate rooms. 
     Allows notes to be made about experiment progress. 
     '''
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(MessageSchema)
     def post(self, message_data, room_id):
         '''
@@ -222,7 +222,7 @@ class Message(MethodView):
 
         return {"Success":True, "message_id": new_message.id}, 201
     
-    @jwt_required()
+    #@jwt_required()
     @blp.response(201, MessageSchema(many=True))
     def get(self, room_id):
         '''
@@ -233,7 +233,7 @@ class Message(MethodView):
 
 @blp.route("/rooms/messages/<int:message_id>")
 class SpecificMessage(MethodView):
-    @jwt_required()
+    #@jwt_required()
     def delete(self, message_id):
         '''
         Delete a Message
@@ -245,7 +245,7 @@ class SpecificMessage(MethodView):
 
         return {"Success": True}, 200
     
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(MessageUpdateSchema)
     def patch(self, message_data, message_id):
         '''

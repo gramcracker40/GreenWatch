@@ -22,6 +22,7 @@ from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_cors import CORS
+import sqlalchemy
 
 # Internal
 from db import db
@@ -102,9 +103,11 @@ def app():
     def missing_token_callback(error):
         return jsonify({"message": "No valid access token in request", "error": "authorization required"}), 401
 
-    with app.app_context():
-        db.create_all()
-
+    try:
+        with app.app_context():
+            db.create_all()
+    except sqlalchemy.exc.OperationalError:
+        pass
 
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(RoomBlueprint)

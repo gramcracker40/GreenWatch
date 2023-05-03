@@ -15,7 +15,7 @@ blp = Blueprint("Greenhouse", "Greenhouse", description="Operations on Greenhous
 @blp.route("/greenhouses/<int:greenhouse_id>")
 class Greenhouse(MethodView):
     
-    @jwt_required()
+    #@jwt_required()
     @blp.response(200, GreenhouseSchema())
     def get(self, greenhouse_id):
         '''
@@ -23,7 +23,7 @@ class Greenhouse(MethodView):
         '''
         return GreenhouseModel.query.get_or_404(greenhouse_id)
     
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(GreenhouseUpdateSchema)
     def patch(self, greenhouse_data, greenhouse_id):
         '''
@@ -43,7 +43,7 @@ class Greenhouse(MethodView):
         return {"Success": True}, 201
     
 
-    @jwt_required()
+    #@jwt_required()
     def delete(self, greenhouse_id):
         '''
         Deletes a Greenhouse given an id
@@ -57,7 +57,7 @@ class Greenhouse(MethodView):
     
 @blp.route("/greenhouses")
 class Greenhouses(MethodView):
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(GreenhouseSchema())
     def post(self, greenhouse_data):
         '''
@@ -81,7 +81,7 @@ class Greenhouses(MethodView):
         return {"Success": True, "greenhouse_id": new_greenhouse.id}, 201
     
     
-    @jwt_required()
+    #@jwt_required()
     @blp.response(200, GreenhouseSchema(many=True))
     def get(self):
         '''

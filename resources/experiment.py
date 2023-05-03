@@ -14,7 +14,7 @@ blp = Blueprint("experiment", "experiment", description="Operations on experimen
 
 @blp.route("/experiments")
 class Experiments(MethodView):
-    @jwt_required()
+    #@jwt_required()
     @blp.response(200, ExperimentSchema(many=True))
     def get(self):
         '''
@@ -22,7 +22,7 @@ class Experiments(MethodView):
         '''
         return ExperimentModel.query.all()
     
-    @jwt_required()
+    ##@jwt_required()
     @blp.arguments(ExperimentSchema)
     def post(self, experiment_data):
         '''
@@ -71,7 +71,7 @@ class Experiments(MethodView):
 
 @blp.route("/experiments/<int:experiment_id>")
 class Experiment(MethodView):
-    @jwt_required()
+    #@jwt_required()
     @blp.response(200, ExperimentSchema)
     def get(self, experiment_id):
         '''
@@ -79,7 +79,7 @@ class Experiment(MethodView):
         '''
         return ExperimentModel.query.get_or_404(experiment_id)
 
-    @jwt_required()
+    #@jwt_required()
     def delete(self, experiment_id):
         '''
         Delete a Experiment
@@ -101,7 +101,7 @@ class Experiment(MethodView):
         return {"Success": True}, 200
     
 
-    @jwt_required()
+    #@jwt_required()
     @blp.arguments(ExperimentUpdateSchema)
     def patch(self, experiment_data, experiment_id):
         '''
@@ -121,7 +121,7 @@ class Experiment(MethodView):
 @blp.route("/experiments/<int:experiment_id>/users/<int:user_id>")
 class ExperimentUsers(MethodView):
     
-    @jwt_required()
+    #@jwt_required()
     def post(self, experiment_id, user_id):
         '''
         Add a User to an Experiment alert list
@@ -141,7 +141,7 @@ class ExperimentUsers(MethodView):
 
         return {"Success": True}, 201
     
-    @jwt_required()
+    #@jwt_required()
     def delete(self, experiment_id, user_id):
         '''
         Delete a User off an Experiment alert list
