@@ -197,16 +197,13 @@ export class GreenhouseProxy {
 
     // Update a room by ID
     async editRoom(roomID, name) {
-        const roomName = {
-            "name": name
-        }
 
         const options = {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(roomName)
+            body: JSON.stringify(name)
         }
 
         try {

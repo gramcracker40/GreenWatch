@@ -71,22 +71,22 @@ export async function renderRoomCards() {
         t_label.setAttribute('class', 'h1');
         t_label.textContent = "Temperature:";
         t_value.setAttribute('class', 'h1');
-        t_value.textContent = `${room['measurements'][0]['temperature']}`;
+        t_value.textContent = `${room['measurements'][room['measurements'].length-1]['temperature']}`;
         h_row.setAttribute('class', 'd-flex justify-content-between');
         h_label.setAttribute('class', 'h1');
         h_label.textContent = "Humidity:";
         h_value.setAttribute('class', 'h1');
-        h_value.textContent = `${room['measurements'][0]['humidity']}`;
+        h_value.textContent = `${room['measurements'][room['measurements'].length-1]['humidity']}`;
         p_row.setAttribute('class', 'd-flex justify-content-between');
         p_label.setAttribute('class', 'h1');
         p_label.textContent = "Pressure:";
         p_value.setAttribute('class', 'h1');
-        p_value.textContent = `${room['measurements'][0]['pressure']}`;
+        p_value.textContent = `${room['measurements'][room['measurements'].length-1]['pressure']}`;
         l_label.setAttribute('class', 'h1');
         l_label.textContent = "Light:";
         l_row.setAttribute('class', 'd-flex justify-content-between');
         l_value.setAttribute('class', 'h1');
-        l_value.textContent = `${room['measurements'][0]['light']}`;
+        l_value.textContent = `${room['measurements'][room['measurements'].length-1]['light']}`;
 
         t_row.append(t_label);
         t_row.append(t_value);

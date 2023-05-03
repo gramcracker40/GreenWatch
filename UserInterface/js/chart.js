@@ -39,15 +39,14 @@ async function renderMeasurements() {
   if (!isDateNull) {
     const measurementsObj = await proxy.getMeasurementByRoom(roomID, dateObj);
     measurements = measurementsObj['data'];
-    console.log(measurements);
+    // console.log(measurements);
 
     if (measurements.length) {
       // Enable export data button
       exportDataBtn.disabled = false;
       exportDataBtn.addEventListener('click', () => {
         const csvData = Utils.csvMaker(measurements);
-        console.log(csvData);
-
+        // console.log(csvData);
         
         Utils.download(csvData['csv_data'], csvData['file_name']);
       });
@@ -201,6 +200,6 @@ function createPlaceholderChart(key) {
   updateChart(labels, data, key);
 }
 
-createPlaceholderChart('empty');
+createPlaceholderChart('N/A');
 
 renderMeasurements();
