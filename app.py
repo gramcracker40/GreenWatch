@@ -102,12 +102,9 @@ def app():
     @jwt.unauthorized_loader
     def missing_token_callback(error):
         return jsonify({"message": "No valid access token in request", "error": "authorization required"}), 401
-
-    try:
-        with app.app_context():
-            db.create_all()
-    except sqlalchemy.exc.OperationalError:
-        pass
+    
+    with app.app_context():
+        db.create_all()
 
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(RoomBlueprint)
