@@ -14,7 +14,7 @@ blp = Blueprint("experiment", "experiment", description="Operations on experimen
 
 @blp.route("/experiments")
 class Experiments(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, ExperimentSchema(many=True))
     def get(self):
         '''
@@ -22,14 +22,18 @@ class Experiments(MethodView):
         '''
         return ExperimentModel.query.all()
     
-    #@jwt_required(fresh=True)
+    @jwt_required()
     @blp.arguments(ExperimentSchema)
     def post(self, experiment_data):
         '''
         Create a new experiment in greenhouse
         '''
-        experiment = ExperimentModel(**experiment_data)
+        if(get_jwt()['admin'] == False):
+            abort(403, message=f"User trying to create an experiment is not an admin")
 
+
+        experiment = ExperimentModel(**experiment_data)
+        
         experiment.time_spent_outside = time(0,0,0)
         experiment.average_light = 0.0
         experiment.average_pressure = 0.0
@@ -67,7 +71,7 @@ class Experiments(MethodView):
 
 @blp.route("/experiments/<int:experiment_id>")
 class Experiment(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, ExperimentSchema)
     def get(self, experiment_id):
         '''
@@ -117,7 +121,7 @@ class Experiment(MethodView):
 @blp.route("/experiments/<int:experiment_id>/users/<int:user_id>")
 class ExperimentUsers(MethodView):
     
-    #@jwt_required()
+    @jwt_required()
     def post(self, experiment_id, user_id):
         '''
         Add a User to an Experiment alert list
@@ -137,7 +141,7 @@ class ExperimentUsers(MethodView):
 
         return {"Success": True}, 201
     
-
+    @jwt_required()
     def delete(self, experiment_id, user_id):
         '''
         Delete a User off an Experiment alert list
