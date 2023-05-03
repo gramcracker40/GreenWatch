@@ -12,34 +12,6 @@ const default_headers = {
     'Content-Type': 'application/json'
 }
 
-const optionsPost = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}
-
-const optionsPut = {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}
-
-const optionsPatch = {
-    method: 'PATCH',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}
-
-const optionsDelete = {
-    method: 'DELETE',
-    headers: {
-        'Authorization': token
-    }
-}
-
 export class GreenhouseProxy {
     constructor() {
         // this.debugMode = false;
@@ -51,10 +23,7 @@ export class GreenhouseProxy {
     async registerUser(user) {
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(user)
         }
 
@@ -125,10 +94,7 @@ export class GreenhouseProxy {
     async editUser(userID, userData) {
         const options = {
             method: 'PATCH',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(userData)
         }
         
@@ -148,9 +114,7 @@ export class GreenhouseProxy {
     async deleteUser(userID) {
         const options = {
             method: 'DELETE',
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {
@@ -184,10 +148,7 @@ export class GreenhouseProxy {
     async createRoom(room) {
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(room)
         }
 
@@ -204,9 +165,7 @@ export class GreenhouseProxy {
     // Get room by id
     async getRoomByID(roomID) {
         const options = {
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {
@@ -225,10 +184,7 @@ export class GreenhouseProxy {
 
         const options = {
             method: 'PATCH',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(name)
         }
 
@@ -248,9 +204,7 @@ export class GreenhouseProxy {
     async deleteRoom(room_id) {
         const options = {
             method: 'DELETE',
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {
@@ -267,10 +221,7 @@ export class GreenhouseProxy {
     async getMeasurementByRoom(roomID, dateObj) {
         const options = {
             method: 'PUT',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(dateObj)
         }
 
@@ -311,10 +262,7 @@ export class GreenhouseProxy {
     // Get all messages
     getAllMessages() {
         const options = {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
+            headers: default_headers
         }
 
         fetch(`/rooms/messages`, options)
@@ -325,10 +273,7 @@ export class GreenhouseProxy {
     // Get all room messages by room id
     async getAllMessagesByRoom(roomID) {
         const options = {
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            }
+            headers: default_headers
         }
       
         try {
@@ -351,10 +296,7 @@ export class GreenhouseProxy {
 
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(_body)
         }
 
@@ -376,9 +318,7 @@ export class GreenhouseProxy {
     // Get all experiments
     async getExperiments() {
         const options = {
-            headers: {
-                'Authorization': token,
-            }
+            headers: default_headers
         }
 
         try {
@@ -396,10 +336,7 @@ export class GreenhouseProxy {
     async createExpirement(experimentObj) {
         const options = {
             method: 'POST',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(experimentObj)
         }
 
@@ -416,9 +353,7 @@ export class GreenhouseProxy {
     // Get experiment by id
     async getExperimentByID(experimentID) {
         const options = {
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {
@@ -436,10 +371,7 @@ export class GreenhouseProxy {
     async editExperiment(experimentID, experimentObj) {
         const options = {
             method: 'PATCH',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
+            headers: default_headers,
             body: JSON.stringify(experimentObj)
         }
 
@@ -457,9 +389,7 @@ export class GreenhouseProxy {
     async deleteExperiment(experimentID) {
         const options = {
             method: 'DELETE',
-            headers: {
-                'Authorization': token
-            }
+            headers: default_headers
         }
 
         try {
