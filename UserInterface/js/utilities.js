@@ -51,11 +51,13 @@ export function toStandardTime(_hours) {
   let hours = _hours;
   let amPm = '';
   if (hours > 12) {
-    amPm = 'AM';
+    amPm = 'PM';
     hours -= 12;
   } else if (hours == 0) {
     amPm = 'AM';
     hours = "12";
+  }else if (hours < 12) {
+    amPm = 'AM';
   }else{
     amPm = 'PM';
   }
