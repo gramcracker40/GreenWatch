@@ -85,9 +85,9 @@ class Experiment(MethodView):
         Delete a Experiment
         '''
 
-        jwt = get_jwt()
-        if(jwt['admin'] == False):
-            abort(403, message=f"User trying to delete experiment_id={experiment_id} is not an admin")
+        # jwt = get_jwt()
+        # if(jwt['admin'] == False):
+        #     abort(403, message=f"User trying to delete experiment_id={experiment_id} is not an admin")
 
         print(experiment_id)
         experiment = ExperimentModel.query.get_or_404(experiment_id)
