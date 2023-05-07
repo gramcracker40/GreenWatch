@@ -19,7 +19,7 @@ Within the [Docs](https://github.com/gramcracker40/GreenWatch/tree/main/docs) fo
 
 ## User Interface
 
-In [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInterface) folder includes the code and images related to the User Interface.
+The [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInterface) folder includes all of the static html files, the javascript files that manipulate DOM to create dynamic html files, and the css files that style the login page. There are also javascript utility scripts that include functions that are repeatedly used accross multiple files. The javascript files making the API fetch requests are also stored within the [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInterface) folder.
 
 ## Backend
 
@@ -29,6 +29,6 @@ In [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInt
 
 - [Garrett Mathers](https://github.com/gramcracker40): Project Lead & Backend
 - [Kolten Pulliam](https://github.com/klpulliam-37): API & Frontend
-- [Derrick Pollock](https://github.com/derrk): Frontend & GUI
+- [Derrick Pollock](https://github.com/derrk): Frontend
 - [Edwin Mondragon](https://github.com/Takaximos): Hardware
 - [June Portillo](https://github.com/BastionWolf): Misc.
