@@ -1,0 +1,3 @@
+Resource,URI,Method,Status Code,Data
+/greenhouses,GET,200,[]
+/greenhouses,POST,201,"{'Success': True, 'greenhouse_id': 1}"
