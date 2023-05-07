@@ -1,11 +1,11 @@
 import requests
 import json
 import re
+import csv
 
 test_url = "http://127.0.0.1:5000"
 user = "tester"
 passw = "testtest"
-
 
 class RouteTester:
     '''
@@ -17,6 +17,8 @@ class RouteTester:
     init    --> pass the 'base_url' aka "IP:port"
                  as well as passing the username and password. 
                  can be fed in automatically at start of app
+                 will create fake user and also log them in, noting all key
+                 values needed for later use
 
     request     --> used as a helper method for test_routes, able to be 
                 given the data and intelligently form the requests
@@ -56,10 +58,14 @@ class RouteTester:
         except KeyError as err:
             print(f"Initialization of RouteTester: Error --> {err}")
 
+        except requests.exceptions.RequestException as err:
+            print(f"Request exception thrown, check IP address given; Error -> {err}")
+
+
 
     def __del__(self):
         '''
-        logs out the user created in __init__ for the tests and then deletes the user as well
+        logs out the fake user created in __init__ for the tests and then deletes it as well
         '''
         logout_url = self.base_url + "/logout"
         del_url = self.base_url + f"/users/{self.fake_user_id}"
@@ -100,7 +106,7 @@ class RouteTester:
         return {"uri": uri, "method": method, "status_code": req.status_code, "data": obj}
 
 
-    def test_routes(self, file:str, dump:bool=True, json_file_save:str=None) -> dict:
+    def test_routes(self, file:str, dump:bool=True, json_file_save:str=None, csv_file_save:str=None) -> dict:
         '''
         file            : str  --> path to the formatted JSON file, examples below
         dump            : bool --> determines if test_routes dumps results to terminal
@@ -208,13 +214,30 @@ class RouteTester:
             file = open(f"{json_file_save}.json", "w")
             json.dump(results, file, indent=2)
 
+        if csv_file_save:
+            file = open(f"{json_file_save}.csv", "w")
+            writer = csv.writer(file)
+
+            fields = ["Resource", "URI", "Method", "Status Code", "Data"]
+            writer.writerow(fields)
+
+            for resource in results:
+                for method in results[resource]:
+                    try:
+                        writer.writerow([method['uri'], method['method'], 
+                                method['status_code'], method['data']])
+                    except KeyError:
+                        writer.writerow([method['uri'], method['method'], 
+                                method['status_code'], method['error']])
+                        print(f"Error: ---> {err}")          
         return results
 
 
 test_file_name = "routes.json"
 
 test = RouteTester(base_url=test_url, username=user, password=passw)
-test_results = test.test_routes(test_file_name, dump=True, json_file_save="test_results")
+test_results = test.test_routes(test_file_name, dump=True, 
+        json_file_save="test_results", csv_file_save="test_results")
 
 del test
 
