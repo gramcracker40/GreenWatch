@@ -31,17 +31,9 @@
       "status_code": 200,
       "data": [
         {
-          "email": "gmathers@gmail.commm",
-          "first_name": "n",
-          "id": 1,
-          "is_admin": true,
-          "last_name": "o",
-          "username": "test2"
-        },
-        {
           "email": "test@testmail.com",
           "first_name": "test",
-          "id": 2,
+          "id": 1,
           "is_admin": true,
           "last_name": "name",
           "username": "tester"
@@ -51,7 +43,7 @@
   ],
   "USER": [
     {
-      "uri": "/users/2",
+      "uri": "/users/1",
       "method": "PATCH",
       "status_code": 201,
       "data": {
@@ -123,7 +115,7 @@
       "data": {
         "Success": true,
         "agent_id": 1,
-        "private_key": "QSAV2NDJ9LWZC81NRFGURE0B9OSGRPVMEFZENC6OLIVMFBS2CPZTWQ9EEVM2",
+        "private_key": "YD0G4R9354O7Q3F67C4JKZ1RWPRJ2W8H9O8Q5HJFCY6EFNQXXTGZGAYTUXAO",
         "room_id": 1,
         "server_ip": "172.22.0.1"
       }
@@ -164,8 +156,8 @@
           "body": "Hello, I am another message of testing",
           "id": 1,
           "room_id": 1,
-          "timestamp": "2023-04-29T19:20:10.056921",
-          "user_id": 2
+          "timestamp": "2023-05-06T18:58:52.028006",
+          "user_id": 1
         }
       ]
     }
