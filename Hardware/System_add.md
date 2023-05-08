@@ -36,7 +36,7 @@
                 Though might be rare, there might be a chance that pests invade the greenhouse environment 
                 so pesticide might be needed. But this will contaminate most of the plants so safety procaution is needed.
         Possible design:
-        ![Image](location of image in repo.type)
+        ![Image](Hardware/Hardware_diagram/Irrigation.png)
 
     Possible Fertilization design:
     !['Fertilization'](Hardware/Hardware_diagram/Fertilization.png)
