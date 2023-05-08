@@ -35,12 +35,12 @@ if you have no clue what that means, simply skip to the next step
 4. we will now install all packages needed to run the application, run this command  
 pip install -r requirements.txt
 
-All packages should be downloaded.  
+All packages should be downloaded.   
 5. Next, go to /.flaskenv and open the contents.
    Below lines detail the configuration you need in .flaskenv to run the app locally. 
-   Make the changes to reflect the lines below and save the file. 
-    FLASK_DEBUG=1
-    PRODUCTION=0
+   Make the changes to reflect the lines below and save the file.  
+    FLASK_DEBUG=1  
+    PRODUCTION=0  
     SERVER_IP="127.0.0.1:5000"
 
 6. Now in the root directory of the repo type the below command into a terminal
