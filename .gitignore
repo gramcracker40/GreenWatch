@@ -130,3 +130,4 @@ dmypy.json
 
 #SSH Key file for Azure VM
 greenwatch_key.pem
+greenwatch_vm_connection.txt

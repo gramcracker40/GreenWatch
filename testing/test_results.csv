@@ -1,3 +1,22 @@
-Resource,URI,Method,Status Code,Data
-/greenhouses,GET,200,[]
-/greenhouses,POST,201,"{'Success': True, 'greenhouse_id': 1}"
+Resource,URI,Method,Status Code,Data
+GREENHOUSES,/greenhouses,GET,200,[]
+GREENHOUSES,/greenhouses,POST,201,"{'Success': True, 'greenhouse_id': 1}"
+GREENHOUSE,/greenhouses/1,DELETE,201,{'Success': True}
+USERS,/users,GET,200,"[{'email': 'test@testmail.com', 'first_name': 'test', 'id': 1, 'is_admin': True, 'last_name': 'name', 'username': 'tester'}]"
+USER,/users/1,PATCH,201,{'Success': True}
+ROOMS,/rooms,GET,200,[]
+ROOMS,/rooms,POST,200,"{'Success': True, 'room_id': 1}"
+ROOM,/rooms/1,DELETE,200,{'message': 'room deleted successfully'}
+SERVERS,/servers,GET,200,[]
+SERVERS,/servers,POST,201,"{'Success': True, 'server_id': 1}"
+SERVER,/servers/1,DELETE,200,{'Success': True}
+AGENTS,/servers/agents,GET,200,[]
+AGENTS,/servers/agents,POST,201,"{'Success': True, 'agent_id': 1, 'private_key': '1EN85U6AZ8CJZK846UDDTW25ET6249LJXAZUWXHLWZUWWMRPAQB4WQ6OTRLH', 'room_id': 1, 'server_ip': '172.22.0.1'}"
+AGENT,/servers/agents/1,DELETE,200,{'Success': True}
+MESSAGES,/rooms/messages,GET,200,[]
+MESSAGE,/rooms/1/messages,POST,201,"{'Success': True, 'message_id': 1}"
+MESSAGE,/rooms/1/messages,GET,201,"[{'body': 'Hello, I am another message of testing', 'id': 1, 'room_id': 1, 'timestamp': '2023-05-06T19:22:17.477906', 'user_id': 1}]"
+SPECIFICMESSAGE,/rooms/messages/1,DELETE,200,{'Success': True}
+EXPERIMENTS,/experiments,GET,200,[]
+EXPERIMENTS,/experiments,POST,201,"{'Success': True, 'experiment_id': 1}"
+EXPERIMENT,/experiments/1,DELETE,200,{'Success': True}

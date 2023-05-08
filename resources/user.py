@@ -69,7 +69,7 @@ class UserLogin(MethodView):
 
 @blp.route("/logout")
 class UserLogout(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def post(self):
         '''
         logs out a user

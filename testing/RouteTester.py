@@ -215,21 +215,31 @@ class RouteTester:
             json.dump(results, file, indent=2)
 
         if csv_file_save:
-            file = open(f"{json_file_save}.csv", "w")
+            file = open(f"{json_file_save}.csv", "w", newline="\n")
             writer = csv.writer(file)
 
             fields = ["Resource", "URI", "Method", "Status Code", "Data"]
             writer.writerow(fields)
 
             for resource in results:
-                for method in results[resource]:
+                if type(results[resource]) == list:
+                    for method in results[resource]:
+                        try:
+                            writer.writerow([resource, method['uri'], method['method'], 
+                                    method['status_code'], method['data']])
+                        except KeyError:
+                            writer.writerow([resource, method['uri'], method['method'], 
+                                    method['status_code'], method['error']])
+                            print(f"Error: ---> {err}")
+                else:
                     try:
-                        writer.writerow([method['uri'], method['method'], 
-                                method['status_code'], method['data']])
+                        writer.writerow([resource, results[resource]['uri'], results[resource]['method'], 
+                                results[resource]['status_code'], results[resource]['data']])
                     except KeyError:
-                        writer.writerow([method['uri'], method['method'], 
-                                method['status_code'], method['error']])
-                        print(f"Error: ---> {err}")          
+                        writer.writerow([resource, results[resource]['uri'], results[resource]['method'], 
+                                results[resource]['status_code'], results[resource]['error']])
+                        print(f"Error: ---> {err}")
+
         return results
 
 

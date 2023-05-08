@@ -42,9 +42,6 @@ config = dotenv_values(".flaskenv")
 production = bool(int(config["PRODUCTION"]))
 db_uri = config["DBHOST"] if production else None
 
-# Grabbing all old access tokens
-
-
 # factory pattern --> .flaskenv FLASK_APP, allows for simple "flask run" 
 # command when running the app locally
 def app():
