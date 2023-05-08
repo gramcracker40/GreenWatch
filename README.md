@@ -25,25 +25,26 @@ To get the application running in a test/development environment all
 you need is a machine with python 3.6 or higher and pip installed as the primary 
 package manager. Also, you will want to use git to clone the repo and follow the below steps.
 
-1. clone the repo into a directory of your choice and tunnel into the root of the project
-git clone https://github.com/gramcracker40/GreenWatch.git
-cd GreenWatch
+1. clone the repo into a directory of your choice and tunnel into the root of the project  
+2. git clone https://github.com/gramcracker40/GreenWatch.git  
+3. cd GreenWatch
 
-2. if you would like to do it with a virtual environment build it now and activate
-if you have no clue what that means, simply skip to the third step
+if you would like to do it with a virtual environment build it now and activate
+if you have no clue what that means, simply skip to the next step
 
-3. we will now install all packages needed to run the application, run this command
+4. we will now install all packages needed to run the application, run this command  
 pip install -r requirements.txt
 
-4. all packages should be downloaded. Next, go to /.flaskenv and open the contents.
-Below lines detail the configuration you need in .flaskenv to run the app locally. 
-Make the changes to reflect the lines below and save the file. 
-FLASK_DEBUG=1
-PRODUCTION=0
-SERVER_IP="127.0.0.1:5000"
+All packages should be downloaded.  
+5. Next, go to /.flaskenv and open the contents.
+   Below lines detail the configuration you need in .flaskenv to run the app locally. 
+   Make the changes to reflect the lines below and save the file. 
+    FLASK_DEBUG=1
+    PRODUCTION=0
+    SERVER_IP="127.0.0.1:5000"
 
-5. Now in the root directory of the repo type the below command into a terminal
-flask run
+6. Now in the root directory of the repo type the below command into a terminal
+    flask run
 
 You now are running Greenwatch and will be brought to the login page of the
 server when you go to the 127.0.0.1:5000 in your browser. 
