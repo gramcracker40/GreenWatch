@@ -1,12 +1,6 @@
 # Greenwatch
-
-# UPDATE BEFORE TURNING IN
 <p align="center">
   <img src="https://i.imgur.com/Y7tztzJ.jpg" width="250" height="250">
-</p>
-
-<p align="center"> 
-
 </p>
 
 ## Greenwatch's Purpose
@@ -19,7 +13,8 @@ and light. Future iterations may
   
 ## Documentation
 
-Within the [Docs](https://github.com/gramcracker40/GreenWatch/tree/main/docs) folder is a collection of the Greenwatch's project documentation including various UML diagrams as well as other documents that were used for the development of the project itself.
+Within the [Docs](https://github.com/gramcracker40/GreenWatch/tree/main/docs) folder is a collection of the
+Greenwatch's project documentation including various UML diagrams as well as other documents that were used for the development of the project itself.
 Reference this folder for any questions you have about the purpose, architecture, or 
 even the code itself. 
 
@@ -89,8 +84,13 @@ The [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserIn
 
 ## Backend
 
-[Backend](https://github.com/gramcracker40/GreenWatch/tree/main/Backend) Contains the code of the [Agents](https://github.com/gramcracker40/GreenWatch/tree/main/Backend/Agents), that run on the 3 intended Raspberry Pi to take sensor data, and the [GreenhouseServer](https://github.com/gramcracker40/GreenWatch/tree/main/Backend/GreenhouseServer) that acts as a proxy to push the agent data from the greenhouse to
+[Backend](https://github.com/gramcracker40/GreenWatch/tree/main/Backend) Contains the code of the [Agents](https://github.com/gramcracker40/GreenWatch/tree/main/Backend/Agents), that run on the Raspberry Pi to take sensor data, and the [GreenhouseServer](https://github.com/gramcracker40/GreenWatch/tree/main/Backend/GreenhouseServer) that acts as a proxy to push the agent data from the greenhouse to
 whatever remote server is running the Greenwatch application.
+
+## Hardware
+[Hardware](https://github.com/gramcracker40/GreenWatch/tree/main/Hardware) Contains information about the hardware used to take
+the measurement data and any setup processes we used to get them to where they needed to be in order to work with Greenwatch. 
+
 
 ## Contributors
 
