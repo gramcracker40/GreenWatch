@@ -50,7 +50,7 @@ You now are running Greenwatch and will be brought to the login page of the
 server when you go to the 127.0.0.1:5000 in your browser. 
 
 ### Note
-If you are going to do the docker options, I will expect you to have used
+If you are going to do the docker options, It is expected of you to have used
 docker and have it installed ready to use. 
 
 ## Setup - Docker development - PostgreSQL DB
