@@ -18,7 +18,14 @@ function createUserList() {
 createUserList();
 // console.log(usernames);
 
-async function generateDropdownItems() {
+function resetDropdownItems() {
+  while (chatbox_dropdown.firstChild) {
+    chatbox_dropdown.removeChild(chatbox_dropdown.lastChild);
+  }
+}
+
+export async function generateDropdownItems() {
+  resetDropdownItems();
   const rooms = await proxy.getRooms();
   
   // console.log(rooms);

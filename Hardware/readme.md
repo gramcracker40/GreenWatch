@@ -1,4 +1,12 @@
-hardware about page - edwin to finish
+# Hardware about document/Set-up
+
+## Raspberry Pi
+
+    Raspberry Pis are small, low-cost, single-board computers developed by the Raspberry Pi Foundation. They were designed with the intention of providing an affordable means for people to learn programming and computer science. Raspberry Pis are about the size of a credit card and come with a range of hardware features, including USB ports, HDMI output, Ethernet, and GPIO (General Purpose Input/Output) pins that can be used for connecting sensors, motors, and other electronics.
+
+    There are different models of Raspberry Pi, each with varying levels of performance and capabilities. They run on a variety of operating systems, including Linux-based distributions like Raspbian (which is used in this project). Raspberry Pis can be used for a wide range of applications, such as home automation, media centers, retro gaming, and even as the brains of robots and other DIY projects.
+
+    Another thing to note, is that raspberry pi board are not limited to collect data from sensors. There are multiple examples online that demonstrate boards being used in robotics. Now how is this beneficial to project that is greenhouse based? It mainly goes along the factors that ventilation can be manipulated via raspberry pi boards. The only way to be certain of factors that can benefit certain projects, is to speak with individuals that are involved with the respected project topic.
 
 ## Setting up Raspberry PI (URLs can be used as aide)
 
@@ -18,6 +26,18 @@ hardware about page - edwin to finish
         9. Follow the procedures and change any desired settings.
         10. Now the the raspberry pi has OS fully integrated.
     ```
+## Sensors
+    Raspberry Pis can be used with numerous sensors to collect data from the environment, process it, and act upon it. There are many types of sensors that can be implemented with Raspberry Pis, that may include:
+
+        1. Temperature
+        2. Humidity
+        3. Light
+        4. Soil moisturity
+        5. Gas
+        6. Motion
+        ...and so on
+
+    From here, it is a matter of budgetting and deciding which will be the most optimal for the selected project. 
 
 ## How to set up Sensors
 
@@ -44,4 +64,6 @@ hardware about page - edwin to finish
 
     Some of the pins are self-explanatory, one being the 3.3V and 5V which provides power to certain sensors, or like the ground which acts like the ground option for the sensors. It is once the individuals look at the GPIO pins that makes the head scratch. First GPIO stands fir "General Purpose Input/Output", knowing that now most of the pins become sself-explanatory, but still hold their own purpose. Following that most of the other components provided are easier to understand, USB-Ports are for any other external connections all be it mouse, keyboard, etc. The HDMI chord will allow the user to connect the pi board to any monitor with HDMI port alongside it to see the what the raspberry pi board has going on internally. A micro-USB port to provide power to the board. Micro-SD port to provide extended services to the board (ie the Operating Systen).
 
-4. rasberry pi cases and the design used to build them for rasberry pi. 
+## Cases
+
+    When it comes to the cases around the Raspberry Pi's, it is completely situational. For instance, in the greenhouse project the cases should provide protection from water to protect the pi boards, while at the same time allowing board to breathe so that the readings for humidity and temperature are not hindered. Equally, one needs to consider the environment of the cases, another factor that needs to be taken into consideration is the amount of components that it will hold. Depending on the number of components, will depend on the size of the case. Alognside an increase in the number of compnenets the amount of wires must also be taken into consideration. Even if the wiring is the neatest in the world, the amount of volume they require will prove to be more than expected. Another factor to consider is, will this certain project likely result in expansions? It will be customary for those who in the future wish to add more on to the project had sufficient room to work with, and 

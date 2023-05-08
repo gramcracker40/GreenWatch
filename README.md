@@ -85,7 +85,7 @@ thirdly, the nginx web server running on port 80
 
 ## User Interface
 
-In [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInterface) folder includes the code and images related to the User Interface. 
+The [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInterface) folder includes all of the static html files, the javascript files that manipulate DOM to create dynamic html files, and the css files that style the login page. There are also javascript utility scripts that include functions that are repeatedly used accross multiple files. The javascript files making the API fetch requests are also stored within the [UserInterface](https://github.com/gramcracker40/GreenWatch/tree/main/UserInterface) folder.
 
 ## Backend
 

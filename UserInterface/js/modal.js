@@ -1,6 +1,7 @@
 import { GreenhouseProxy } from "../api/api.js";
 import * as Utils from "../js/utilities.js";
 import { renderRoomCards } from "./home.js";
+import { generateDropdownItems } from "./chatbox.js";
 
 const proxy = new GreenhouseProxy();
 const usersButton = document.getElementById('users-modal-trigger');
@@ -476,6 +477,7 @@ async function createRoom() {
   resetCreateRoomInputFields();
   renderRooms();
   renderRoomCards();
+  generateDropdownItems();
 }
 
 function isCreateRoomInputFieldsEmpty(room) {
@@ -609,6 +611,7 @@ async function editRoom() {
   resetEditRoomInputFields();
   renderRooms();
   renderRoomCards();
+  generateDropdownItems();
 }
 
 // -------------------- Delete Room -------------------- //
@@ -620,5 +623,6 @@ async function deleteRoom() {
   await proxy.deleteRoom(roomID);
   renderRooms();
   renderRoomCards();
+  generateDropdownItems();
 }
 
