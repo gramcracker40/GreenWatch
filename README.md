@@ -44,7 +44,7 @@ All packages should be downloaded.
     SERVER_IP="127.0.0.1:5000"
 
 6. Now in the root directory of the repo type the below command into a terminal
-    flask run
+      flask run
 
 You now are running Greenwatch and will be brought to the login page of the
 server when you go to the 127.0.0.1:5000 in your browser. 
