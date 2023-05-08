@@ -39,7 +39,7 @@
         ![Image](location of image in repo.type)
 
     Possible Fertilization design:
-    ![Image](location of image in repo.type)
+    ![Image](Hardware/Hardware_diagram/Fertilization.png)
     Other greenhouse components that can be considered:
 
         - Moisture content of soil
