@@ -47,9 +47,21 @@ class RouteTester:
         try:
             fake_user_req = requests.post(register_url, json={"username": username, "password": password, 
                 "first_name":"test", "last_name": "name", "is_admin": True, "email": "test@testmail.com"})
-            
-            self.fake_user_id = json.loads(fake_user_req.text)["user_id"]
 
+            #if the user already exists, force delete it so we can run tests with no hiccups. And then try to add
+            # the fake user again. 
+            if fake_user_req.status_code == 409:
+                users_req = requests.get(base_url + "/users")
+                users = json.loads(users_req.text)
+
+                pre_existing = [user for user in users if user["username"] == username]
+                del_fake_user = requests.delete(f"{base_url}/users/{pre_existing[0]['id']}")
+
+                if del_fake_user.status_code == 200:
+                    fake_user_req = requests.post(register_url, json={"username": username, "password": password, 
+                        "first_name":"test", "last_name": "name", "is_admin": True, "email": "test@testmail.com"})
+
+            self.fake_user_id = json.loads(fake_user_req.text)["user_id"]
             auth_url = base_url + "/login"
             jwt = json.loads(requests.post(auth_url, json={"username": username, "password": password}).text)
 
@@ -245,9 +257,8 @@ class RouteTester:
 
 test_file_name = "routes.json"
 
-test = RouteTester(base_url=test_url, username=user, password=passw)
-test_results = test.test_routes(test_file_name, dump=True, 
-        json_file_save="test_results", csv_file_save="test_results")
+test = RouteTester(base_url=test_url, username="tester", password=passw)
+test_results = test.test_routes(test_file_name, json_file_save="test_results", csv_file_save="test_results")
 
 del test
 

@@ -11,11 +11,11 @@ SERVERS,/servers,GET,200,[]
 SERVERS,/servers,POST,201,"{'Success': True, 'server_id': 1}"
 SERVER,/servers/1,DELETE,200,{'Success': True}
 AGENTS,/servers/agents,GET,200,[]
-AGENTS,/servers/agents,POST,201,"{'Success': True, 'agent_id': 1, 'private_key': '1EN85U6AZ8CJZK846UDDTW25ET6249LJXAZUWXHLWZUWWMRPAQB4WQ6OTRLH', 'room_id': 1, 'server_ip': '172.22.0.1'}"
+AGENTS,/servers/agents,POST,201,"{'Success': True, 'agent_id': 1, 'private_key': 'B2PXX1PQ8Y6HHBKC9YIK7NMB3B4QJNGDLGW203RDOUZXOSW306JR1RENVS5V', 'room_id': 1, 'server_ip': '172.22.0.1'}"
 AGENT,/servers/agents/1,DELETE,200,{'Success': True}
 MESSAGES,/rooms/messages,GET,200,[]
 MESSAGE,/rooms/1/messages,POST,201,"{'Success': True, 'message_id': 1}"
-MESSAGE,/rooms/1/messages,GET,201,"[{'body': 'Hello, I am another message of testing', 'id': 1, 'room_id': 1, 'timestamp': '2023-05-06T19:22:17.477906', 'user_id': 1}]"
+MESSAGE,/rooms/1/messages,GET,201,"[{'body': 'Hello, I am another message of testing', 'id': 1, 'room_id': 1, 'timestamp': '2023-08-06T22:32:46.731131', 'user_id': 1}]"
 SPECIFICMESSAGE,/rooms/messages/1,DELETE,200,{'Success': True}
 EXPERIMENTS,/experiments,GET,200,[]
 EXPERIMENTS,/experiments,POST,201,"{'Success': True, 'experiment_id': 1}"
