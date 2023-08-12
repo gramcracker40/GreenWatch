@@ -9,12 +9,12 @@ from time import sleep
 from datetime import time
 
 
-roomTitle = 'testtestesttest'
-roomID = 1
+roomTitle = 'Room Two'
+roomID = 2
 ServerPort = 5000
-ServerIP='172.22.0.1'
-duration = 23
-private_key = '8MKFR2KHILRYL6IY13LRYGN5AUIO4OO9U8VVBRUFMHY132GK4DTCCXMJHWL1'
+ServerIP='192.168.1.146'
+duration = 10
+private_key = 'CNNU9FMSO7DJ2S00LZ95VDQ7VF4ELLQ5KDL5YR58N6BTT70FASDTAGFN6E7Y'
 
 req_headers = {
     "Key": private_key

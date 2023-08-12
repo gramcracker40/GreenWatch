@@ -100,6 +100,7 @@ class Agents(MethodView):
             agent.private_key = hash
 
             room = RoomModel.query.get_or_404(agent_data['room_id'])
+            
             if room.agent:
                 agent_exists = True
                 abort(400, message=f"room already has an agent, please delete the existing agent to create a new one")
@@ -118,27 +119,26 @@ class Agents(MethodView):
             new_agent = AgentModel.query.filter(AgentModel.private_key == hash).first()
 
             return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
-
+            
         except werkzeug.exceptions.BadRequest as err:
-            pass
+            abort(500, message=f"werkzeug server error --> {err}")
 
         finally:
+            # we will now build the executable for the rasberry pi's
             # Querying all objects associated with creation of agent
+            
             if not agent_exists:
                 room = RoomModel.query.get_or_404(new_agent.room_id)
                 server = ServerModel.query.get_or_404(new_agent.server_id)
-                
-                print(f"Current directory ---> {dir_path}")
+
                 # marking location of Agent boiler plate code
                 agent_path = dir_path + "\\Backend\\Agent\\agent.py"
-
-                print(agent_path)
 
                 # copying boiler plate code into resources as a copy and opening the copy
                 shutil.copy(agent_path, f"resources\\agent{room.id}.py")
                 copy = open(f"{dir_path}\\resources\\agent{room.id}.py", "r")
 
-                # patterns to parse through the copy and replace for the creation of the agent
+                # patterns to parse through the creation of the room specific agent
                 patterns = {
                     "'///room-name///'": room.name,
                     "'///room-id///'": room.id,
@@ -147,8 +147,8 @@ class Agents(MethodView):
                     "'///duration///'": int(new_agent.duration.second)
                 }
                 
-                #parsing through each line looking for the patterns above. when found
-                # it will replace with appropriate agent values. 
+                #parsing through each line of the boiler plate code looking for the patterns above. when found
+                # it will replace with appropriate unique agent values. 
                 replace = []
                 replaced = False
                 for line in copy:
@@ -164,12 +164,12 @@ class Agents(MethodView):
                         replace.append(line)
                     else:
                         replaced = False
-                
+
                 copy.close()
-                
-                copy = open(f"{dir_path}\\agent{room.id}.py", "w")
-                copy.writelines(replace)
-                copy.close()
+
+                new_py = open(f"{dir_path}\\resources\\agent{room.id}.py", "w")
+                new_py.writelines(replace)
+                new_py.close()
 
                 try:
                     create_exe_p = subprocess.Popen(
@@ -181,10 +181,7 @@ class Agents(MethodView):
                     outs, errs = create_exe_p.communicate(timeout=30)
                 except subprocess.TimeoutExpired as err:
                     create_exe_p.kill()
-
-            else:
-                abort(400, message=f"room already has an agent, please delete the existing agent to create a new one")
-
+                    abort(500, message=f"Process timed out while building executable --> {err}")
 
 
     #@jwt_required()

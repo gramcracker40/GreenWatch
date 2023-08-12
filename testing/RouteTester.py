@@ -159,9 +159,11 @@ class RouteTester:
 
                     # determining the variables in the resources URI, then finding the matching
                     # stage variable and replacing it. 
+                    print(f"URI PARTS:  {uri_parts}")
                     id_vars = [(count,var) for count, var in enumerate(uri_parts) if "id" in var]
+                    print(f"ID VARS: {id_vars}")
                     id_vals = [(id_var[0], stage_variables[id_var[1]]) for id_var in id_vars]
-
+                    
                     for part, value in id_vals:
                         uri_parts[part] = value
 
@@ -259,7 +261,6 @@ test_file_name = "routes.json"
 
 test = RouteTester(base_url=test_url, username="tester", password=passw)
 test_results = test.test_routes(test_file_name, json_file_save="test_results", csv_file_save="test_results")
-
 del test
 
 
