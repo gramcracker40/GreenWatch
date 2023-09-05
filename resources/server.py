@@ -128,8 +128,8 @@ class Agents(MethodView):
             # Querying all objects associated with creation of agent
             
             if not agent_exists:
-                room = RoomModel.query.get_or_404(new_agent.room_id)
-                server = ServerModel.query.get_or_404(new_agent.server_id)
+                room = RoomModel.query.get(new_agent.room_id)
+                server = ServerModel.query.get(new_agent.server_id)
 
                 # marking location of Agent boiler plate code
                 agent_path = dir_path + "\\Backend\\Agent\\agent.py"
@@ -181,7 +181,6 @@ class Agents(MethodView):
                     outs, errs = create_exe_p.communicate(timeout=30)
                 except subprocess.TimeoutExpired as err:
                     create_exe_p.kill()
-                    abort(500, message=f"Process timed out while building executable --> {err}")
 
 
     #@jwt_required()
@@ -196,9 +195,7 @@ class Agent(MethodView):
     #@jwt_required()
     def get(self, agent_id):
         '''
-        performed directly after post method for agent, takes private key
-        from json passed and creates a new agent executable that is unique
-        to the specific room that agent is attached to. 
+        Grabs agent specific executable file. 
 
         The executable will run on the rasberry pi os and collect measurements from
         the senseHAT and associate those measurements with the specific room it was 
@@ -208,10 +205,6 @@ class Agent(MethodView):
         example json: {"private_key": "60 character string from Post"}}
         '''
         agent = AgentModel.query.get_or_404(agent_id)
-        
-        
-        print(f"Current directory ---> {dir_path}")
-
         build_path = dir_path + f"/dist/agent{agent.room_id}.exe"
 
         return send_file(build_path)
@@ -221,19 +214,25 @@ class Agent(MethodView):
     #@jwt_required(fresh=True)
     def delete(self, agent_id):
         '''
-        delete an agent by id
+        delete an agent and all build paths associated by id
         '''
-
         agent = AgentModel.query.get_or_404(agent_id)
-
+        paths = [f"{dir_path}\\dist\\agent{agent.room_id}.exe",
+                 f"{dir_path}\\resources\\agent{agent.room_id}.py"]
+        
         try:
+            for path in paths:
+                os.remove(path)
+    
             db.session.delete(agent)
             db.session.commit()
         except SQLAlchemyError as err:
             abort(500, message=f"Unresolved server error: --> {err}")
-
+        except FileNotFoundError as err:
+            abort(404, message=f"File not found error --> {err}")
 
         return {"Success":True}, 200
+
 
     @blp.arguments(AgentUpdateSchema())
     def patch(self, agent_data, agent_id):
