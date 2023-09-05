@@ -10,11 +10,11 @@ from datetime import time
 
 
 roomTitle = '///room-name///'
-roomID = 1
+roomID = 2
 ServerPort = 5000
 ServerIP='192.168.1.23'
 duration = 10
-private_key = 'HY47UYQ80HZI9DBF2WH5VC34IWXMBNIRDR9I0FI60R6LM3TL4152A3Y5GVBS'
+private_key = 'K5RCEPHHCFUTW2L4JLYTYWLDIUEMXILLCI2743ZAH4IS8NEXQGHUUO5AINEZ'
 
 req_headers = {
     "Key": private_key
