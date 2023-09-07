@@ -17,7 +17,7 @@ import subprocess
 import werkzeug
 
 blp = Blueprint("server", "server", description="Operations on servers")
-dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+dir_path = os.path.dirname(os.path.dirname(__file__))
 
 @blp.route("/servers")
 class Servers(MethodView):
@@ -89,11 +89,12 @@ class Agents(MethodView):
         builds the agent executable
         '''
         # marking location of Agent boiler plate code
-        agent_path = dir_path + "\\Backend\\Agent\\agent.py"
+        agent_path = dir_path + "/Backend/Agent/agent.py"
+        copy_path = dir_path + f"/resources/agent{room_id}.py"
 
         # copying boiler plate code into resources as a copy and opening the copy
-        shutil.copy(agent_path, f"resources\\agent{room_id}.py")
-        copy = open(f"{dir_path}\\resources\\agent{room_id}.py", "r")
+        shutil.copy(agent_path, copy_path)
+        copy = open(f"{dir_path}/resources/agent{room_id}.py", "r")
 
         # patterns to parse through the creation of the room specific agent
         patterns = {
@@ -124,21 +125,22 @@ class Agents(MethodView):
         copy.close()
 
         # writing all lines to new file to build executable from
-        new_py = open(f"{dir_path}\\resources\\agent{room_id}.py", "w")
+        new_py = open(copy_path, "w")
         new_py.writelines(replace)
         new_py.close()
-
-        # building executable in a new, windowed process
-        try:
-            create_exe_p = subprocess.Popen(
-                f"pyinstaller resources/agent{room_id}.py --noconfirm --onefile --windowed",
-                shell=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
-            outs, errs = create_exe_p.communicate(timeout=30)
-        except subprocess.TimeoutExpired as err:
-            create_exe_p.kill()
+        
+        # only able to compile to x86 and does not produce an exe compatible with rasberry pi.
+        # 
+        # try:
+        #     create_exe_p = subprocess.Popen(
+        #         f"pyinstaller '{copy_path}' --noconfirm --onefile --windowed",
+        #         shell=True,
+        #         stdout=subprocess.PIPE,
+        #         stderr=subprocess.PIPE
+        #     )
+        #     outs, errs = create_exe_p.communicate(timeout=30)
+        # except subprocess.TimeoutExpired as err:
+        #     create_exe_p.kill()
 
 
     #@jwt_required()
@@ -200,7 +202,7 @@ class Agent(MethodView):
         '''
         agent = AgentModel.query.get_or_404(agent_id)
         
-        build_path = dir_path + f"/dist/agent{agent.room_id}.exe"
+        build_path = dir_path + f"/resources/agent{agent.room_id}.py"
 
         return send_file(build_path)
 
@@ -213,19 +215,22 @@ class Agent(MethodView):
         '''
         agent = AgentModel.query.get_or_404(agent_id)
         
-        paths = [f"{dir_path}\\dist\\agent{agent.room_id}.exe",
-                 f"{dir_path}\\resources\\agent{agent.room_id}.py"]
+        paths = [f"{dir_path}/dist/agent{agent.room_id}",
+                 f"{dir_path}/resources/agent{agent.room_id}.py",
+                 f"{dir_path}/agent{agent.room_id}.spec"]
         
         try:
-            for path in paths:
-                os.remove(path)
-    
             db.session.delete(agent)
             db.session.commit()
+
+            for path in paths:
+                os.remove(path)
+
         except SQLAlchemyError as err:
             abort(500, message=f"Unresolved server error: --> {err}")
         except FileNotFoundError as err:
-            abort(404, message=f"File not found error --> {err}")
+            print(f"File not found -> {err}")
+            pass
 
         return {"Success":True}, 200
 
