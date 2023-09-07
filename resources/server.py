@@ -17,9 +17,7 @@ import subprocess
 import werkzeug
 
 blp = Blueprint("server", "server", description="Operations on servers")
-
-# marking location of root directory
-dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+dir_path = os.path.dirname(os.path.dirname(__file__))
 
 @blp.route("/servers")
 class Servers(MethodView):
@@ -85,108 +83,102 @@ class Server(MethodView):
 
 @blp.route("/servers/agents")
 class Agents(MethodView):
+
+    def build_agent(self, room_id, server_ip_address, passcode, duration):
+        '''
+        builds the agent executable
+        '''
+        # marking location of Agent boiler plate code
+        agent_path = dir_path + "/Backend/Agent/agent.py"
+        copy_path = dir_path + f"/resources/agent{room_id}.py"
+
+        # copying boiler plate code into resources as a copy and opening the copy
+        shutil.copy(agent_path, copy_path)
+        copy = open(f"{dir_path}/resources/agent{room_id}.py", "r")
+
+        # patterns to parse through the creation of the room specific agent
+        patterns = {
+            "'///room-id///'": room_id,
+            "'///private-key///'": passcode, 
+            "'///server-ip///'": server_ip_address,
+            "'///duration///'": int(duration.second)
+        }
+        
+        #parsing through each line of the boiler plate code looking for the patterns above. when found
+        # it will replace with appropriate unique agent values. 
+        replace = []
+        replaced = False
+        for line in copy:
+            for pattern in patterns: 
+                if pattern in line and type(patterns[pattern]) == str:
+                    replace.append(line.replace(pattern, f"'{patterns[pattern]}'"))
+                    replaced = True
+                elif pattern in line:
+                    replace.append(line.replace(pattern, str(patterns[pattern])))
+                    replaced = True
+                
+            if not replaced:
+                replace.append(line)
+            else:
+                replaced = False
+
+        copy.close()
+
+        # writing all lines to new file to build executable from
+        new_py = open(copy_path, "w")
+        new_py.writelines(replace)
+        new_py.close()
+        
+        # only able to compile to x86 and does not produce an exe compatible with rasberry pi.
+        # 
+        # try:
+        #     create_exe_p = subprocess.Popen(
+        #         f"pyinstaller '{copy_path}' --noconfirm --onefile --windowed",
+        #         shell=True,
+        #         stdout=subprocess.PIPE,
+        #         stderr=subprocess.PIPE
+        #     )
+        #     outs, errs = create_exe_p.communicate(timeout=30)
+        # except subprocess.TimeoutExpired as err:
+        #     create_exe_p.kill()
+
+
     #@jwt_required()
     @blp.arguments(AgentSchema())
     def post(self, agent_data):
         '''
         takes the agent data and creates a new agent for the greenhouse
         '''
-        agent_exists = False
+        
+        agent = AgentModel(**agent_data)
+        room = RoomModel.query.get_or_404(agent_data['room_id'])
+        server = ServerModel.query.get_or_404(agent_data['server_id'], 
+                            description=f"server does not exist")
+
+        if room.agent:
+            abort(400, message=f"room already has an agent, please delete the existing agent to create a new one")
+
+        passcode = rand_string(size=60)
+        hash = pbkdf2_sha256.hash(passcode)
+        agent.private_key = hash
+        
         try:
-            agent = AgentModel(**agent_data)
+            db.session.add(agent)
+            db.session.commit()
+        except IntegrityError as err:
+            abort(400, message=f"resource with unique identifier found in request, please respecify data")
+        except SQLAlchemyError as err:
+            abort(500, message=f"An unhandled server error has occurred -> {err}")
 
-            passcode = rand_string(size=60)
-            hash = pbkdf2_sha256.hash(passcode)
-            agent.private_key = hash
+        new_agent = AgentModel.query.filter(AgentModel.private_key == hash).first()
 
-            room = RoomModel.query.get_or_404(agent_data['room_id'])
-            if room.agent:
-                agent_exists = True
-                abort(400, message=f"room already has an agent, please delete the existing agent to create a new one")
+        self.build_agent(room.id, server.ip_address, passcode, agent_data["duration"])
 
-            server = ServerModel.query.get_or_404(agent_data['server_id'], 
-                                description=f"server does not exist")
-            
-            try:
-                db.session.add(agent)
-                db.session.commit()
-            except IntegrityError as err:
-                abort(400, message=f"resource with unique identifier found in request, please respecify data")
-            except SQLAlchemyError as err:
-                abort(500, message=f"An unhandled server error has occurred -> {err}")
+        return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
+        
+        
 
-            new_agent = AgentModel.query.filter(AgentModel.private_key == hash).first()
-
-            return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
-
-        except werkzeug.exceptions.BadRequest as err:
-            pass
-
-        finally:
-            # Querying all objects associated with creation of agent
-            if not agent_exists:
-                room = RoomModel.query.get_or_404(new_agent.room_id)
-                server = ServerModel.query.get_or_404(new_agent.server_id)
-                
-                print(f"Current directory ---> {dir_path}")
-                # marking location of Agent boiler plate code
-                agent_path = dir_path + "\\Backend\\Agent\\agent.py"
-
-                print(agent_path)
-
-                # copying boiler plate code into resources as a copy and opening the copy
-                shutil.copy(agent_path, f"resources\\agent{room.id}.py")
-                copy = open(f"{dir_path}\\resources\\agent{room.id}.py", "r")
-
-                # patterns to parse through the copy and replace for the creation of the agent
-                patterns = {
-                    "'///room-name///'": room.name,
-                    "'///room-id///'": room.id,
-                    "'///private-key///'": passcode, 
-                    "'///server-ip///'": server.ip_address,
-                    "'///duration///'": int(new_agent.duration.second)
-                }
-                
-                #parsing through each line looking for the patterns above. when found
-                # it will replace with appropriate agent values. 
-                replace = []
-                replaced = False
-                for line in copy:
-                    for pattern in patterns: 
-                        if pattern in line and type(patterns[pattern]) == str:
-                            replace.append(line.replace(pattern, f"'{patterns[pattern]}'"))
-                            replaced = True
-                        elif pattern in line:
-                            replace.append(line.replace(pattern, str(patterns[pattern])))
-                            replaced = True
-                        
-                    if not replaced:
-                        replace.append(line)
-                    else:
-                        replaced = False
-                
-                copy.close()
-                
-                copy = open(f"{dir_path}\\agent{room.id}.py", "w")
-                copy.writelines(replace)
-                copy.close()
-
-                try:
-                    create_exe_p = subprocess.Popen(
-                        f"pyinstaller resources/agent{room.id}.py --noconfirm --onefile --windowed",
-                        shell=False,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE
-                    )
-                    outs, errs = create_exe_p.communicate(timeout=30)
-                except subprocess.TimeoutExpired as err:
-                    create_exe_p.kill()
-
-            else:
-                abort(400, message=f"room already has an agent, please delete the existing agent to create a new one")
-
-
-
+        
     #@jwt_required()
     @blp.response(200, AgentSchema(many=True))
     def get(self):
@@ -199,9 +191,7 @@ class Agent(MethodView):
     #@jwt_required()
     def get(self, agent_id):
         '''
-        performed directly after post method for agent, takes private key
-        from json passed and creates a new agent executable that is unique
-        to the specific room that agent is attached to. 
+        Grabs agent specific executable file. 
 
         The executable will run on the rasberry pi os and collect measurements from
         the senseHAT and associate those measurements with the specific room it was 
@@ -212,10 +202,7 @@ class Agent(MethodView):
         '''
         agent = AgentModel.query.get_or_404(agent_id)
         
-        
-        print(f"Current directory ---> {dir_path}")
-
-        build_path = dir_path + f"/dist/agent{agent.room_id}.exe"
+        build_path = dir_path + f"/resources/agent{agent.room_id}.py"
 
         return send_file(build_path)
 
@@ -224,19 +211,29 @@ class Agent(MethodView):
     #@jwt_required(fresh=True)
     def delete(self, agent_id):
         '''
-        delete an agent by id
+        delete an agent and all build paths associated by id
         '''
-
         agent = AgentModel.query.get_or_404(agent_id)
-
+        
+        paths = [f"{dir_path}/dist/agent{agent.room_id}",
+                 f"{dir_path}/resources/agent{agent.room_id}.py",
+                 f"{dir_path}/agent{agent.room_id}.spec"]
+        
         try:
             db.session.delete(agent)
             db.session.commit()
+
+            for path in paths:
+                os.remove(path)
+
         except SQLAlchemyError as err:
             abort(500, message=f"Unresolved server error: --> {err}")
-
+        except FileNotFoundError as err:
+            print(f"File not found -> {err}")
+            pass
 
         return {"Success":True}, 200
+
 
     @blp.arguments(AgentUpdateSchema())
     def patch(self, agent_data, agent_id):
