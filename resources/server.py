@@ -130,6 +130,7 @@ class Agents(MethodView):
         new_py.close()
         
         # only able to compile to x86 and does not produce an exe compatible with rasberry pi.
+        #   need to image a seperate OS to compile executable needed
         # 
         # try:
         #     create_exe_p = subprocess.Popen(
