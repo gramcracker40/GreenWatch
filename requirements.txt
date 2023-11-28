@@ -11,5 +11,3 @@ requests
 pyinstaller
 psycopg2-binary
 gunicorn
-sense_hat
-spidev

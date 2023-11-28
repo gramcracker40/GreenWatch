@@ -1,3 +1,0 @@
-
-# Below command will auto connect with a pre authenticated user to the VM running Greenwatch
-ssh -i greenwatch_key.pem azureuser@40.112.52.526
