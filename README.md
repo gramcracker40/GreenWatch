@@ -8,8 +8,11 @@
 To provide a way to measure and record environmental data in a greenhouse and
 be able to present that data in a meaningful web application that allows for 
 insightful interpretation of the data. The projects first iteration was to implement
-a web app that takes four primary units of measurement: temperature, humidity, pressure
-and light. Future iterations may 
+a web application that displays four primary units of measurement: temperature, humidity, pressure
+and light. As well as configuring and putting together the rasberry PIs for each individual
+room in the greenhouse, building scripts to send measurement data to the backend server, etc.  
+Future iterations may include controlling function within the opening of shades
+or even changing the temperature of the greenhouse itself.
   
 ## Documentation
 
@@ -30,10 +33,14 @@ package manager. Also, you will want to use git to clone the repo and follow the
 3. cd GreenWatch
 
 if you would like to do it with a virtual environment build it now and activate
-if you have no clue what that means, simply skip to the next step
+  pip install virtualenv
+  virtualenv venv
+  'source ./venv/Scripts/activate'  Windows
+  'source ./venv/bin/activate'      Bash
+  
 
 4. we will now install all packages needed to run the application, run this command  
-pip install -r requirements.txt
+  pip install -r requirements.txt
 
 All packages should be downloaded.   
 5. Next, go to /.flaskenv and open the contents.
