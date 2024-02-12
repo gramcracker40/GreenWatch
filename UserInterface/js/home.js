@@ -33,6 +33,7 @@ export async function renderRoomCards() {
   resetRoomsList();
 
   const rooms = await proxy.getRooms();
+  const agents = await proxy.getAgents();
   // console.log(rooms);
 
   // forEach room, in rooms, create a card and append it to main.
@@ -43,14 +44,28 @@ export async function renderRoomCards() {
       const card = document.createElement('div');
       const card_header = document.createElement('div');
       const card_body = document.createElement('div');    // Needs to containt multiple rows
-      const roomName = document.createElement('h1');
+      const roomName = document.createElement('h2');
       
       card.setAttribute('class', 'room-card');
       card.setAttribute('id', `${room['id']}`)
       card_header.setAttribute('class', 'card-header');
       card_body.setAttribute('class', 'row');
-      roomName.setAttribute('class', 'display-3')
-      roomName.textContent = room["name"];
+      roomName.setAttribute('class', 'display-3');
+      roomName.setAttribute('style', 'color: grey')
+      
+
+      // Get agent 
+      // const agent = await proxy.getAgentByID(room['id'])
+      let agent_ip = " [...]";
+        agents.forEach(agent => {
+          if (room['id'] == agent['room_id'])
+            {
+              agent_ip = ` [${agent['ip_address']}]`
+              roomName.setAttribute('style', 'color: black')
+            }
+        })
+
+      roomName.textContent = room["name"] + agent_ip;
 
       if (room['measurements'].length) {
         // Need a label, value, and row for each

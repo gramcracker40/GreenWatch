@@ -19,6 +19,15 @@ req_headers = {
 
 server_url = f"http://{ServerIP}:5000/rooms/{roomID}/measurement"
 
+# Actions
+last_action_timestamp = ''
+vent_state = 2
+shade_state = 2
+
+# States
+vent_states = ['Open', 'Closed', 'Unknown']
+shade_states = ['Open', 'Closed', 'Unknown']
+
 class MCP:
     def __init__(self, bus = 0, device = 0):
         self.bus, self.device = bus, device
@@ -65,14 +74,40 @@ while True:
                 'light': light,
                 'pressure': pres}
     
-    print(dataSet)
+    # print(dataSet)
 
 
     post_measurement = requests.post(server_url, headers=req_headers, json=dataSet)
 
     # server_data = json.loads(post_measurement.text)
     # sleep(int(server_data["duration"]))
-    sleep(1)
+    sleep(5)
 
-    print(post_measurement)
+    # print(post_measurement)
 
+    # Get data from room
+    get_room = requests.get(f'http://127.0.0.1:5000/rooms/{roomID}')
+    # print(get_room)
+    # print(get_room.json()['actions'])
+
+    actions = get_room.json()['actions']
+
+    # Obtain last action request to room
+    last_action = actions[-1]
+    # print(last_action)
+    if last_action is not None:
+        # Check if last action was already processed by agent
+        if last_action_timestamp != last_action['timestamp']:
+            last_action_timestamp = last_action['timestamp']
+            print(f'[NEW] New action requested at {last_action_timestamp}')
+
+            # Parse new action request
+            vent_state = last_action['vent_state']
+            shade_state = last_action['shade_state']
+
+        else:
+            print(f'Last action requested at {last_action_timestamp}')
+
+
+    # Current physical states
+    print(f'Vent State: {vent_states[vent_state]},\nShade State: {shade_states[shade_state]},\n')

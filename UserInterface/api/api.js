@@ -431,6 +431,38 @@ export class GreenhouseProxy {
 
     // Get all agents on a server
 
+    // Get all agents
+    async getAgents() {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/servers/agents`, options);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
+
+    // Get agent by id
+    async getAgentByID(roomID) {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/servers/agents/${roomID}`, options);
+            if (response.ok) {
+                let data = await response.json();
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // Create an agent on a server
     async createAgent(agentObj) {
         const options = {
