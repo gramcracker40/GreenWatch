@@ -15,7 +15,7 @@ const exportDataBtn = document.getElementById('export-data-btn');
 exportDataBtn.disabled = true;
 
 async function renderMeasurements() {
-  // console.log("Rendering measurements...");
+  console.log("Rendering measurements...");
   
   const startDate = document.getElementById('startDate');
   const endDate = document.getElementById('endDate');
@@ -37,9 +37,10 @@ async function renderMeasurements() {
 
   // Get measurements for roomID stored in session storage
   if (!isDateNull) {
+    console.log('CHART: getting measurementObj from room ' + roomID)
     const measurementsObj = await proxy.getMeasurementByRoom(roomID, dateObj);
     measurements = measurementsObj['data'];
-    // console.log(measurements);
+    console.log(measurements);
 
     if (measurements.length) {
       // Enable export data button
@@ -87,11 +88,11 @@ async function renderMeasurements() {
       });
   
       // Debug Lines
-      // console.log("Temperature:\n" + t_data);
-      // console.log("Humidity:\n" + h_data);
-      // console.log("Pressure:\n" + p_data);
-      // console.log("Light:\n" + l_data);
-      // console.log("Timestamps:\n" + dates);    
+      console.log("Temperature:\n" + t_data);
+      console.log("Humidity:\n" + h_data);
+      console.log("Pressure:\n" + p_data);
+      console.log("Light:\n" + l_data);
+      console.log("Timestamps:\n" + dates);    
   
       switch(parseInt(chartSelector.value)) {
         case 1: 

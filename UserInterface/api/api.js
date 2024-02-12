@@ -224,11 +224,14 @@ export class GreenhouseProxy {
             headers: default_headers,
             body: JSON.stringify(dateObj)
         }
+        console.log('PROXY: Getting measurment by room: room ' + roomID)
 
         try {
-            let response = await fetch(`/rooms/${roomID}/measurement`, options);
+            // let response = await fetch(`/rooms/${roomID}/measurement`, options);
+            let response = await fetch(`/rooms/${roomID}/`, options);
             if (response.ok) {
                 let data = await response.json();
+                console.log(data);
                 return data;
             }
         } catch (error) {
@@ -429,6 +432,25 @@ export class GreenhouseProxy {
     // Get all agents on a server
 
     // Create an agent on a server
+    async createAgent(agentObj) {
+        const options = {
+            method: 'POST',
+            headers: default_headers,
+            body: JSON.stringify(agentObj)
+        }
+
+        try {
+            let response = await fetch(`/servers/agents`, options);
+            if (response.ok) {
+                console.log("Agent Created Successfully");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Download agent by id
+    
 
     // Update an agent by id
 

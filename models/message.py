@@ -12,5 +12,3 @@ class MessageModel(db.Model):
 
     user = db.relationship("UserModel", back_populates="messages")
     room = db.relationship("RoomModel", back_populates="messages")
-
-

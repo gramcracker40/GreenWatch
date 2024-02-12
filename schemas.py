@@ -34,6 +34,9 @@ class PlainRoomSchema(Schema):
 class PlainMeasurementSchema(Schema):
     room_id = fields.Int(dump_only=True)
 
+class PlainActionSchema(Schema):
+    room_id = fields.Int(dump_only=True)
+
 
 class PlainAgentSchema(Schema):
     id = fields.Int(dump_only=True, unique=True)
@@ -78,6 +81,10 @@ class MeasurementSchema(PlainMeasurementSchema):
     pressure = fields.Float(required=True)
     timestamp = fields.DateTime(dump_only=True)
 
+class ActionSchema(PlainActionSchema):
+    vent_state = fields.Int(required=True)
+    shade_state = fields.Int(required=True)
+    timestamp = fields.DateTime(dump_only=True)
 
 class MessageSchema(PlainMessageSchema):
     body = fields.String(required=True)
@@ -95,7 +102,7 @@ class RoomSchema(PlainRoomSchema):
     experiments = fields.List(fields.Nested(PlainExperimentSchema), dump_only=True)
     measurements = fields.List(fields.Nested(MeasurementSchema()), dump_only=True)
     messages = fields.List(fields.Nested(MessageSchema()), dump_only=True)
-
+    actions = fields.List(fields.Nested(ActionSchema()), dump_only=True)
 
 class AgentSchema(PlainAgentSchema):
     duration = fields.Time(required=True)

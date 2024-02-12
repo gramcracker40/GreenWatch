@@ -107,6 +107,48 @@ export async function renderRoomCards() {
 
         card_body.append(emptyMeasurementsText);
       }
+
+      if (room['actions'].length) {
+        // Need a label, value, and row for each
+        const vent_row = document.createElement('div');
+        const vent_label = document.createElement('p');
+        const vent_value = document.createElement('p');
+        const shade_row = document.createElement('div');
+        const shade_label = document.createElement('p');
+        const shade_value = document.createElement('p');
+        
+
+        vent_row.setAttribute('class', 'd-flex justify-content-between');
+        vent_label.setAttribute('class', 'h2');
+        vent_label.setAttribute('style', 'color: red');
+        vent_label.textContent = "Vent State:";
+        vent_value.setAttribute('class', 'h2');
+        vent_value.setAttribute('style', 'color: red');
+        vent_value.textContent = `${room['actions'][room['actions'].length-1]['vent_state']}`;
+        shade_row.setAttribute('class', 'd-flex justify-content-between');
+        shade_label.setAttribute('class', 'h2');
+        shade_label.setAttribute('style', 'color: red');
+        shade_label.textContent = "Shade State:";
+        shade_value.setAttribute('class', 'h2');
+        shade_value.setAttribute('style', 'color: red');
+        shade_value.textContent = `${room['actions'][room['actions'].length-1]['shade_state']}`;
+        
+
+        vent_row.append(vent_label);
+        vent_row.append(vent_value);
+        shade_row.append(shade_label);
+        shade_row.append(shade_value);
+      
+        card_body.append(vent_row);
+        card_body.append(shade_row);
+      
+      }else{
+        const emptyActionsText = document.createElement('div');
+        emptyActionsText.textContent = "No Actions Available";
+        emptyActionsText.setAttribute('style', 'color: grey');
+
+        card_body.append(emptyActionsText);
+      }
   
       
       card_header.append(roomName);

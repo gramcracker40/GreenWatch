@@ -5,10 +5,10 @@ from time import sleep
 from sense_hat import SenseHat
 from spidev import SpiDev
 
-roomID = 1
+roomID = 2
 ServerIP='192.168.0.2'
 duration = 23
-private_key = 'S5TAKIYL49N7C9BJCNY3VFVC67AHELUXNBCFLPCVGT9AR9HIQVOE1VU5HXCK'
+private_key = 'M9BLR7KE1KYHEJTSTRR7LS7CY7FST9UAFDQGH0ULN67VNX5VUJDZ6K9533R4'
 
 req_headers = {
     "Key": private_key

@@ -14,3 +14,4 @@ class RoomModel(db.Model):
     messages = db.relationship("MessageModel", back_populates="room", lazy=True, cascade="all, delete")
     agent = db.relationship("AgentModel", back_populates="room", lazy=True, cascade="all, delete")
     greenhouse = db.relationship("GreenhouseModel", back_populates="rooms")
+    actions = db.relationship("ActionModel", back_populates="room", lazy=True, cascade="all, delete")

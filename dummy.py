@@ -2,12 +2,15 @@
 import requests
 import json
 from time import sleep
-from sense_hat import SenseHat
-from spidev import SpiDev
+# from sense_hat import SenseHat
+# from spidev import SpiDev
+import random
 
 roomID = 1
-ServerIP='192.168.0.2'
+# ServerIP='192.168.0.2'
+ServerIP='127.0.0.1'
 duration = 23
+# private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
 private_key = 'S5TAKIYL49N7C9BJCNY3VFVC67AHELUXNBCFLPCVGT9AR9HIQVOE1VU5HXCK'
 
 req_headers = {
@@ -36,29 +39,40 @@ class MCP:
 
 
 #initializing sensors
-sense = SenseHat()
-adc = MCP()
+# sense = SenseHat()p
 
 
 while True:
     #Temperature
-    temp = round(sense.get_temperature(), 2)
+    # temp = round(sense.get_temperature(), 2)
+    temp = round(random.random() * 50 + 50)
+
     #Humidity
-    hum = round(sense.get_humidity(), 2)
+    # hum = round(sense.get_humidity(), 2)
+    hum = round(random.random() * 50 + 50)
+
     #Light
-    light = adc.read(channel = 0)
+    # light = adc.read(channel = 0)
+    light= round(random.random() * 50 + 50)
+
     #AirPressure
-    pres = round(sense.get_pressure(), 2)
+    # pres = round(sense.get_pressure(), 2)
+    pres = round(random.random() * 50 + 50)
 
     #Dataset
     dataSet = {'temperature': temp,
                 'humidity': hum,
                 'light': light,
                 'pressure': pres}
+    
+    print(dataSet)
 
 
     post_measurement = requests.post(server_url, headers=req_headers, json=dataSet)
 
-    server_data = json.loads(post_measurement.text)
-    sleep(int(server_data["duration"]))
+    # server_data = json.loads(post_measurement.text)
+    # sleep(int(server_data["duration"]))
+    sleep(1)
+
+    print(post_measurement)
 

@@ -1,8 +1,8 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import RoomSchema, RoomUpdateSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema
-from models import RoomModel, MeasurementModel, MessageModel, UserModel, AgentModel
+from schemas import RoomSchema, RoomUpdateSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema, ActionSchema
+from models import RoomModel, MeasurementModel, MessageModel, UserModel, AgentModel, ActionModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from db import db
@@ -147,31 +147,82 @@ class Measurement(MethodView):
 
         return {"message": "Successfully added new measurement", "duration": agent.duration.second}, 201
     
-    #@jwt_required()
-    @blp.arguments(DateRangeSchema)
-    def put(self, dates, room_id):
+@blp.route("/rooms/<int:room_id>/action")
+class Action(MethodView):
+    
+    @blp.arguments(ActionSchema)
+    def post(self, action_data, room_id):
         '''
-        Given a start and end date, this method will return all 
-        Measurements within a Room in that given period. 
+        Take an action in a room - Only agents created in the dashboard can 
+        tak actions in the room they were created for originally. 
+        Anything else will be rejected.
         '''
         room = RoomModel.query.get_or_404(room_id)
+        agent = AgentModel.query.filter(AgentModel.room_id == room.id).first()
 
-        valid = []
-        for measurement in room.measurements:
-
-            _date = date.fromisoformat(str(measurement.timestamp).split()[0])
-
-            if _date >= dates["start_date"] and _date <= dates["end_date"]:
-                valid.append({
-                    "temperature": measurement.temperature,
-                    "humidity": measurement.humidity,
-                    "light": measurement.light,
-                    "pressure": measurement.pressure, 
-                    "timestamp": measurement.timestamp
-                })
+        if agent is None:
+            abort(404, message="Agent not found for room", error="agent_does_not_exist", fix=f"add an agent to {room.name}")
 
 
-        return {"Success": True, "data": valid}, 200
+        # key = request.headers.get("Key")
+        # same = pbkdf2_sha256.verify(key, agent.private_key)
+
+        ExperimentCheck()
+
+        # measurement = MeasurementModel(**measurement_data)
+        # measurement.timestamp = datetime.now()
+        # measurement.room_id = room_id
+
+        # active_experiments = [experiment for experiment in room.experiments
+        #                     if experiment.active]
+
+        # if active_experiments:
+        #     active_experiments[0].measurements.append(measurement)
+        
+        action = ActionModel(**action_data)
+        action.timestamp = datetime.now()
+        action.room_id = room_id
+        
+
+        room.actions.append(action)
+
+        try:
+            db.session.add(action)
+            db.session.commit()
+
+        except SQLAlchemyError as err:
+            abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
+
+        
+
+
+        return {"message": "Successfully added new action - ", "duration": agent.duration.second}, 201
+    
+    # #@jwt_required()
+    # @blp.arguments(DateRangeSchema)
+    # def put(self, dates, room_id):
+    #     '''
+    #     Given a start and end date, this method will return all 
+    #     Measurements within a Room in that given period. 
+    #     '''
+    #     room = RoomModel.query.get_or_404(room_id)
+
+    #     valid = []
+    #     for measurement in room.measurements:
+
+    #         _date = date.fromisoformat(str(measurement.timestamp).split()[0])
+
+    #         if _date >= dates["start_date"] and _date <= dates["end_date"]:
+    #             valid.append({
+    #                 "temperature": measurement.temperature,
+    #                 "humidity": measurement.humidity,
+    #                 "light": measurement.light,
+    #                 "pressure": measurement.pressure, 
+    #                 "timestamp": measurement.timestamp
+    #             })
+
+
+    #     return {"Success": True, "data": valid}, 200
 
 @blp.route("/rooms/messages")
 class Messages(MethodView):

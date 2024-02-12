@@ -7,6 +7,7 @@ from models.experiment_users import ExperimentUsersModel
 from models.agent import AgentModel
 from models.greenhouse import GreenhouseModel
 from models.server import ServerModel
+from models.action import ActionModel
 
 # All SQL database tables created are listed above as the extension of models.table
 
