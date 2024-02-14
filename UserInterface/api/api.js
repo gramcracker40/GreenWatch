@@ -474,7 +474,7 @@ export class GreenhouseProxy {
         try {
             let response = await fetch(`/servers/agents`, options);
             if (response.ok) {
-                console.log("Agent Created Successfully");
+                console.log("[API] Agent Created Successfully");
             }
         } catch (error) {
             console.log(error);
@@ -487,4 +487,82 @@ export class GreenhouseProxy {
     // Update an agent by id
 
     // Delete an agent by id
+
+    // ------------------ACTIONS------------------
+    // Get all actions by roomID
+    async getActionByRoomID(roomID) {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/rooms/${roomID}`, options);
+            if (response.ok) {
+                let data = await response.json();
+                return data['actions'];
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Get last action by roomID
+    async getLastActionByRoomID(roomID) {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/rooms/${roomID}`, options);
+            if (response.ok) {
+                let data = await response.json();
+                console.log(data['actions'])
+                console.log((data['actions']).length)
+                return data['actions'][(data['actions']).length - 1];
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Create a new action by room
+    async createAction(roomID, actionObj) {
+        const options = {
+            method: 'POST',
+            headers: default_headers,
+            body: JSON.stringify(actionObj)
+        }
+
+        try {
+            let response = await fetch(`/rooms/${roomID}/action`, options);
+            if (response.ok) {
+                console.log(`Action Created Successfully for Room ${roomID}`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async createRoomMessage(roomID, userID, message) {
+        const _body = {
+            "user_id": userID,
+            "body": message
+        }
+
+        const options = {
+            method: 'POST',
+            headers: default_headers,
+            body: JSON.stringify(_body)
+        }
+
+        try {
+            let response = await fetch(`/rooms/${roomID}/messages`, options);
+            if (response.ok && debugMode) {
+                console.log("Messages Created Successfully");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 }

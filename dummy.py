@@ -2,9 +2,11 @@
 import requests
 import json
 from time import sleep
+import datetime
 # from sense_hat import SenseHat
 # from spidev import SpiDev
 import random
+import socket
 
 roomID = 1
 # ServerIP='192.168.0.2'
@@ -46,68 +48,84 @@ class MCP:
     def close(self):
         self.spi.close()
 
+def get_Host_name_IP():
+    try:
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        print("Hostname :  ", host_name)
+        print("IP : ", host_ip)
+    except:
+        print("Unable to get Hostname and IP")
 
-#initializing sensors
-# sense = SenseHat()p
-
-
-while True:
-    #Temperature
-    # temp = round(sense.get_temperature(), 2)
-    temp = round(random.random() * 50 + 50)
-
-    #Humidity
-    # hum = round(sense.get_humidity(), 2)
-    hum = round(random.random() * 50 + 50)
-
-    #Light
-    # light = adc.read(channel = 0)
-    light= round(random.random() * 50 + 50)
-
-    #AirPressure
-    # pres = round(sense.get_pressure(), 2)
-    pres = round(random.random() * 50 + 50)
-
-    #Dataset
-    dataSet = {'temperature': temp,
-                'humidity': hum,
-                'light': light,
-                'pressure': pres}
-    
-    # print(dataSet)
+    return [host_name, host_ip]
 
 
-    post_measurement = requests.post(server_url, headers=req_headers, json=dataSet)
+if __name__ == "__main__":
 
-    # server_data = json.loads(post_measurement.text)
-    # sleep(int(server_data["duration"]))
-    sleep(5)
+    #initializing sensors
+    # sense = SenseHat()
 
-    # print(post_measurement)
+    host_name, host_IP = get_Host_name_IP()
 
-    # Get data from room
-    get_room = requests.get(f'http://127.0.0.1:5000/rooms/{roomID}')
-    # print(get_room)
-    # print(get_room.json()['actions'])
+    while True:
+        #Temperature
+        # temp = round(sense.get_temperature(), 2)
+        temp = round(random.random() * 50 + 50)
 
-    actions = get_room.json()['actions']
+        #Humidity
+        # hum = round(sense.get_humidity(), 2)
+        hum = round(random.random() * 50 + 50)
 
-    # Obtain last action request to room
-    last_action = actions[-1]
-    # print(last_action)
-    if last_action is not None:
-        # Check if last action was already processed by agent
-        if last_action_timestamp != last_action['timestamp']:
-            last_action_timestamp = last_action['timestamp']
-            print(f'[NEW] New action requested at {last_action_timestamp}')
+        #Light
+        # light = adc.read(channel = 0)
+        light= round(random.random() * 50 + 50)
 
-            # Parse new action request
-            vent_state = last_action['vent_state']
-            shade_state = last_action['shade_state']
+        #AirPressure
+        # pres = round(sense.get_pressure(), 2)
+        pres = round(random.random() * 50 + 50)
 
-        else:
-            print(f'Last action requested at {last_action_timestamp}')
+        #Dataset
+        dataSet = {'temperature': temp,
+                    'humidity': hum,
+                    'light': light,
+                    'pressure': pres}
+        
+        # print(dataSet)
 
 
-    # Current physical states
-    print(f'Vent State: {vent_states[vent_state]},\nShade State: {shade_states[shade_state]},\n')
+        post_measurement = requests.post(server_url, headers=req_headers, json=dataSet)
+
+        # server_data = json.loads(post_measurement.text)
+        # sleep(int(server_data["duration"]))
+        sleep(5)
+
+        # print(post_measurement)
+
+        # Get data from room
+        get_room = requests.get(f'http://127.0.0.1:5000/rooms/{roomID}')
+        # print(get_room)
+        # print(get_room.json()['actions'])
+
+        actions = get_room.json()['actions']
+
+        # Obtain last action request to room
+        last_action = actions[-1]
+        # print(last_action)
+        if last_action is not None:
+            # Check if last action was already processed by agent
+            if last_action_timestamp != last_action['timestamp']:
+                last_action_timestamp = last_action['timestamp']
+                print(f'[{datetime.datetime.now()}][NEW] New action requested at {last_action_timestamp}')
+
+                # Parse new action request
+                if last_action['vent_state'] is not None:
+                    vent_state = last_action['vent_state']
+                if last_action['shade_state'] is not None:
+                    shade_state = last_action['shade_state']
+
+            else:
+                print(f'[{datetime.datetime.now()}] Last action requested at {last_action_timestamp}')
+
+
+        # Current physical states
+        print(f'Vent State: {vent_states[vent_state]},\nShade State: {shade_states[shade_state]},\n')

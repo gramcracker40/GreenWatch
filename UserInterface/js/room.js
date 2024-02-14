@@ -13,7 +13,22 @@ async function setRoomName() {
   const roomName = room['name'];
   const roomNameText = document.getElementById('room-name-text');
 
-  roomNameText.textContent = roomName;
+  roomNameText.setAttribute('style', 'color: grey');
+
+  // Get agent 
+  // const agent = await proxy.getAgentByID(room['id'])
+  const agents = await proxy.getAgents();
+  let agent_ip = " [...]";
+    agents.forEach(agent => {
+      if (roomID == agent['room_id'])
+        {
+          agent_ip = ` [${agent['ip_address']}]`;
+          roomNameText.setAttribute('style', 'color: black');
+        }
+    })
+
+  roomNameText.textContent = roomName + agent_ip;
+
 }
 
 setRoomName();
@@ -23,15 +38,17 @@ logoutLink.addEventListener('click', Utils.logout);
 
 async function createAgent() {
   console.log("Creating new agent for room: " + roomID)
-  const message = "[LOG] Created new agent for room: " + roomID
+  const message = "[LOG] Creating new agent for room: " + roomID
 
   // Get user ID from access_token
   const jwt = Utils.getJwt();
   const userID = jwt['user_id'];
 
   const agentObj = getCreateAgentObject();
+  // Create agent in database
   await proxy.createAgent(agentObj);
 
+  // Post message in notes
   await proxy.createRoomMessage(roomID, userID, message);
   console.log("[SUCCESS] Created new agent for room: " + roomID)
 
@@ -39,7 +56,6 @@ async function createAgent() {
 
 }
 
-// Returns the values of each input tag for create room as an object
 function getCreateAgentObject() {
 
   const agent = {

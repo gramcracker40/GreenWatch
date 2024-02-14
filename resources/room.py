@@ -193,9 +193,6 @@ class Action(MethodView):
         except SQLAlchemyError as err:
             abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
 
-        
-
-
         return {"message": "Successfully added new action - ", "duration": agent.duration.second}, 201
     
     # #@jwt_required()
