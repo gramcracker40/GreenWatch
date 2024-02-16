@@ -6,7 +6,13 @@ class ActionModel(db.Model):
     #attributes
     id = db.Column(db.Integer, unique=True, primary_key=True)
 
+    # status: 0 - Unfulfilled, 1 - Queued, 2 - In Progress, 3 - Fulfilled, -1 - Failed
+    status = db.Column(db.Integer, nullable=True)
+
+    # vent_state: 0 - Open, 1 - Closed, 2 - Moving, 3 - Unknown
     vent_state = db.Column(db.Integer, nullable=True)
+
+    # shade_state: 0 - Open, 1 - Closed, 2 - Moving, 3 - Unknown
     shade_state = db.Column(db.Integer, nullable=True)
     
     timestamp = db.Column(db.DateTime, nullable=True)

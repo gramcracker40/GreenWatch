@@ -35,7 +35,9 @@ class PlainMeasurementSchema(Schema):
     room_id = fields.Int(dump_only=True)
 
 class PlainActionSchema(Schema):
+    id = fields.Int(dump_only=True, unique=True)
     room_id = fields.Int(dump_only=True)
+    status = fields.Int(required=True)
 
 
 class PlainAgentSchema(Schema):
@@ -97,6 +99,10 @@ class MessageUpdateSchema(Schema):
 
 class RoomUpdateSchema(Schema):
     name = fields.Str()
+
+class ActionUpdateSchema(Schema):
+    id = fields.Int(required=True)
+    status = fields.Int()
 
 class RoomSchema(PlainRoomSchema):
     experiments = fields.List(fields.Nested(PlainExperimentSchema), dump_only=True)

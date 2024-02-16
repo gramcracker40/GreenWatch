@@ -35,8 +35,8 @@ export async function renderRoomCards() {
   const rooms = await proxy.getRooms();
   const agents = await proxy.getAgents();
 
-  const vent_states = ['Open', 'Closed', 'Unknown']
-  const shade_states = ['Open', 'Closed', 'Unknown']
+  const vent_states = ['Open', 'Closed', 'Pending']
+  const shade_states = ['Open', 'Closed', 'Pending']
   // console.log(rooms);
 
   // forEach room, in rooms, create a card and append it to main.
@@ -138,28 +138,41 @@ export async function renderRoomCards() {
 
         vent_row.setAttribute('class', 'd-flex justify-content-between');
         vent_label.setAttribute('class', 'h2');
-        vent_label.setAttribute('style', 'color: red');
+        // vent_label.setAttribute('style', 'color: red');
         vent_label.textContent = "Vent State:";
         vent_value.setAttribute('class', 'h2');
-        vent_value.setAttribute('style', 'color: red');
+        vent_value.setAttribute('style', 'color: green');
 
-        if (room['actions'][room['actions'].length-1]['vent_state'] != null){
-          vent_value.textContent = vent_states[`${room['actions'][room['actions'].length-1]['vent_state']}`];
-        }
         
         shade_row.setAttribute('class', 'd-flex justify-content-between');
         shade_label.setAttribute('class', 'h2');
-        shade_label.setAttribute('style', 'color: red');
+        // shade_label.setAttribute('style', 'color: red');
         shade_label.textContent = "Shade State:";
         shade_value.setAttribute('class', 'h2');
-        shade_value.setAttribute('style', 'color: red');
-        
-        if (room['actions'][room['actions'].length-1]['shade_state'] != null)
-        {
-          shade_value.textContent = shade_states[`${room['actions'][room['actions'].length-1]['shade_state']}`];
-        }
+        shade_value.setAttribute('style', 'color: green');
         
 
+        console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
+        if (room['actions'][room['actions'].length-1]['status'] == 3)
+        {
+          if (room['actions'][room['actions'].length-1]['shade_state'] != null)
+          {
+            shade_value.textContent = shade_states[`${room['actions'][room['actions'].length-1]['shade_state']}`];
+          }
+
+          if (room['actions'][room['actions'].length-1]['vent_state'] != null){
+            vent_value.textContent = vent_states[`${room['actions'][room['actions'].length-1]['vent_state']}`];
+          }
+        }
+        else{
+          shade_value.textContent = "Pending";
+          shade_value.setAttribute('style', 'color: red');
+          
+          vent_value.textContent = "Pending";
+          vent_value.setAttribute('style', 'color: red');
+          };
+        
+        
         vent_row.append(vent_label);
         vent_row.append(vent_value);
         shade_row.append(shade_label);
@@ -197,6 +210,7 @@ export async function renderRoomCards() {
 
         // Create action object
         const actionObj = getCreateActionObject(
+          0,
           ((lastAction['vent_state'] * -1) + 1),
           (lastAction['shade_state']
           )
@@ -215,8 +229,12 @@ export async function renderRoomCards() {
         console.log("[SUCCESS] Created new action for room: " + roomID);
         
         // Refresh the current page
-        location.reload();
-        console.log("[TEST] Reloading Page...");
+        // location.reload();
+        // console.log("[TEST] Reloading Page...");
+        
+        // Refresh cards
+        renderRoomCards();
+        console.log("[TEST] Reloading Cards...");
         });
 
       shade_button.textContent = "Toggle Shade";
@@ -234,6 +252,7 @@ export async function renderRoomCards() {
 
         // Create action object
         const actionObj = getCreateActionObject(
+          0,
           lastAction['vent_state'],
           ((lastAction['shade_state'] * -1) + 1)
           )
@@ -251,8 +270,13 @@ export async function renderRoomCards() {
         console.log("[SUCCESS] Created new action for room: " + roomID)
         
         // Refresh the current page
-        location.reload();
-        console.log("[TEST] Reloading Page...");
+        // location.reload();
+        // console.log("[TEST] Reloading Page...");
+        
+        // Refresh cards
+        renderRoomCards();
+        console.log("[TEST] Reloading Cards...");
+
         });    
         
       button_row.append(vent_button);
@@ -307,9 +331,10 @@ function renderNewRoomCard() {
   main.append(card);
 }
 
-function getCreateActionObject(vent_state, shade_state) {
+function getCreateActionObject(status, vent_state, shade_state) {
 
   const action = {
+      "status": status,
       "vent_state": vent_state,
       "shade_state": shade_state
   };
@@ -318,4 +343,7 @@ function getCreateActionObject(vent_state, shade_state) {
 }
 
 renderRoomCards();
-// renderNewRoomCard();
+
+// Start the interval
+let intervalId = setInterval(renderRoomCards, 3000);
+renderNewRoomCard();

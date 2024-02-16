@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import RoomSchema, RoomUpdateSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema, ActionSchema
+from schemas import RoomSchema, RoomUpdateSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema, ActionSchema, ActionUpdateSchema
 from models import RoomModel, MeasurementModel, MessageModel, UserModel, AgentModel, ActionModel
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
@@ -182,6 +182,7 @@ class Action(MethodView):
         action = ActionModel(**action_data)
         action.timestamp = datetime.now()
         action.room_id = room_id
+        action.status = action_data['status']
         
 
         room.actions.append(action)
@@ -194,6 +195,7 @@ class Action(MethodView):
             abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
 
         return {"message": "Successfully added new action - ", "duration": agent.duration.second}, 201
+    
     
     # #@jwt_required()
     # @blp.arguments(DateRangeSchema)
@@ -218,7 +220,23 @@ class Action(MethodView):
     #                 "timestamp": measurement.timestamp
     #             })
 
+    #@jwt_required()
+    @blp.arguments(ActionUpdateSchema)
+    def patch(self, action_data, room_id):
+        '''
+        Update an Action
+        '''
+        action = ActionModel.query.get_or_404(action_data['id'])
 
+        if not action_data:
+            abort(400, message="No data was provided")
+
+        for key, value in action_data.items():
+            setattr(action, key, value)
+
+        db.session.commit()
+
+        return {"Success": True}, 201
     #     return {"Success": True, "data": valid}, 200
 
 @blp.route("/rooms/messages")
