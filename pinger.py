@@ -1,3 +1,7 @@
+"""
+Trying out pinging of ipv4 addresses using Python
+"""
+
 import os
 from pythonping import ping
 
