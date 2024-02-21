@@ -1,7 +1,6 @@
 {
     "states": {
-        "vent_state": 0,
-        "shade_state": 0    
+        "vent_state": 1,
+        "shade_state": 0
     }
-    
 }

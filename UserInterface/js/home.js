@@ -89,21 +89,25 @@ export async function renderRoomCards() {
         t_label.setAttribute('class', 'h1');
         t_label.textContent = "Temperature:";
         t_value.setAttribute('class', 'h1');
+        t_value.setAttribute('id', `t_value${room['id']}`)
         t_value.textContent = `${room['measurements'][room['measurements'].length-1]['temperature']}`;
         h_row.setAttribute('class', 'd-flex justify-content-between');
         h_label.setAttribute('class', 'h1');
         h_label.textContent = "Humidity:";
         h_value.setAttribute('class', 'h1');
+        h_value.setAttribute('id', `h_value${room['id']}`)
         h_value.textContent = `${room['measurements'][room['measurements'].length-1]['humidity']}`;
         p_row.setAttribute('class', 'd-flex justify-content-between');
         p_label.setAttribute('class', 'h1');
         p_label.textContent = "Pressure:";
         p_value.setAttribute('class', 'h1');
+        p_value.setAttribute('id', `p_value${room['id']}`)
         p_value.textContent = `${room['measurements'][room['measurements'].length-1]['pressure']}`;
         l_label.setAttribute('class', 'h1');
         l_label.textContent = "Light:";
         l_row.setAttribute('class', 'd-flex justify-content-between');
         l_value.setAttribute('class', 'h1');
+        l_value.setAttribute('id', `l_value${room['id']}`)
         l_value.textContent = `${room['measurements'][room['measurements'].length-1]['light']}`;
 
         t_row.append(t_label);
@@ -142,6 +146,7 @@ export async function renderRoomCards() {
         vent_label.textContent = "Vent State:";
         vent_value.setAttribute('class', 'h2');
         vent_value.setAttribute('style', 'color: green');
+        vent_value.setAttribute('id',`vent_value${room['id']}`)
 
         
         shade_row.setAttribute('class', 'd-flex justify-content-between');
@@ -150,6 +155,7 @@ export async function renderRoomCards() {
         shade_label.textContent = "Shade State:";
         shade_value.setAttribute('class', 'h2');
         shade_value.setAttribute('style', 'color: green');
+        shade_value.setAttribute('id', `shade_value${room['id']}`)
         
 
         console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
@@ -196,9 +202,19 @@ export async function renderRoomCards() {
       const vent_button = document.createElement('button');
       const shade_button = document.createElement('button');
 
+      vent_button.setAttribute('id', `vent_button${room['id']}`);
+      shade_button.setAttribute('id', `shade_button${room['id']}`);
+
       vent_button.textContent = "Toggle Vent";
       // Add an event listener for the click event to refresh the page
       vent_button.addEventListener('click', async function(event) {
+        // Disable button until action fulfilled
+        vent_button.disabled = true;
+        vent_button.innerText = "Vent Toggle Pending...";
+        shade_button.disabled = true;
+        shade_button.innerText = "Disabled";
+        
+
         // Prevent the event from propagating to the card
         event.stopPropagation();
         
@@ -233,13 +249,20 @@ export async function renderRoomCards() {
         // console.log("[TEST] Reloading Page...");
         
         // Refresh cards
-        renderRoomCards();
+        // renderRoomCards();
+        renderRoomValues();
         console.log("[TEST] Reloading Cards...");
         });
 
       shade_button.textContent = "Toggle Shade";
       // Add an event listener for the click event to refresh the page
       shade_button.addEventListener('click', async function(event) {
+
+        // Disable button until action fulfilled
+        shade_button.disabled = true;
+        shade_button.innerText = "Shade Toggle Pending..."
+        vent_button.disabled = true;
+        vent_button.innerText = "Disabled";
 
         // Prevent the event from propagating to the card
         event.stopPropagation();
@@ -274,7 +297,7 @@ export async function renderRoomCards() {
         // console.log("[TEST] Reloading Page...");
         
         // Refresh cards
-        renderRoomCards();
+        renderRoomValues();
         console.log("[TEST] Reloading Cards...");
 
         });    
@@ -303,6 +326,108 @@ export async function renderRoomCards() {
   }
 
   // displayNewRoomCard(main);
+}
+
+export async function renderRoomValues() {
+  // resetRoomsList();
+
+  const rooms = await proxy.getRooms();
+  const agents = await proxy.getAgents();
+
+  const agent_response = await proxy.pingAgentByID(1); // TESTING: just for first agent
+  const agent_status = agent_response['success'];
+  console.log(`Agent 1 ping status: ${agent_status}`);
+  // console.log(rooms[0])
+  // if (rooms.length){
+  //   agent_status = await proxy.pingAgentByID(1)['success']
+  //   console.log(`Agent 1 ping status: ${agent_status}`)
+  // }
+
+  const vent_states = ['Open', 'Closed', 'Pending']
+  const shade_states = ['Open', 'Closed', 'Pending']
+  // console.log(rooms);
+
+  // forEach room, in rooms, create a card and append it to main.
+  // Also set the information for the card.
+
+  if (rooms.length) {
+    rooms.forEach(room => {
+      const room_card = document.getElementById(`${room['id']}`)
+      const roomName = room_card.getElementsByClassName('display-3')[0]
+
+      // Get agent 
+      // const agent = await proxy.getAgentByID(room['id'])
+      let agent_ip = " [...]";
+        agents.forEach(agent => {
+          if (room['id'] == agent['room_id'])
+            {
+              agent_ip = ` [${agent['ip_address']}]`
+              roomName.setAttribute('style', 'color: black')
+            }
+        })
+
+      roomName.textContent = room["name"] + agent_ip;
+
+      if (agent_status == 0){
+        roomName.setAttribute('style', 'color: grey')
+      }
+
+
+      if (room['measurements'].length) {
+        // Need a label, value, and row for each
+
+        const t_value = document.getElementById(`t_value${room['id']}`)
+        const h_value = document.getElementById(`h_value${room['id']}`)
+        const p_value = document.getElementById(`p_value${room['id']}`)
+        const l_value = document.getElementById(`l_value${room['id']}`)
+
+        t_value.textContent = `${room['measurements'][room['measurements'].length-1]['temperature']}`;
+        h_value.textContent = `${room['measurements'][room['measurements'].length-1]['humidity']}`;
+        p_value.textContent = `${room['measurements'][room['measurements'].length-1]['pressure']}`;
+        l_value.textContent = `${room['measurements'][room['measurements'].length-1]['light']}`;
+      }
+
+      if (room['actions'].length) {
+        // Need a label, value, and row for each
+        const vent_value = document.getElementById(`vent_value${room['id']}`)
+        const shade_value = document.getElementById(`shade_value${room['id']}`);
+        const vent_button = document.getElementById(`vent_button${room['id']}`);
+        const shade_button= document.getElementById(`shade_button${room['id']}`);
+
+        vent_value.setAttribute('style', 'color: green');
+        shade_value.setAttribute('style', 'color: green');
+        
+        // console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
+        if (room['actions'][room['actions'].length-1]['status'] == 3)
+        {
+          // if (room['actions'][room['actions'].length-1]['shade_state'] != null)
+          // {
+            shade_value.textContent = shade_states[`${room['actions'][room['actions'].length-1]['shade_state']}`];
+            shade_button.disabled = false;
+            shade_button.textContent = "Toggle Shade"
+          // }
+
+          // if (room['actions'][room['actions'].length-1]['vent_state'] != null){
+            vent_value.textContent = vent_states[`${room['actions'][room['actions'].length-1]['vent_state']}`];
+            vent_button.disabled = false;
+            vent_button.textContent = "Toggle Vent"
+          // }
+        }
+        else{
+          shade_value.textContent = "Pending";
+          shade_value.setAttribute('style', 'color: red');
+          vent_button.disabled = true;
+          vent_button.textContent = "Disabled"
+          
+          
+          vent_value.textContent = "Pending";
+          vent_value.setAttribute('style', 'color: red');
+          vent_button.disabled = true;
+          vent_button.textContent = "Disabled"
+          }; 
+      }
+    });
+  }
 }
 
 function renderNewRoomCard() {
@@ -345,5 +470,5 @@ function getCreateActionObject(status, vent_state, shade_state) {
 renderRoomCards();
 
 // Start the interval
-let intervalId = setInterval(renderRoomCards, 3000);
-renderNewRoomCard();
+let intervalId = setInterval(renderRoomValues, 10000);
+// renderNewRoomCard();

@@ -488,6 +488,25 @@ export class GreenhouseProxy {
 
     // Delete an agent by id
 
+    // Ping agent by id
+    async pingAgentByID(roomID) {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/servers/agents/${roomID}/ping`, options);
+            if (response.ok) {
+                let data = await response.json();
+                // console.log(data)
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+
     // ------------------ACTIONS------------------
     // Get all actions by roomID
     async getActionByRoomID(roomID) {

@@ -15,6 +15,7 @@ import shutil
 import re
 import subprocess
 import werkzeug
+from pythonping import ping
 
 blp = Blueprint("server", "server", description="Operations on servers")
 dir_path = os.path.dirname(os.path.dirname(__file__))
@@ -249,3 +250,28 @@ class Agent(MethodView):
         db.session.commit()
 
         return {"Success": True}, 201
+    
+@blp.route("/servers/agents/<int:agent_id>/ping")
+class Agent(MethodView):
+
+    #@jwt_required()
+    def get(self, agent_id):
+        '''
+        Pings an agent to return its status
+        
+        '''
+        agent = AgentModel.query.get_or_404(agent_id)
+        ip = agent.ip_address # to be updated, refers to server ip but should refer to agent ip
+
+        response = ping(ip, timeout = 0.5)
+        responseStr = str(list(response)[0])
+
+        if "Reply from" in responseStr:
+            print(f"{ip} Ping Successful, Host is UP!")
+            success = 1
+        else:
+            print(f"{ip} Ping Unsuccessful, Host is DOWN.")
+            success = 0
+
+        return {"success": success,
+                "response": responseStr }, 201

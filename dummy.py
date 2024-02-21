@@ -9,8 +9,8 @@ import random
 import socket
 
 roomID = 1
-# ServerIP='192.168.0.2'
-ServerIP='127.0.0.1'
+ServerIP='138.197.101.211'
+# ServerIP='127.0.0.1'
 duration = 23
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
 private_key = 'CP6WSHXDF4NWAJH42JLEC2WUXTF81S4Z57AGMXSYO7WREVU2MTA6RQH03QJ0'
@@ -104,6 +104,18 @@ def post_current_states():
     post_action = requests.post(action_url, headers=req_headers, json=action_json)
     print(post_action)
 
+def update_current_states(data, file_path = 'dummy_config.json'):
+    """
+    Updates current states in config.json file
+    """
+    with open(file_path, 'w') as file:
+        global vent_state
+        global shade_state
+
+        data['states']['vent_state'] = vent_state
+        data['states']['shade_state'] = shade_state
+
+        json.dump(data, file, indent = 4)
 
 def toggle_vent(state):
     """
@@ -286,19 +298,19 @@ if __name__ == "__main__":
 
         #Temperature
         # temp = round(sense.get_temperature(), 2)
-        temp = round(random.random() * 50 + 50)
+        temp = round(random.random() * 2.0 + 22, 2)
 
         #Humidity
         # hum = round(sense.get_humidity(), 2)
-        hum = round(random.random() * 50 + 50)
+        hum = round(random.random() * 10 + 35, 2)
 
         #Light
         # light = adc.read(channel = 0)
-        light= round(random.random() * 50 + 50)
+        light= round(random.random() * 5 + 75, 2)
 
         #AirPressure
         # pres = round(sense.get_pressure(), 2)
-        pres = round(random.random() * 50 + 50)
+        pres = round(random.random() * 5 + 990, 2)
 
         #Dataset
         dataSet = {'temperature': temp,
@@ -306,7 +318,7 @@ if __name__ == "__main__":
                     'light': light,
                     'pressure': pres}
         
-        # print(dataSet)
+        print(dataSet)
 
         post_measurement = requests.post(server_url, headers=req_headers, json=dataSet)
 
@@ -314,10 +326,10 @@ if __name__ == "__main__":
         # sleep(int(server_data["duration"]))
         sleep(3)
 
-        # print(post_measurement)
+        print(post_measurement)
         
         # Get data from room
-        get_room = requests.get(f'http://127.0.0.1:5000/rooms/{roomID}')
+        get_room = requests.get(f'http://{ServerIP}:5000/rooms/{roomID}')
         # print(get_room)
         # print(get_room.json()['actions'])
 
@@ -327,6 +339,7 @@ if __name__ == "__main__":
                 if done:
                     vent_state = (vent_state * -1) + 1
                     post_current_states()
+                    update_current_states(config_data)
 
         if shade_state < 2:
             if shade_moving:
@@ -334,6 +347,7 @@ if __name__ == "__main__":
                 if done:
                     shade_state = (shade_state * -1) + 1
                     post_current_states()
+                    update_current_states(config_data)
 
         process_actions(get_room)
         
