@@ -12,3 +12,5 @@ requests
 pyinstaller
 psycopg2-binary
 gunicorn
+
+pythonping
