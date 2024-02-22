@@ -460,8 +460,10 @@ function getCreateActionObject(status, vent_state, shade_state) {
 
   const action = {
       "status": status,
+      "stop": 0,
       "vent_state": vent_state,
-      "shade_state": shade_state
+      "shade_state": shade_state,
+      "reboot": 0
   };
 
   return action;

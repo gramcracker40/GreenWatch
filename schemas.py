@@ -84,8 +84,10 @@ class MeasurementSchema(PlainMeasurementSchema):
     timestamp = fields.DateTime(dump_only=True)
 
 class ActionSchema(PlainActionSchema):
+    stop = fields.Int()
     vent_state = fields.Int(required=True)
     shade_state = fields.Int(required=True)
+    reboot = fields.Int()
     timestamp = fields.DateTime(dump_only=True)
 
 class MessageSchema(PlainMessageSchema):
