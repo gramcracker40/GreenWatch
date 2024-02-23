@@ -54,11 +54,9 @@ export async function renderRoomCards() {
       card_header.setAttribute('class', 'card-header');
       card_body.setAttribute('class', 'row');
       roomName.setAttribute('class', 'display-3');
-      roomName.setAttribute('style', 'color: grey')
+      roomName.setAttribute('style', 'color: grey');
       
-
       // Get agent 
-      // const agent = await proxy.getAgentByID(room['id'])
       let agent_ip = " [...]";
         agents.forEach(agent => {
           if (room['id'] == agent['room_id'])
@@ -70,6 +68,142 @@ export async function renderRoomCards() {
 
       roomName.textContent = room["name"] + agent_ip;
 
+      async function getLastAction(room){
+        // Get last action
+      const lastAction = await proxy.getLastActionByRoomID(room['id']);
+      return lastAction;
+      }
+
+      // Main buttons
+      // Create a button element
+      const m_button_row = document.createElement('div');
+      const start_button = document.createElement('button');
+      const stop_button = document.createElement('button');
+
+      start_button.setAttribute('id', `start_button${room['id']}`);
+      stop_button.setAttribute('id', `stop_button${room['id']}`);
+
+      start_button.textContent = "Start Logging";
+      // Add an event listener for the click event to refresh the page
+      start_button.addEventListener('click', async function(event) {
+        // Disable button until action fulfilled
+        start_button.disabled = true;
+        stop_button.disabled = false;
+        
+        // Prevent the event from propagating to the card
+        event.stopPropagation();
+        
+        const roomID = room['id'];
+
+        // Get last action
+        const lastAction = await proxy.getLastActionByRoomID(roomID);
+        console.log(lastAction['stop']);
+
+        // Create action object
+        const actionObj = getCreateActionObject(
+          0,
+          0,
+          lastAction['vent_state'],
+          lastAction['shade_state'],
+          0
+          )
+
+        // Get user ID from access_token
+        const jwt = Utils.getJwt();
+        const userID = jwt['user_id'];
+
+        // Create action in database
+        await proxy.createAction(roomID, actionObj);
+
+        // Post message in notes
+        const message = `[MEASUREMENT] Started logging in room ${roomID}`; 
+        await proxy.createRoomMessage(roomID, userID, message);
+        console.log("[SUCCESS] Started logging in room: " + roomID);
+        
+        renderRoomValues();
+        console.log("[TEST] Reloading Cards...");
+        });
+
+      stop_button.textContent = "Stop Logging";
+      // Add an event listener for the click event to refresh the page
+      stop_button.addEventListener('click', async function(event) {
+
+        // Disable button until action fulfilled
+        start_button.disabled = false;
+        stop_button.disabled = true;
+        
+        // Prevent the event from propagating to the card
+        event.stopPropagation();
+        
+        const roomID = room['id'];
+
+        // Get last action
+        const lastAction = await proxy.getLastActionByRoomID(roomID);
+        console.log(lastAction['stop']);
+
+        // Create action object
+        const actionObj = getCreateActionObject(
+          0,
+          1,
+          lastAction['vent_state'],
+          lastAction['shade_state'],
+          0
+          )
+      
+        // Get user ID from access_token
+        const jwt = Utils.getJwt();
+        const userID = jwt['user_id'];
+
+        // Create action in database
+        await proxy.createAction(roomID, actionObj);
+
+        // Post message in notes
+        const message = `[MEASUREMENT] Stopped logging in room ${roomID}`; 
+        await proxy.createRoomMessage(roomID, userID, message);
+        console.log("[SUCCESS] Stopped logging in room: " + roomID);
+
+        // Refresh cards
+        renderRoomValues();
+        console.log("[TEST] Reloading Cards...");
+        });
+        
+      m_button_row.append(start_button);
+      m_button_row.append(stop_button);
+      card_body.append(m_button_row);
+      
+      const status_row = document.createElement('div');
+      const status_label = document.createElement('p');
+      const status_value = document.createElement('p');
+      status_row.setAttribute('class', 'd-flex justify-content-between');
+      status_label.setAttribute('class', 'h1');
+      status_label.textContent = "Status: ";
+      status_value.setAttribute('class', 'h1');
+      status_value.setAttribute('id', `status_value${room['id']}`)
+      status_value.textContent = `...`;
+      
+      let isStopped = -1;
+      getLastAction(room).then(response => {
+        isStopped = response['stop'];
+        // console.log(`isStopped: ${isStopped}`)
+        if (isStopped == 0){
+          start_button.disabled = true;
+          stop_button.disabled = false;
+          status_value.textContent = " Logging...";
+          status_value.setAttribute('style', 'color: green');
+        }else{
+          start_button.disabled = false;
+          stop_button.disabled = true;
+          status_value.textContent = " Inactive...";
+          status_value.setAttribute('style', 'color: grey');
+        }
+        // console.log(`stop: ${isStopped}`)
+      })
+      
+
+      status_row.append(status_label);
+      status_row.append(status_value);
+      card_body.append(status_row);
+      
       if (room['measurements'].length) {
         // Need a label, value, and row for each
         const t_row = document.createElement('div');
@@ -87,7 +221,7 @@ export async function renderRoomCards() {
 
         t_row.setAttribute('class', 'd-flex justify-content-between');
         t_label.setAttribute('class', 'h1');
-        t_label.textContent = "Temperature:";
+        t_label.textContent = "Temp (°C):";
         t_value.setAttribute('class', 'h1');
         t_value.setAttribute('id', `t_value${room['id']}`)
         t_value.textContent = `${room['measurements'][room['measurements'].length-1]['temperature']}`;
@@ -156,7 +290,6 @@ export async function renderRoomCards() {
         shade_value.setAttribute('class', 'h2');
         shade_value.setAttribute('style', 'color: green');
         shade_value.setAttribute('id', `shade_value${room['id']}`)
-        
 
         console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
         if (room['actions'][room['actions'].length-1]['status'] == 3)
@@ -178,16 +311,13 @@ export async function renderRoomCards() {
           vent_value.setAttribute('style', 'color: red');
           };
         
-        
         vent_row.append(vent_label);
         vent_row.append(vent_value);
         shade_row.append(shade_label);
         shade_row.append(shade_value);
         
-      
         card_body.append(vent_row);
         card_body.append(shade_row);
-        
       
       }else{
         const emptyActionsText = document.createElement('div');
@@ -227,9 +357,10 @@ export async function renderRoomCards() {
         // Create action object
         const actionObj = getCreateActionObject(
           0,
+          lastAction['stop'],
           ((lastAction['vent_state'] * -1) + 1),
-          (lastAction['shade_state']
-          )
+          (lastAction['shade_state']),
+          lastAction['reboot']
         )
 
         // Get user ID from access_token
@@ -243,10 +374,6 @@ export async function renderRoomCards() {
         const message = `[ACTION] Changing vent in room ${roomID} to ${vent_states[actionObj['vent_state']]}`; 
         await proxy.createRoomMessage(roomID, userID, message);
         console.log("[SUCCESS] Created new action for room: " + roomID);
-        
-        // Refresh the current page
-        // location.reload();
-        // console.log("[TEST] Reloading Page...");
         
         // Refresh cards
         // renderRoomCards();
@@ -276,9 +403,11 @@ export async function renderRoomCards() {
         // Create action object
         const actionObj = getCreateActionObject(
           0,
+          lastAction['stop'],
           lastAction['vent_state'],
-          ((lastAction['shade_state'] * -1) + 1)
-          )
+          ((lastAction['shade_state'] * -1) + 1),
+          lastAction['reboot']
+        )
 
         // Get user ID from access_token
         const jwt = Utils.getJwt();
@@ -291,11 +420,7 @@ export async function renderRoomCards() {
         const message = `[ACTION] Changing shade in room ${roomID} to ${shade_states[actionObj['shade_state']]}`; 
         await proxy.createRoomMessage(roomID, userID, message);
         console.log("[SUCCESS] Created new action for room: " + roomID)
-        
-        // Refresh the current page
-        // location.reload();
-        // console.log("[TEST] Reloading Page...");
-        
+
         // Refresh cards
         renderRoomValues();
         console.log("[TEST] Reloading Cards...");
@@ -334,9 +459,9 @@ export async function renderRoomValues() {
   const rooms = await proxy.getRooms();
   const agents = await proxy.getAgents();
 
-  const agent_response = await proxy.pingAgentByID(1); // TESTING: just for first agent
-  const agent_status = agent_response['success'];
-  console.log(`Agent 1 ping status: ${agent_status}`);
+  // const agent_response = await proxy.pingAgentByID(1); // TESTING: just for first agent
+  // const agent_status = agent_response['success'];
+  // console.log(`Agent 1 ping status: ${agent_status}`);
   // console.log(rooms[0])
   // if (rooms.length){
   //   agent_status = await proxy.pingAgentByID(1)['success']
@@ -368,9 +493,25 @@ export async function renderRoomValues() {
 
       roomName.textContent = room["name"] + agent_ip;
 
-      if (agent_status == 0){
-        roomName.setAttribute('style', 'color: grey')
+      // if (agent_status == 0){
+      //   roomName.setAttribute('style', 'color: grey')
+      // }
+
+      const status_value = document.getElementById(`status_value${room['id']}`);
+      const isStopped = `${room['actions'][room['actions'].length-1]['stop']}`;
+      
+      if (isStopped == 0){
+        // start_button.disabled = true;
+        // stop_button.disabled = false;
+        status_value.textContent = " Logging...";
+        status_value.setAttribute('style', 'color: green');
+      }else{
+        // start_button.disabled = false;
+        // stop_button.disabled = true;
+        status_value.textContent = " Inactive...";
+        status_value.setAttribute('style', 'color: grey');
       }
+      
 
 
       if (room['measurements'].length) {
@@ -456,14 +597,14 @@ function renderNewRoomCard() {
   main.append(card);
 }
 
-function getCreateActionObject(status, vent_state, shade_state) {
+function getCreateActionObject(status, stop, vent_state, shade_state, reboot) {
 
   const action = {
       "status": status,
-      "stop": 0,
+      "stop": stop,
       "vent_state": vent_state,
       "shade_state": shade_state,
-      "reboot": 0
+      "reboot": reboot
   };
 
   return action;
