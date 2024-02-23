@@ -101,7 +101,6 @@ class Room(MethodView):
         return {"message": "room deleted successfully"}, 200
 
 
-
 @blp.route("/rooms/<int:room_id>/measurement")
 class Measurement(MethodView):
     

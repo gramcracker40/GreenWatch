@@ -11,8 +11,9 @@ import subprocess
 
 roomID = 1
 # ServerIP='138.197.101.211'
-ServerIP='127.0.0.1'
-duration = 23
+ServerIP='192.168.1.94'
+server_data = None
+duration = 3
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
 private_key = 'AA0QII7I4JCCU1UTGS4RY9E8NXPK6EEOP392YKUDUWVK5ESPSUVLPGTT1A4V'
 
@@ -95,11 +96,17 @@ def initialize_states(config_data):
     """
     Initializes states based on config
     """
+    global stop
     global vent_state
     global shade_state
 
+    global duration
+    
+    stop = config_data['states']['stop']
     vent_state = config_data['states']['vent_state']
     shade_state = config_data['states']['shade_state']
+
+    duration = config_data['settings']['duration']
 
     for state, value in config_data['states'].items():
         print(f'{state}: {value}')
@@ -115,13 +122,17 @@ def post_current_states():
     """
     Posts current state data to server as fulfilled actions
     """
+    global stop
     global vent_state
     global shade_state
+    global reboot
 
     action_json = {
         "status": 3, # completed
+        "stop": stop,
         "vent_state": vent_state,
-        "shade_state": shade_state
+        "shade_state": shade_state,
+        "reboot": reboot
         }
     print(f"\ncompleted action_json: {action_json}\n")
 
@@ -133,11 +144,17 @@ def update_current_states(data, file_path = 'dummy_config.json'):
     Updates current states in config.json file
     """
     with open(file_path, 'w') as file:
+        global stop
         global vent_state
         global shade_state
+        
+        global duration
 
+        data['states']['stop'] = stop
         data['states']['vent_state'] = vent_state
         data['states']['shade_state'] = shade_state
+
+        data['settings']['duration'] = duration
 
         json.dump(data, file, indent = 4)
 
@@ -208,7 +225,6 @@ def process_actions(get_room):
 
                 patch_action = requests.patch(action_url, headers=req_headers, json=action_json)
                 print(patch_action)
-
 
             # Obtain last action request to room
             last_action = actions[-1]
@@ -315,7 +331,36 @@ def simulate_toggle(device):
                 return True # shade is done moving
             else:
                 return False # shade is not done moving
+            
+def take_measurements(simulated=True):
+    """
+    Takes measurements and returns data
+    """
+    if simulated:
+        # Temperature
+        temp = round(random.random() * 2.0 + 22, 2)
+        # Humidity
+        hum = round(random.random() * 10 + 35, 2)
+        # Light
+        light= round(random.random() * 5 + 75, 2)
+        # Air Pressure
+        pres = round(random.random() * 5 + 990, 2)
 
+    else: 
+        global sense
+        global adc
+        temp = round(sense.get_temperature(), 2)
+        hum = round(sense.get_humidity(), 2)
+        light = adc.read(channel = 0)
+        pres = round(sense.get_pressure(), 2)
+
+    #Dataset
+    dataSet = {'temperature': temp,
+                'humidity': hum,
+                'light': light,
+                'pressure': pres}
+    
+    return dataSet 
 
 if __name__ == "__main__":
 
@@ -325,6 +370,7 @@ if __name__ == "__main__":
 
     #initializing sensors
     # sense = SenseHat()
+    # adc = MCP()
 
     # Get host name and ip address
     host_name, host_IP = get_Host_name_IP()
@@ -332,41 +378,25 @@ if __name__ == "__main__":
     while True:
         print("****************************\n")
         if not stop:
-            #Temperature
-            # temp = round(sense.get_temperature(), 2)
-            temp = round(random.random() * 2.0 + 22, 2)
-
-            #Humidity
-            # hum = round(sense.get_humidity(), 2)
-            hum = round(random.random() * 10 + 35, 2)
-
-            #Light
-            # light = adc.read(channel = 0)
-            light= round(random.random() * 5 + 75, 2)
-
-            #AirPressure
-            # pres = round(sense.get_pressure(), 2)
-            pres = round(random.random() * 5 + 990, 2)
-
-            #Dataset
-            dataSet = {'temperature': temp,
-                        'humidity': hum,
-                        'light': light,
-                        'pressure': pres}
-            
+            dataSet = take_measurements(simulated=True)
             print(dataSet)
 
-        
             post_measurement = requests.post(server_url, headers=req_headers, json=dataSet)
-            print(post_measurement)
+            # print(post_measurement)
+            print(post_measurement.text)
 
-        # server_data = json.loads(post_measurement.text)
-        # sleep(int(server_data["duration"]))
-        sleep(3)
+            server_data = json.loads(post_measurement.text)
+            # print(int(server_data['duration']))
+
+        if server_data is not None:
+            sleep(int(server_data["duration"]))
+            if duration != int(server_data["duration"]): 
+                duration = int(server_data["duration"])
+        else:
+            sleep(duration)
 
         # Get data from room
         get_room = requests.get(f'http://{ServerIP}:5000/rooms/{roomID}')
-        # print(get_room)
         # print(get_room.json()['actions'])
 
         if vent_state < 2:
@@ -386,4 +416,3 @@ if __name__ == "__main__":
                     update_current_states(config_data)
 
         process_actions(get_room)
-        

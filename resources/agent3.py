@@ -6,9 +6,9 @@ from sense_hat import SenseHat
 from spidev import SpiDev
 
 roomID = 3
-ServerIP='192.168.0.2'
-duration = 23
-private_key = '19RV9XSROCBAXP7KETIO16YWU6HICUPJUNVJW0VQRDEBOPCOOQZ6VGLXGB26'
+ServerIP='127.0.0.1'
+duration = 3
+private_key = 'HSP4MMB0I1VG4UXLQ9OFP79QZPREQH72MN61NDUX2AGK9TS0698JIN224LYH'
 
 req_headers = {
     "Key": private_key
