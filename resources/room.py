@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, send_file, jsonify
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import RoomSchema, RoomUpdateSchema, MeasurementSchema, DateRangeSchema, MessageSchema, MessageUpdateSchema, ActionSchema, ActionUpdateSchema
@@ -10,8 +10,13 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from utilities.rand import rand_string
 from resources.experiment import ExperimentCheck
 from datetime import datetime, date
+import csv
+import json
+import os
+
 
 blp = Blueprint("room", "room", description="Operations on rooms")
+dir_path = os.path.dirname(os.path.dirname(__file__))
 
 
 def admin_check(jwt_obj):
@@ -146,6 +151,96 @@ class Measurement(MethodView):
 
         return {"message": "Successfully added new measurement", "duration": agent.duration.second}, 201
     
+    @blp.response(201, MeasurementSchema(many=True))
+    def get(self, room_id):
+        '''
+        Get all Measurements in Room
+        '''
+        return MeasurementModel.query.filter_by(room_id=room_id).all()
+    
+    # #@jwt_required()
+    @blp.arguments(DateRangeSchema)
+    def put(self, dates, room_id):
+        '''
+        Given a start and end date, this method will return all 
+        Measurements within a Room in that given period. 
+        '''
+        room = RoomModel.query.get_or_404(room_id)
+
+        valid = []
+        for measurement in room.measurements:
+
+            _date = date.fromisoformat(str(measurement.timestamp).split()[0])
+
+            if _date >= dates["start_date"] and _date <= dates["end_date"]:
+                valid.append({
+                    "temperature": measurement.temperature,
+                    "humidity": measurement.humidity,
+                    "light": measurement.light,
+                    "pressure": measurement.pressure, 
+                    "timestamp": measurement.timestamp
+                })
+        
+        return {"Success": True, "data": valid}, 201
+    
+@blp.route("/rooms/<int:room_id>/measurement/csv")
+class Measurement(MethodView):
+
+    def build_csv(self, room_id, json_obj):
+        """
+        builds .csv file from .json measurements object
+        """
+
+        csv_file_path = dir_path + f"/resources/room{room_id}_measurements.csv"
+
+        # Read the JSON data
+        
+        data = json_obj  # Assumes the JSON data is an array of objects
+
+        # Open the CSV file for writing
+        with open(csv_file_path, 'w', newline='') as csv_file:
+            # If the objects in your JSON array are dictionaries with the same keys,
+            # you can use the keys from the first object as the header row in the CSV
+            if data:
+                data_array = []
+                fieldnames = ["timestamp",
+                              "temperature",
+                              "humidity",
+                              "light",
+                              "pressure" 
+                    ]  # Extracting field names (column names)
+                for row in data:
+                    data_array.append(
+                        {
+                            "timestamp": row.timestamp,
+                            "temperature": row.temperature,
+                            "humidity": row.humidity,
+                            "light": row.light,
+                            "pressure": row.pressure 
+                        }
+                    )
+                
+                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+                writer.writeheader()  # Write the column names
+                for row in data_array:
+                    writer.writerow(row)  # Write each row
+            else:
+                print("The JSON file is empty or not formatted as expected.")
+
+        print(f"JSON data  has been converted to CSV and saved as '{csv_file_path}'")
+        return csv_file_path
+     
+    @blp.response(201, MeasurementSchema(many=True))
+    def get(self, room_id):
+        '''
+        Get all Measurements in Room and write to .csv file
+        '''
+        json_obj = MeasurementModel.query.filter_by(room_id=room_id).all()
+        csv_file_path = self.build_csv(room_id, json_obj)
+        return send_file(csv_file_path)
+    
+    
 @blp.route("/rooms/<int:room_id>/action")
 class Action(MethodView):
     
@@ -195,29 +290,6 @@ class Action(MethodView):
 
         return {"message": "Successfully added new action - ", "duration": agent.duration.second}, 201
     
-    
-    # #@jwt_required()
-    # @blp.arguments(DateRangeSchema)
-    # def put(self, dates, room_id):
-    #     '''
-    #     Given a start and end date, this method will return all 
-    #     Measurements within a Room in that given period. 
-    #     '''
-    #     room = RoomModel.query.get_or_404(room_id)
-
-    #     valid = []
-    #     for measurement in room.measurements:
-
-    #         _date = date.fromisoformat(str(measurement.timestamp).split()[0])
-
-    #         if _date >= dates["start_date"] and _date <= dates["end_date"]:
-    #             valid.append({
-    #                 "temperature": measurement.temperature,
-    #                 "humidity": measurement.humidity,
-    #                 "light": measurement.light,
-    #                 "pressure": measurement.pressure, 
-    #                 "timestamp": measurement.timestamp
-    #             })
 
     #@jwt_required()
     @blp.arguments(ActionUpdateSchema)

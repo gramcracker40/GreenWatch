@@ -38,8 +38,10 @@ async function renderMeasurements() {
   // Get measurements for roomID stored in session storage
   if (!isDateNull) {
     console.log('CHART: getting measurementObj from room ' + roomID)
-    const measurementsObj = await proxy.getMeasurementByRoom(roomID, dateObj);
-    measurements = measurementsObj['data'];
+    await proxy.getMeasurementByRoom(roomID, dateObj).then(response => {
+      measurements = response['data'];
+    });
+    // measurements = measurementsObj['data'];
     console.log(measurements);
 
     if (measurements.length) {
