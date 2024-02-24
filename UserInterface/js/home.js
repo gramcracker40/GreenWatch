@@ -220,27 +220,27 @@ export async function renderRoomCards() {
         const l_value = document.createElement('p');
 
         t_row.setAttribute('class', 'd-flex justify-content-between');
-        t_label.setAttribute('class', 'h1');
+        t_label.setAttribute('class', 'h2');
         t_label.textContent = "Temp (°C):";
-        t_value.setAttribute('class', 'h1');
+        t_value.setAttribute('class', 'h2');
         t_value.setAttribute('id', `t_value${room['id']}`)
         t_value.textContent = `${room['measurements'][room['measurements'].length-1]['temperature']}`;
         h_row.setAttribute('class', 'd-flex justify-content-between');
-        h_label.setAttribute('class', 'h1');
-        h_label.textContent = "Humidity:";
-        h_value.setAttribute('class', 'h1');
+        h_label.setAttribute('class', 'h2');
+        h_label.textContent = "Humidity (Rel):";
+        h_value.setAttribute('class', 'h2');
         h_value.setAttribute('id', `h_value${room['id']}`)
         h_value.textContent = `${room['measurements'][room['measurements'].length-1]['humidity']}`;
         p_row.setAttribute('class', 'd-flex justify-content-between');
-        p_label.setAttribute('class', 'h1');
-        p_label.textContent = "Pressure:";
-        p_value.setAttribute('class', 'h1');
+        p_label.setAttribute('class', 'h2');
+        p_label.textContent = "Pressure (mBar):";
+        p_value.setAttribute('class', 'h2');
         p_value.setAttribute('id', `p_value${room['id']}`)
         p_value.textContent = `${room['measurements'][room['measurements'].length-1]['pressure']}`;
-        l_label.setAttribute('class', 'h1');
+        l_label.setAttribute('class', 'h2');
         l_label.textContent = "Light:";
         l_row.setAttribute('class', 'd-flex justify-content-between');
-        l_value.setAttribute('class', 'h1');
+        l_value.setAttribute('class', 'h2');
         l_value.setAttribute('id', `l_value${room['id']}`)
         l_value.textContent = `${room['measurements'][room['measurements'].length-1]['light']}`;
 
