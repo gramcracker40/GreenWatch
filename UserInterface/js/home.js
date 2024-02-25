@@ -620,8 +620,62 @@ function getCreateActionObject(status, stop, vent_state, shade_state, reboot) {
   return action;
 }
 
+function getCreateServerObject(ip_address) {
+  const server = {
+    "ip_address": ip_address,
+    "greenhouse_id": 1,
+    "name": "Default Greenhouse Server"
+  };
+
+  return server;
+}
+
+async function createFirstServer(local) {
+  // Get server info and create new server if none exists,
+  // returns ip address of this first server
+  const servers = await proxy.getServers()
+  let server_ip = '';
+
+  if (servers.length == 0) { // No servers
+    if (local == true) { // localHost
+      server_ip = '127.0.0.1'
+      console.log(`Creating server at ${server_ip}`)
+      const serverObj = getCreateServerObject(server_ip);
+      await proxy.createServer(serverObj).then(
+        response => {console.log(response);});
+      
+    } else {
+      server_ip = await proxy.getServerIPByID(1)[1];
+      console.log(`Creating server at ${server_ip}`)
+      const serverObj = getCreateServerObject(server_ip);
+      await proxy.createServer(serverObj).then(
+        response => {console.log(response);});
+    }
+  } else {
+    server_ip = servers[0]['ip_address']
+    console.log(`[SERVER] Server already exists at ${server_ip}`)
+  }
+  return server_ip
+}
+
+function displayServerIPAddress(server_ip) {
+  // Display server ip address
+  const serverIPText = document.getElementById('server-ip')
+  serverIPText.textContent = `Server IPv4 Address: ${server_ip}`;
+  serverIPText.href = `http://${server_ip}:5000/servers`;
+}
+
+// Create first server
+const server_ip = await createFirstServer(true);
+
+// Display server ip address on navbar
+displayServerIPAddress(server_ip);
+
+// Render all room cards
 renderRoomCards();
 
-// Start the interval
+// Start the interval to update room values within room cars
 let intervalId = setInterval(renderRoomValues, 10000);
+
+// New room card button
 // renderNewRoomCard();
