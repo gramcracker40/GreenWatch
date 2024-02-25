@@ -9,6 +9,9 @@ class ActionModel(db.Model):
     # status: 0 - Unfulfilled, 1 - Queued, 2 - In Progress, 3 - Fulfilled, -1 - Failed
     status = db.Column(db.Integer, nullable=True)
 
+    # acknowledge: 0 - not acknowledged, 1 - acknowledged
+    ack = db.Column(db.Integer, nullable=True)
+
     # stop: 0 - Do not stop, 1 - Stop ### Stops measurements    
     stop = db.Column(db.Integer, nullable=True)
 

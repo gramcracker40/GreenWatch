@@ -69,10 +69,15 @@ export async function renderRoomCards() {
       roomName.textContent = room["name"] + agent_ip;
 
       async function getLastAction(room){
-        // Get last action
+      // Get last action
       const lastAction = await proxy.getLastActionByRoomID(room['id']);
       return lastAction;
       }
+
+      // DEBUG: Test 'pinging'
+      getLastAction(room).then(response => {
+        console.log(`Room ID ${room['id']} Acknowledged: ${response['ack']}`);
+      })
 
       // Main buttons
       // Create a button element
@@ -97,10 +102,14 @@ export async function renderRoomCards() {
 
         // Get last action
         const lastAction = await proxy.getLastActionByRoomID(roomID);
-        console.log(lastAction['stop']);
+        // console.log(lastAction['stop']);
 
+        // DEBUG: Test 'pinging'
+        console.log(`Room ID ${room['id']} Acknowledged: ${lastAction['ack']}`);
+        
         // Create action object
         const actionObj = getCreateActionObject(
+          0,
           0,
           0,
           lastAction['vent_state'],
@@ -139,7 +148,7 @@ export async function renderRoomCards() {
 
         // Get last action
         const lastAction = await proxy.getLastActionByRoomID(roomID);
-        console.log(lastAction['stop']);
+        // console.log(lastAction['stop']);
 
         // Create action object
         const actionObj = getCreateActionObject(
@@ -600,6 +609,7 @@ function renderNewRoomCard() {
 function getCreateActionObject(status, stop, vent_state, shade_state, reboot) {
 
   const action = {
+      "ack": 0,
       "status": status,
       "stop": stop,
       "vent_state": vent_state,

@@ -15,7 +15,7 @@ ServerIP='127.0.0.1'
 server_data = None
 duration = 3
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
-private_key = 'AA0QII7I4JCCU1UTGS4RY9E8NXPK6EEOP392YKUDUWVK5ESPSUVLPGTT1A4V'
+private_key = 'NVTCVAG5F3XFEUZE2T28BGUBBA0S8NOFG7WII8E94M9UIYC6617M5E8AT1PX'
 
 req_headers = {
     "Key": private_key
@@ -30,6 +30,7 @@ vent_state = 3
 shade_state = 3
 reboot = 0
 stop = 0
+ack = 0
 
 # States
 vent_states = ['Open', 'Closed', 'Pending', 'Unknown']
@@ -128,6 +129,7 @@ def post_current_states():
     global reboot
 
     action_json = {
+        "ack": ack,
         "status": 3, # completed
         "stop": stop,
         "vent_state": vent_state,
@@ -205,6 +207,7 @@ def process_actions(get_room):
             actions = get_room.json()['actions']
 
             global last_action_timestamp
+            global ack
             global stop
             global reboot
             global vent_states
@@ -240,6 +243,11 @@ def process_actions(get_room):
                         setActionToStatus(last_action, 1)
 
                         # Parse and execute new action request
+                        if last_action['ack'] == 1:
+                            ack = 1
+                            setActionToStatus(last_action, 3)
+                            ack = 0
+
                         if last_action['stop'] != stop:
                             stop = last_action['stop']
                             setActionToStatus(last_action, 3)
