@@ -24,7 +24,7 @@ req_headers = {
 server_url = f"http://{ServerIP}:5000/rooms/{roomID}/measurement"
 action_url = f"http://{ServerIP}:5000/rooms/{roomID}/action"
 
-# Actions
+# Actions.
 last_action_timestamp = ''
 vent_state = 3
 shade_state = 3
