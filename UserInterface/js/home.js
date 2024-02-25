@@ -97,7 +97,8 @@ export async function renderRoomCards() {
 
         // Get last action
         const lastAction = await proxy.getLastActionByRoomID(roomID);
-        console.log(lastAction['stop']);
+        // console.log(lastAction['stop']);
+        console.log(`Room ID ${roomID} Acknowledged: ${lastAction['ack']}`);
 
         // Create action object
         const actionObj = getCreateActionObject(
