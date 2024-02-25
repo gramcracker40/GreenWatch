@@ -15,7 +15,7 @@ ServerIP='127.0.0.1'
 server_data = None
 duration = 3
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
-private_key = 'AA0QII7I4JCCU1UTGS4RY9E8NXPK6EEOP392YKUDUWVK5ESPSUVLPGTT1A4V'
+private_key = 'NVTCVAG5F3XFEUZE2T28BGUBBA0S8NOFG7WII8E94M9UIYC6617M5E8AT1PX'
 
 req_headers = {
     "Key": private_key
@@ -129,6 +129,7 @@ def post_current_states():
     global reboot
 
     action_json = {
+        "ack": ack,
         "status": 3, # completed
         "stop": stop,
         "vent_state": vent_state,
