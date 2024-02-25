@@ -30,6 +30,7 @@ vent_state = 3
 shade_state = 3
 reboot = 0
 stop = 0
+ack = 0
 
 # States
 vent_states = ['Open', 'Closed', 'Pending', 'Unknown']
@@ -205,6 +206,7 @@ def process_actions(get_room):
             actions = get_room.json()['actions']
 
             global last_action_timestamp
+            global ack
             global stop
             global reboot
             global vent_states
@@ -240,6 +242,11 @@ def process_actions(get_room):
                         setActionToStatus(last_action, 1)
 
                         # Parse and execute new action request
+                        if last_action['ack'] == 1:
+                            ack = 1
+                            setActionToStatus(last_action, 3)
+                            ack = 0
+
                         if last_action['stop'] != stop:
                             stop = last_action['stop']
                             setActionToStatus(last_action, 3)
