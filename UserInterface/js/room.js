@@ -59,7 +59,7 @@ async function createAgent() {
 function getCreateAgentObject() {
 
   const agent = {
-    "duration": "00:00:23.000000",
+    "duration": "00:00:03.000000",
     "ip_address": "127.0.0.1",
     "room_id": roomID,
     "server_id": 1

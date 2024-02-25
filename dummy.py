@@ -189,7 +189,7 @@ def toggle_shade(state):
         print("Closing shade...")
 
 
-def get_Host_name_IP():
+def get_hostname_IP():
     try:
         host_name = socket.gethostname()
         host_ip = socket.gethostbyname(host_name)
@@ -381,7 +381,7 @@ if __name__ == "__main__":
     # adc = MCP()
 
     # Get host name and ip address
-    host_name, host_IP = get_Host_name_IP()
+    host_name, host_IP = get_hostname_IP()
 
     while True:
         print("****************************\n")

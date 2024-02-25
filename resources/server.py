@@ -16,6 +16,7 @@ import re
 import subprocess
 import werkzeug
 from pythonping import ping
+from socket import gethostname, gethostbyname
 
 blp = Blueprint("server", "server", description="Operations on servers")
 dir_path = os.path.dirname(os.path.dirname(__file__))
@@ -30,6 +31,11 @@ class Servers(MethodView):
         '''
 
         server = ServerModel(**server_data)
+        
+        if server_data['ip_address'] != '127.0.0.1':
+            server_ip = self.get_hostname_IP()[1]
+
+        server.ip_address = server_data['ip_address']
 
         try:
             db.session.add(server)
@@ -43,7 +49,18 @@ class Servers(MethodView):
 
         new_server = ServerModel.query.filter(ServerModel.name == server_data["name"]).first()
 
-        return {"Success": True, "server_id": new_server.id}, 201
+        return {"Success": True, "server_id": new_server.id, "ip_address:": new_server.ip_address}, 201
+
+    def get_hostname_IP(self):
+        try:
+            host_name = gethostname()
+            host_ip = gethostbyname(host_name)
+            print("Hostname :  ", host_name)
+            print("IP : ", host_ip)
+        except:
+            print("Unable to get Hostname and IP")
+
+        return [host_name, host_ip]
     
 
     #@jwt_required()
@@ -80,6 +97,20 @@ class Server(MethodView):
         db.session.commit()
 
         return {"Success": True}, 201
+
+@blp.route("/servers/<int:server_id>/host")
+class Server(MethodView):
+    #@jwt_required()
+    def get(self, server_id):
+        try:
+            host_name = gethostname()
+            host_ip = gethostbyname(host_name)
+            print("Hostname :  ", host_name)
+            print("IP : ", host_ip)
+        except:
+            print("Unable to get Hostname and IP")
+
+        return [host_name, host_ip]
 
 
 @blp.route("/servers/agents")
