@@ -212,3 +212,6 @@ function createPlaceholderChart(key) {
 createPlaceholderChart('N/A');
 
 renderMeasurements();
+
+// Start the interval to re-render chart
+let intervalId = setInterval(renderMeasurements, 10000);

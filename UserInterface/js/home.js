@@ -47,12 +47,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (darkModeSwitch.checked) {
       // Activate dark mode and store the preference
       document.body.classList.add('dark-mode');
-      localStorage.setItem('darkMode', "true");
+      localStorage.setItem('darkMode', 'true');
     } else {
       // Deactivate dark mode and store the preference
       document.body.classList.remove('dark-mode');
-      localStorage.setItem('darkMode', "false");
+      localStorage.setItem('darkMode', 'false');
     }
+    renderRoomCards();
   });
 });
 
@@ -68,6 +69,9 @@ export async function renderRoomCards() {
 
   const rooms = await proxy.getRooms();
   const agents = await proxy.getAgents();
+
+  const isDarkMode = localStorage.getItem('darkMode');
+  console.log(`[DARK MODE] ${isDarkMode}`)
 
   const vent_states = ['Open', 'Closed', 'Pending']
   const shade_states = ['Open', 'Closed', 'Pending']
@@ -93,15 +97,20 @@ export async function renderRoomCards() {
       card_header.setAttribute('class', 'card-header');
       card_body.setAttribute('class', 'row');
       roomName.setAttribute('class', 'display-3');
-      roomName.setAttribute('style', 'color: grey');
+      // roomName.setAttribute('style', 'color: grey');
+      
       
       // Get agent 
       let agent_ip = " [...]";
         agents.forEach(agent => {
           if (room['id'] == agent['room_id'])
             {
-              agent_ip = ` [${agent['ip_address']}]`
-              roomName.setAttribute('style', 'color: black')
+              agent_ip = ` [${agent['ip_address']}]`;
+            }
+            if (isDarkMode == 'true'){
+              roomName.setAttribute('style', 'color: white');
+            } else {
+              roomName.setAttribute('style', 'color: black');
             }
         })
 
@@ -123,10 +132,24 @@ export async function renderRoomCards() {
       const m_button_row = document.createElement('div');
       const start_button = document.createElement('button');
       const stop_button = document.createElement('button');
-      
+      const download_button = document.createElement('button');
+
+      download_button.setAttribute("class", "btn btn-success");
+      download_button.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"></path>
+        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"></path>
+      </svg> Data`
 
       start_button.setAttribute('id', `start_button${room['id']}`);
       stop_button.setAttribute('id', `stop_button${room['id']}`);
+      
+      if (isDarkMode == 'true'){
+        start_button.setAttribute('class', `btn btn-outline-light`);
+        stop_button.setAttribute('class', `btn btn-outline-light`);
+      } else {
+        start_button.setAttribute('class', `btn btn-outline-dark`);
+        stop_button.setAttribute('class', `btn btn-outline-dark`);
+      }
 
       start_button.textContent = "Start Logging";
       // Add an event listener for the click event to refresh the page
@@ -215,9 +238,11 @@ export async function renderRoomCards() {
         renderRoomValues();
         console.log("[TEST] Reloading Cards...");
         });
+
         
       m_button_row.append(start_button);
       m_button_row.append(stop_button);
+      m_button_row.append(download_button);
       card_body.append(m_button_row);
       
       const status_row = document.createElement('div');
@@ -382,7 +407,17 @@ export async function renderRoomCards() {
       const shade_button = document.createElement('button');
 
       vent_button.setAttribute('id', `vent_button${room['id']}`);
+      vent_button.setAttribute('class', `btn btn-outline-light`);
       shade_button.setAttribute('id', `shade_button${room['id']}`);
+      shade_button.setAttribute('class', `btn btn-outline-light`);
+
+      if (isDarkMode == 'true'){
+        vent_button.setAttribute('class', `btn btn-outline-light`);
+        shade_button.setAttribute('class', `btn btn-outline-light`);
+      } else {
+        vent_button.setAttribute('class', `btn btn-outline-dark`);
+        shade_button.setAttribute('class', `btn btn-outline-dark`);
+      }
 
       vent_button.textContent = "Toggle Vent";
       // Add an event listener for the click event to refresh the page
@@ -536,7 +571,6 @@ export async function renderRoomValues() {
           if (room['id'] == agent['room_id'])
             {
               agent_ip = ` [${agent['ip_address']}]`
-              roomName.setAttribute('style', 'color: black')
             }
         })
 
@@ -704,6 +738,27 @@ function displayServerIPAddress(server_ip) {
   serverIPText.textContent = `Server IPv4 Address: ${server_ip}`;
   serverIPText.href = `http://${server_ip}:5000/servers`;
 }
+
+async function sendAckRequest(room_id) {
+  // Send acknowledgment request to agent
+  const lastAction = await proxy.getLastActionByRoomID(room_id)
+  const action = getCreateActionObject(
+    1,
+    0,
+    lastAction['stop'],
+    lastAction['vent_state'],
+    lastAction['shade_state'],
+    lastAction['reboot']
+  );
+  await proxy.createAction(room_id, action);
+}
+
+async function checkAckResponse(room_id) {
+  // Checks status of acknowledgement request sent to agent
+  const lastAction = await proxy.getLastActionByRoomID(room_id);
+  console.log(`Room ID ${room_id} Acknowledged: ${lastAction['ack']}`);
+}
+
 
 // Create first server
 const server_ip = await createFirstServer(true);
