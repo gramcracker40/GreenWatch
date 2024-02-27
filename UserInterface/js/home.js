@@ -22,7 +22,6 @@ function hideSettings() {
 //Calling hideSettings functions
 hideSettings();
 
-
 //Grabs the logout-link anchor tag 
 const logoutLink = document.getElementById('logout-link');
 //when clicked use logout method from Utils
@@ -97,9 +96,8 @@ export async function renderRoomCards() {
       card_header.setAttribute('class', 'card-header');
       card_body.setAttribute('class', 'row');
       roomName.setAttribute('class', 'display-3');
-      // roomName.setAttribute('style', 'color: grey');
-      
-      
+      roomName.setAttribute('style', 'color: grey');
+            
       // Get agent 
       let agent_ip = " [...]";
         agents.forEach(agent => {
@@ -238,6 +236,16 @@ export async function renderRoomCards() {
         renderRoomValues();
         console.log("[TEST] Reloading Cards...");
         });
+
+      download_button.addEventListener('click', async function(event)
+        {
+          // Prevent the event from propagating to the card
+          event.stopPropagation();
+          
+          const roomID = room['id'];
+          redirectToDownloadCSV(server_ip, roomID);
+        }
+      )
 
         
       m_button_row.append(start_button);
@@ -515,7 +523,7 @@ export async function renderRoomCards() {
       button_row.append(shade_button);
       card_body.append(button_row);
   
-      card.append(roomAlive);
+      card_header.append(roomAlive);
       card_header.append(roomName);
       card.append(card_header);
       card.append(card_body);
@@ -707,7 +715,7 @@ function getCreateServerObject(ip_address) {
 async function createFirstServer(local) {
   // Get server info and create new server if none exists,
   // returns ip address of this first server
-  const servers = await proxy.getServers()
+  const servers = await proxy.getServers();
   let server_ip = '';
 
   if (servers.length == 0) { // No servers
@@ -757,6 +765,21 @@ async function checkAckResponse(room_id) {
   // Checks status of acknowledgement request sent to agent
   const lastAction = await proxy.getLastActionByRoomID(room_id);
   console.log(`Room ID ${room_id} Acknowledged: ${lastAction['ack']}`);
+}
+
+// Function to redirect to a relative URL
+function redirectToDownloadCSV(server_ip, room_id) 
+{
+  let absoluteURL = 
+    `http://${server_ip}:5000/rooms/${room_id}/measurement/csv`;
+
+  absoluteURL = new URL(absoluteURL);
+
+  // Log the absolute URL (optional)
+  console.log('Redirecting to:', absoluteURL.href);
+
+  // Redirect to the absolute URL
+  window.location.href = absoluteURL.href;
 }
 
 
