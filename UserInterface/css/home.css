@@ -25,6 +25,37 @@ main {
   padding: 20px;
 }
 
+/* Dark Mode CSS */
+/* Dark Mode CSS */
+.dark-mode {
+  background-color: #343a40; /* Bootstrap dark background */
+  color: #ffffff; /* White text color */
+}
+
+/* Override styles for dark mode */
+.dark-mode .room-card,
+.dark-mode .room-plus-card {
+  background-color: #424242; /* Darker background for cards */
+  color: #dddddd; /* Lighter text for visibility */
+  border-color: #333333; /* Optional: adjust if you have borders */
+}
+
+.dark-mode .room-card:hover,
+.dark-mode .room-plus-card:hover {
+  background-color: #535353; /* Slightly lighter background on hover */
+}
+
+
+
+/* Additional dark mode styles */
+.dark-mode header {
+  background-color: #333333; /* Adjust header background for dark mode */
+}
+.dark-mode .alive-button-svg{
+  background-color: #007E33; /* Adjusted green for better visibility in dark mode */
+}
+
+/* Room Card CSS */
 .room-card {
   background-color: white;
   border-radius: 5px;
@@ -43,6 +74,8 @@ main {
 .room-card:hover {
   background-color: #eeeeee;
 }
+
+
 
 .room-plus-card {
   background-color: white;
@@ -63,4 +96,8 @@ main {
 .room-plus-card-img {
   margin-left: 1500px;
   width: 50px;
+}
+
+.alive-button-svg{
+  background-color: orange;
 }

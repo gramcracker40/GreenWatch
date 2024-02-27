@@ -19,6 +19,8 @@ start_time = time()
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
 private_key = '56DYF7DQPZLFI6S7C1QIH8RH30OMOK5RF8K87IGSBKHB78KLS5P08VPZ8VAV'
 
+
+
 req_headers = {
     "Key": private_key
 }
@@ -26,7 +28,7 @@ req_headers = {
 server_url = f"http://{ServerIP}:5000/rooms/{roomID}/measurement"
 action_url = f"http://{ServerIP}:5000/rooms/{roomID}/action"
 
-# Actions
+# Actions.
 last_action_timestamp = ''
 vent_state = 3
 shade_state = 3

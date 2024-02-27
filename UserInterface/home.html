@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html data-bs-theme="light">
+  <!-- Hard Set Dark mode with Bootstrap data-bs-theme="dark" -->
+<head>
+  <meta charset="UTF-8">
+  <title>GreenWatch Home</title>
+
 <!-- TODO -->
 <!-- 
 DOM Events to dynamically create add room card
@@ -25,7 +32,7 @@ Add text in chatbox for a room with no messages
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#" img_src="/images/greenwatchlogo.png">Home</a>
+      <a class="navbar-brand" href="#"><img class="logo" src="/UserInterface/greenwatchlogo.png" alt="" height="50" width="50"></a>
       <a id="server-ip" class="navbar-brand" href="http://127.0.0.1:5000/servers">Server IPv4 Address: ...</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
         aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +49,7 @@ Add text in chatbox for a room with no messages
       <!-- Settings Dropstart -->
       <div class="nav-item dropstart" id="settings-dropstart">
         <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          Settings
+          Manage
         </button>
         <ul class="dropdown-menu dropdown-menu-dark">
           <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#users-modal"
@@ -51,6 +58,12 @@ Add text in chatbox for a room with no messages
               id="rooms-modal-trigger">Rooms</button></li>
         </ul>
       </div>
+      <!-- Dark Mode Toggle Button -->
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+        <label class="form-check-label" for="darkModeSwitch"></label>
+      </div>
+
     </div>
   </nav>
   <div class="parent-container d-flex">
@@ -73,7 +86,7 @@ Add text in chatbox for a room with no messages
       <div class="card mx-auto">
         <div class="card-header bg-transparent">
           <div class="d-flex align-items-center justify-content-between">
-            Notes
+            Notifications
             <!-- Dropdown -->
             <!-- <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="chatbox-dropdown" data-bs-toggle="dropdown">

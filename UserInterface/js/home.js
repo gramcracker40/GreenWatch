@@ -6,6 +6,8 @@ const room_grid = document.getElementById('room-grid');
 const main = document.createElement('main');
 room_grid.append(main);
 
+// Function: hideSettings()
+// Hides the settings if use isn't an admin
 function hideSettings() {
   const jwt = Utils.getJwt();
   const token = Utils.parseJwt(JSON.stringify(jwt));
@@ -17,11 +19,43 @@ function hideSettings() {
     settingsDropstart.style.visibility = "hidden";
   }
 }
-
+//Calling hideSettings functions
 hideSettings();
 
+
+//Grabs the logout-link anchor tag 
 const logoutLink = document.getElementById('logout-link');
-logoutLink.addEventListener('click', Utils.logout);
+//when clicked use logout method from Utils
+logoutLink.addEventListener('click', Utils.logout); 
+
+/* Dark Mode Logic */
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', (event) => {
+  const darkModeSwitch = document.getElementById('darkModeSwitch');
+
+  // Check if the user has a preference stored in localStorage
+  const isDarkMode = localStorage.getItem('darkMode') === "true";
+
+  // Apply the stored preference
+  darkModeSwitch.checked = isDarkMode;
+  if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+  }
+
+  // Listen for changes to the toggle switch
+  darkModeSwitch.addEventListener('change', () => {
+    if (darkModeSwitch.checked) {
+      // Activate dark mode and store the preference
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', "true");
+    } else {
+      // Deactivate dark mode and store the preference
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', "false");
+    }
+  });
+});
+
 
 function resetRoomsList() {
   while(main.firstChild) {
@@ -41,16 +75,21 @@ export async function renderRoomCards() {
 
   // forEach room, in rooms, create a card and append it to main.
   // Also set the information for the card.
-
   if (rooms.length) {
     rooms.forEach(room => {
-      const card = document.createElement('div');
+      const card = document.createElement('div'); 
       const card_header = document.createElement('div');
+      const roomAlive = document.createElement('div');
       const card_body = document.createElement('div');    // Needs to containt multiple rows
       const roomName = document.createElement('h2');
       
       card.setAttribute('class', 'room-card');
-      card.setAttribute('id', `${room['id']}`)
+      card.setAttribute('id', `${room['id']}`);
+      roomAlive.innerHTML = Utils.powerButton;
+      roomAlive.setAttribute('class','alive-button');
+      roomAlive.setAttribute('id',`${room['id']}`);
+      
+      // roomAlive.setAttribute('style', 'color: green');
       card_header.setAttribute('class', 'card-header');
       card_body.setAttribute('class', 'row');
       roomName.setAttribute('class', 'display-3');
@@ -89,7 +128,7 @@ export async function renderRoomCards() {
       download_button.innerHTML =`<button type="button" class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"></path>
         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"></path>
-      </svg> Data</button>`
+      </svg> Data</button>
 
       start_button.setAttribute('id', `start_button${room['id']}`);
       stop_button.setAttribute('id', `stop_button${room['id']}`);
@@ -448,6 +487,7 @@ export async function renderRoomCards() {
       button_row.append(shade_button);
       card_body.append(button_row);
   
+      card.append(roomAlive);
       card_header.append(roomName);
       card.append(card_header);
       card.append(card_body);
