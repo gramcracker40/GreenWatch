@@ -84,6 +84,12 @@ export async function renderRoomCards() {
       const m_button_row = document.createElement('div');
       const start_button = document.createElement('button');
       const stop_button = document.createElement('button');
+      const download_button = document.createElement('p');
+
+      download_button.innerHTML =`<button type="button" class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"></path>
+        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"></path>
+      </svg> Data</button>`
 
       start_button.setAttribute('id', `start_button${room['id']}`);
       stop_button.setAttribute('id', `stop_button${room['id']}`);
@@ -175,9 +181,11 @@ export async function renderRoomCards() {
         renderRoomValues();
         console.log("[TEST] Reloading Cards...");
         });
+
         
       m_button_row.append(start_button);
       m_button_row.append(stop_button);
+      m_button_row.append(download_button);
       card_body.append(m_button_row);
       
       const status_row = document.createElement('div');
@@ -440,7 +448,6 @@ export async function renderRoomCards() {
       button_row.append(shade_button);
       card_body.append(button_row);
   
-      
       card_header.append(roomName);
       card.append(card_header);
       card.append(card_body);
