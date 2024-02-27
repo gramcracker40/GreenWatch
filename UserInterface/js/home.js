@@ -665,6 +665,27 @@ function displayServerIPAddress(server_ip) {
   serverIPText.href = `http://${server_ip}:5000/servers`;
 }
 
+async function sendAckRequest(room_id) {
+  // Send acknowledgment request to agent
+  const lastAction = await proxy.getLastActionByRoomID(room_id)
+  const action = getCreateActionObject(
+    1,
+    0,
+    lastAction['stop'],
+    lastAction['vent_state'],
+    lastAction['shade_state'],
+    lastAction['reboot']
+  );
+  await proxy.createAction(room_id, action);
+}
+
+async function checkAckResponse(room_id) {
+  // Checks status of acknowledgement request sent to agent
+  const lastAction = await proxy.getLastActionByRoomID(room_id);
+  console.log(`Room ID ${room_id} Acknowledged: ${lastAction['ack']}`);
+}
+
+
 // Create first server
 const server_ip = await createFirstServer(true);
 
