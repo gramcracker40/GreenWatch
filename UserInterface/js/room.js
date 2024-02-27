@@ -37,8 +37,11 @@ const logoutLink = document.getElementById('logout-link');
 logoutLink.addEventListener('click', Utils.logout);
 
 async function createAgent() {
-  console.log("Creating new agent for room: " + roomID)
-  const message = "[LOG] Creating new agent for room: " + roomID
+  console.log("Creating new agent for room: " + roomID);
+  const message = "[LOG] Creating new agent for room: " + roomID;
+
+  const servers = await proxy.getServers();
+  const server_ip = servers[0]['ip_address']
 
   // Get user ID from access_token
   const jwt = Utils.getJwt();
@@ -52,8 +55,7 @@ async function createAgent() {
   await proxy.createRoomMessage(roomID, userID, message);
   console.log("[SUCCESS] Created new agent for room: " + roomID)
 
-  redirectToDownloadAgent() 
-
+  redirectToDownloadAgent(server_ip) 
 }
 
 function getCreateAgentObject() {
@@ -69,19 +71,11 @@ function getCreateAgentObject() {
 }
 
 // Function to redirect to a relative URL
-function redirectToDownloadAgent() 
+function redirectToDownloadAgent(server_ip) 
 {
-  // Relative URL to redirect to
-  const relativeURL = 
-'http://127.0.0.1:5000/servers/agents/' + roomID;
+  let absoluteURL = `http://${server_ip}:5000/servers/agents/${roomID}`;
 
-  // Construct absolute URL based 
-  // on the current location
-  const absoluteURL = 
-  new URL(relativeURL);
-  // new URL(relativeURL, window.location.href);
-
-  // const absoluteURL = '127.0.0.1/servers/agents/' + roomID;
+  absoluteURL = new URL(absoluteURL);
 
   // Log the absolute URL (optional)
   console.log('Redirecting to:', absoluteURL.href);
