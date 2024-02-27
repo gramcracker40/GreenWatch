@@ -8,14 +8,16 @@ import datetime
 import random
 import socket
 import subprocess
+import math
 
 roomID = 1
 # ServerIP='138.197.101.211'
 ServerIP='127.0.0.1'
 server_data = None
 duration = 3
+start_time = time()
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
-private_key = 'NVTCVAG5F3XFEUZE2T28BGUBBA0S8NOFG7WII8E94M9UIYC6617M5E8AT1PX'
+private_key = '56DYF7DQPZLFI6S7C1QIH8RH30OMOK5RF8K87IGSBKHB78KLS5P08VPZ8VAV'
 
 req_headers = {
     "Key": private_key
@@ -345,8 +347,11 @@ def take_measurements(simulated=True):
     Takes measurements and returns data
     """
     if simulated:
+        global start_time
         # Temperature
-        temp = round(random.random() * 2.0 + 22, 2)
+        # temp = round(random.random() * 2.0 + 22, 2)
+        elapsed_time_minutes = (time() - start_time) / 60
+        temp = round(1 * math.sin(math.pi * elapsed_time_minutes / 3) + 25, 2) # 3 min period
         # Humidity
         hum = round(random.random() * 10 + 35, 2)
         # Light
