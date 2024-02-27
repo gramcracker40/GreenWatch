@@ -25,7 +25,12 @@ main {
   padding: 20px;
 }
 
-/* Dark Mode CSS */
+.btn {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
 /* Dark Mode CSS */
 .dark-mode {
   background-color: #343a40; /* Bootstrap dark background */
@@ -58,7 +63,7 @@ main {
 /* Room Card CSS */
 .room-card {
   background-color: white;
-  border-radius: 5px;
+  border-radius: 15px;
   border-color: #07ad90;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   /* margin: 10px; */
@@ -66,7 +71,7 @@ main {
   text-align: center;
   cursor: pointer;
 }
-.roomn-card img {
+.room-card img {
   max-width: 100%;
   height: auto;
 }
