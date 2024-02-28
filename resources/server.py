@@ -208,10 +208,7 @@ class Agents(MethodView):
         self.build_agent(room.id, server.ip_address, passcode, agent_data["duration"])
 
         return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
-        
-        
-
-        
+   
     #@jwt_required()
     @blp.response(200, AgentSchema(many=True))
     def get(self):
@@ -238,8 +235,6 @@ class Agent(MethodView):
         build_path = dir_path + f"/resources/agent{agent.room_id}.py"
 
         return send_file(build_path)
-
-
 
     #@jwt_required(fresh=True)
     def delete(self, agent_id):
