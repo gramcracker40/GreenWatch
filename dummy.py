@@ -8,14 +8,16 @@ import datetime
 import random
 import socket
 import subprocess
+import math
 
-roomID = 1
+roomID = 2
 # ServerIP='138.197.101.211'
 ServerIP='127.0.0.1'
 server_data = None
 duration = 3
+start_time = time()
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
-private_key = 'AA0QII7I4JCCU1UTGS4RY9E8NXPK6EEOP392YKUDUWVK5ESPSUVLPGTT1A4V'
+private_key = '61EMQO2MVFLT9W0CBBFG6FDL5VDOWC4661VATECG98DKYGNMTHAOWGUJ17NU'
 
 req_headers = {
     "Key": private_key
@@ -129,6 +131,7 @@ def post_current_states():
     global reboot
 
     action_json = {
+        "ack": ack,
         "status": 3, # completed
         "stop": stop,
         "vent_state": vent_state,
@@ -188,7 +191,7 @@ def toggle_shade(state):
         print("Closing shade...")
 
 
-def get_Host_name_IP():
+def get_hostname_IP():
     try:
         host_name = socket.gethostname()
         host_ip = socket.gethostbyname(host_name)
@@ -344,8 +347,11 @@ def take_measurements(simulated=True):
     Takes measurements and returns data
     """
     if simulated:
+        global start_time
         # Temperature
-        temp = round(random.random() * 2.0 + 22, 2)
+        # temp = round(random.random() * 2.0 + 22, 2)
+        elapsed_time_minutes = (time() - start_time) / 60
+        temp = round(1 * math.sin(math.pi * elapsed_time_minutes / 3) + 25, 2) # 3 min period
         # Humidity
         hum = round(random.random() * 10 + 35, 2)
         # Light
@@ -380,7 +386,7 @@ if __name__ == "__main__":
     # adc = MCP()
 
     # Get host name and ip address
-    host_name, host_IP = get_Host_name_IP()
+    host_name, host_IP = get_hostname_IP()
 
     while True:
         print("****************************\n")

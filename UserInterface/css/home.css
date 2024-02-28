@@ -25,9 +25,45 @@ main {
   padding: 20px;
 }
 
+.btn {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+/* Dark Mode CSS */
+.dark-mode {
+  background-color: #343a40; /* Bootstrap dark background */
+  color: #ffffff; /* White text color */
+}
+
+/* Override styles for dark mode */
+.dark-mode .room-card,
+.dark-mode .room-plus-card {
+  background-color: #424242; /* Darker background for cards */
+  color: #dddddd; /* Lighter text for visibility */
+  border-color: #333333; /* Optional: adjust if you have borders */
+}
+
+.dark-mode .room-card:hover,
+.dark-mode .room-plus-card:hover {
+  background-color: #535353; /* Slightly lighter background on hover */
+}
+
+
+
+/* Additional dark mode styles */
+.dark-mode header {
+  background-color: #333333; /* Adjust header background for dark mode */
+}
+.dark-mode .alive-button-on{
+  background-color: #007E33; /* Adjusted green for better visibility in dark mode */
+}
+
+/* Room Card CSS */
 .room-card {
   background-color: white;
-  border-radius: 5px;
+  border-radius: 15px;
   border-color: #07ad90;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   /* margin: 10px; */
@@ -35,7 +71,7 @@ main {
   text-align: center;
   cursor: pointer;
 }
-.roomn-card img {
+.room-card img {
   max-width: 100%;
   height: auto;
 }
@@ -43,6 +79,8 @@ main {
 .room-card:hover {
   background-color: #eeeeee;
 }
+
+
 
 .room-plus-card {
   background-color: white;
@@ -63,4 +101,16 @@ main {
 .room-plus-card-img {
   margin-left: 1500px;
   width: 50px;
+}
+
+.alive-button-on{
+  background-color: #007E33;
+}
+
+.alive-button-off{
+  background-color: grey;
+}
+
+.alive-button-pending{
+  background-color: orange;
 }

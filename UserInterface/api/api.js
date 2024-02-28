@@ -422,8 +422,52 @@ export class GreenhouseProxy {
 
     // ------------------SERVER------------------
     // Get all servers
+    async getServers() {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/servers`, options);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 
     // Create a new server
+    async createServer(server) {
+        const options = {
+            method: 'POST',
+            headers: default_headers,
+            body: JSON.stringify(server)
+        }
+
+        try {
+            let response = await fetch(`/servers`, options);
+            if (response.ok) {
+                console.log("Server Created Successfully");
+            }
+        } catch (error) {
+            console.log(error);
+        }        
+    }
+
+    // Get server ip address by ID
+    async getServerIPByID(server_id) {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/servers/${server_id}/host`, options);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }   
+    }
+    
 
     // Update a server by id
 
@@ -535,8 +579,8 @@ export class GreenhouseProxy {
             let response = await fetch(`/rooms/${roomID}`, options);
             if (response.ok) {
                 let data = await response.json();
-                console.log(data['actions'])
-                console.log((data['actions']).length)
+                // console.log(data['actions'])
+                // console.log((data['actions']).length)
                 return data['actions'][(data['actions']).length - 1];
             }
         } catch (error) {
