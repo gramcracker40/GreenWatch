@@ -108,9 +108,28 @@ main {
 }
 
 .alive-button-off{
-  background-color: grey;
+  /* background-color: grey; */
+  animation: alive-button-blink;
 }
 
 .alive-button-pending{
-  background-color: orange;
+  /* background-color: orange; */
+  animation: alive-button-blink;
+}
+
+/* Animations */
+
+/* Blink animation for Alive Button */
+@keyframes alive-button-blink { 
+  0% {
+    /* opacity: 0; */
+    background-color: orange;
+  }
+  50% {
+    background-color: grey;
+  }
+  100% {
+    /* opacity: 1; */
+    background-color: orange;
+  }
 }
