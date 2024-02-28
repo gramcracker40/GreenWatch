@@ -266,7 +266,7 @@ class Agent(MethodView):
     @blp.arguments(AgentUpdateSchema())
     def patch(self, agent_data, agent_id):
         '''
-        update an agent, can only update ip_address and duration
+        update an agent, can only update server ip_address, device ip address, status and duration
         '''
         agent = AgentModel.query.get_or_404(agent_id)
 

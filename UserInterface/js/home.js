@@ -80,17 +80,28 @@ export async function renderRoomCards() {
   // Also set the information for the card.
   if (rooms.length) {
     rooms.forEach(room => {
+      const room_id = room['id'];
       const card = document.createElement('div'); 
       const card_header = document.createElement('div');
-      const roomAlive = document.createElement('div');
+      const roomAlive = document.createElement('button');
       const card_body = document.createElement('div');    // Needs to containt multiple rows
       const roomName = document.createElement('h2');
       
       card.setAttribute('class', 'room-card');
-      card.setAttribute('id', `${room['id']}`);
+      card.setAttribute('id', `${room_id}`);
+
+      roomAlive.setAttribute('class', 'btn btn-primary alive-button-off');
       roomAlive.innerHTML = Utils.powerButton;
-      roomAlive.setAttribute('class','alive-button');
-      roomAlive.setAttribute('id',`${room['id']}`);
+      // roomAlive.setAttribute('class','alive-button');
+      roomAlive.setAttribute('id',`alive-button${room_id}`);
+
+      toggleRoomAlive(roomAlive, room_id);
+      roomAlive.addEventListener('click', async function(event) {
+        // Prevent the event from propagating to the card
+        event.stopPropagation();
+        roomAlive.classList.remove('alive-button-on')
+        toggleRoomAlive(roomAlive, room_id);
+      })
       
       // roomAlive.setAttribute('style', 'color: green');
       card_header.setAttribute('class', 'card-header');
@@ -101,9 +112,9 @@ export async function renderRoomCards() {
       // Get agent 
       let agent_ip = " [...]";
         agents.forEach(agent => {
-          if (room['id'] == agent['room_id'])
+          if (room_id == agent['room_id'])
             {
-              agent_ip = ` [${agent['ip_address']}]`;
+              agent_ip = ` [${agent['device_ip_address']}]`;
             }
             if (isDarkMode == 'true'){
               roomName.setAttribute('style', 'color: white');
@@ -114,9 +125,9 @@ export async function renderRoomCards() {
 
       roomName.textContent = room["name"] + agent_ip;
 
-      async function getLastAction(room){
+      async function getLastAction(room_id){
       // Get last action
-      const lastAction = await proxy.getLastActionByRoomID(room['id']);
+      const lastAction = await proxy.getLastActionByRoomID(room_id);
       return lastAction;
       }
 
@@ -138,8 +149,8 @@ export async function renderRoomCards() {
         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"></path>
       </svg> Data`
 
-      start_button.setAttribute('id', `start_button${room['id']}`);
-      stop_button.setAttribute('id', `stop_button${room['id']}`);
+      start_button.setAttribute('id', `start_button${room_id}`);
+      stop_button.setAttribute('id', `stop_button${room_id}`);
       
       if (isDarkMode == 'true'){
         start_button.setAttribute('class', `btn btn-outline-light`);
@@ -158,12 +169,13 @@ export async function renderRoomCards() {
         
         // Prevent the event from propagating to the card
         event.stopPropagation();
-        
-        const roomID = room['id'];
 
         // Get last action
-        const lastAction = await proxy.getLastActionByRoomID(roomID);
+        const lastAction = await proxy.getLastActionByRoomID(room_id);
         // console.log(lastAction['stop']);
+
+        console.log(`Room ID ${roomID} Acknowledged: ${lastAction['ack']}`);
+
 
         // DEBUG: Test 'pinging'
         // console.log(`Room ID ${room['id']} Acknowledged: ${lastAction['ack']}`);
@@ -183,12 +195,12 @@ export async function renderRoomCards() {
         const userID = jwt['user_id'];
 
         // Create action in database
-        await proxy.createAction(roomID, actionObj);
+        await proxy.createAction(room_id, actionObj);
 
         // Post message in notes
-        const message = `[MEASUREMENT] Started logging in room ${roomID}`; 
-        await proxy.createRoomMessage(roomID, userID, message);
-        // console.log("[SUCCESS] Started logging in room: " + roomID);
+        const message = `[MEASUREMENT] Started logging in room ${room_id}`; 
+        await proxy.createRoomMessage(room_id, userID, message);
+        // console.log("[SUCCESS] Started logging in room: " + room_id);
         
         renderRoomValues();
         // console.log("[TEST] Reloading Cards...");
@@ -205,10 +217,8 @@ export async function renderRoomCards() {
         // Prevent the event from propagating to the card
         event.stopPropagation();
         
-        const roomID = room['id'];
-
         // Get last action
-        const lastAction = await proxy.getLastActionByRoomID(roomID);
+        const lastAction = await proxy.getLastActionByRoomID(room_id);
         // console.log(lastAction['stop']);
 
         // Create action object
@@ -226,12 +236,12 @@ export async function renderRoomCards() {
         const userID = jwt['user_id'];
 
         // Create action in database
-        await proxy.createAction(roomID, actionObj);
+        await proxy.createAction(room_id, actionObj);
 
         // Post message in notes
-        const message = `[MEASUREMENT] Stopped logging in room ${roomID}`; 
-        await proxy.createRoomMessage(roomID, userID, message);
-        // console.log("[SUCCESS] Stopped logging in room: " + roomID);
+        const message = `[MEASUREMENT] Stopped logging in room ${room_id}`; 
+        await proxy.createRoomMessage(room_id, userID, message);
+        // console.log("[SUCCESS] Stopped logging in room: " + room_id);
 
         // Refresh cards
         renderRoomValues();
@@ -243,8 +253,7 @@ export async function renderRoomCards() {
           // Prevent the event from propagating to the card
           event.stopPropagation();
           
-          const roomID = room['id'];
-          redirectToDownloadCSV(server_ip, roomID);
+          redirectToDownloadCSV(server_ip, room_id);
         }
       )
 
@@ -261,11 +270,11 @@ export async function renderRoomCards() {
       status_label.setAttribute('class', 'h1');
       status_label.textContent = "Status: ";
       status_value.setAttribute('class', 'h1');
-      status_value.setAttribute('id', `status_value${room['id']}`)
+      status_value.setAttribute('id', `status_value${room_id}`)
       status_value.textContent = `...`;
       
       let isStopped = -1;
-      getLastAction(room).then(response => {
+      getLastAction(room_id).then(response => {
         isStopped = response['stop'];
         // console.log(`isStopped: ${isStopped}`)
         if (isStopped == 0){
@@ -363,7 +372,7 @@ export async function renderRoomCards() {
         vent_label.textContent = "Vent State:";
         vent_value.setAttribute('class', 'h2');
         vent_value.setAttribute('style', 'color: green');
-        vent_value.setAttribute('id',`vent_value${room['id']}`)
+        vent_value.setAttribute('id',`vent_value${room_id}`)
 
         
         shade_row.setAttribute('class', 'd-flex justify-content-between');
@@ -372,7 +381,7 @@ export async function renderRoomCards() {
         shade_label.textContent = "Shade State:";
         shade_value.setAttribute('class', 'h2');
         shade_value.setAttribute('style', 'color: green');
-        shade_value.setAttribute('id', `shade_value${room['id']}`)
+        shade_value.setAttribute('id', `shade_value${room_id}`)
 
         // console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
         if (room['actions'][room['actions'].length-1]['status'] == 3)
@@ -415,9 +424,9 @@ export async function renderRoomCards() {
       const vent_button = document.createElement('button');
       const shade_button = document.createElement('button');
 
-      vent_button.setAttribute('id', `vent_button${room['id']}`);
+      vent_button.setAttribute('id', `vent_button${room_id}`);
       vent_button.setAttribute('class', `btn btn-outline-light`);
-      shade_button.setAttribute('id', `shade_button${room['id']}`);
+      shade_button.setAttribute('id', `shade_button${room_id}`);
       shade_button.setAttribute('class', `btn btn-outline-light`);
 
       if (isDarkMode == 'true'){
@@ -441,10 +450,8 @@ export async function renderRoomCards() {
         // Prevent the event from propagating to the card
         event.stopPropagation();
         
-        const roomID = room['id'];
-
         // Get last action
-        const lastAction = await proxy.getLastActionByRoomID(roomID);
+        const lastAction = await proxy.getLastActionByRoomID(room_id);
         // console.log(lastAction['vent_state']);
 
         // Create action object
@@ -462,12 +469,12 @@ export async function renderRoomCards() {
         const userID = jwt['user_id'];
 
         // Create action in database
-        await proxy.createAction(roomID, actionObj);
+        await proxy.createAction(room_id, actionObj);
 
         // Post message in notes
-        const message = `[ACTION] Changing vent in room ${roomID} to ${vent_states[actionObj['vent_state']]}`; 
-        await proxy.createRoomMessage(roomID, userID, message);
-        // console.log("[SUCCESS] Created new action for room: " + roomID);
+        const message = `[ACTION] Changing vent in room ${room_id} to ${vent_states[actionObj['vent_state']]}`; 
+        await proxy.createRoomMessage(room_id, userID, message);
+        // console.log("[SUCCESS] Created new action for room: " + room_id);
         
         // Refresh cards
         // renderRoomCards();
@@ -487,11 +494,9 @@ export async function renderRoomCards() {
 
         // Prevent the event from propagating to the card
         event.stopPropagation();
-        
-        const roomID = room['id'];
 
         // Get last action
-        const lastAction = await proxy.getLastActionByRoomID(roomID);
+        const lastAction = await proxy.getLastActionByRoomID(room_id);
         // console.log(lastAction['shade_state']);
 
         // Create action object
@@ -508,12 +513,12 @@ export async function renderRoomCards() {
         const userID = jwt['user_id'];
 
         // Create action in database
-        await proxy.createAction(roomID, actionObj);
+        await proxy.createAction(room_id, actionObj);
 
         // Post message in notes
-        const message = `[ACTION] Changing shade in room ${roomID} to ${shade_states[actionObj['shade_state']]}`; 
-        await proxy.createRoomMessage(roomID, userID, message);
-        // console.log("[SUCCESS] Created new action for room: " + roomID)
+        const message = `[ACTION] Changing shade in room ${room_id} to ${shade_states[actionObj['shade_state']]}`; 
+        await proxy.createRoomMessage(room_id, userID, message);
+        // console.log("[SUCCESS] Created new action for room: " + room_id)
 
         // Refresh cards
         renderRoomValues();
@@ -533,8 +538,8 @@ export async function renderRoomCards() {
     
       card.addEventListener('click', () => {
         // console.log(card.getAttribute('id'));
-        sessionStorage.setItem('roomID', room['id']);
-        window.location.href = `/home/room/${room['id']}`;
+        sessionStorage.setItem('roomID', room_id);
+        window.location.href = `/home/room/${room_id}`;
       });
     });
   }else{
@@ -552,6 +557,8 @@ export async function renderRoomValues() {
 
   const rooms = await proxy.getRooms();
   const agents = await proxy.getAgents();
+
+  
 
   // const agent_response = await proxy.pingAgentByID(1); // TESTING: just for first agent
   // const agent_status = agent_response['success'];
@@ -571,8 +578,13 @@ export async function renderRoomValues() {
 
   if (rooms.length) {
     rooms.forEach(room => {
-      const room_card = document.getElementById(`${room['id']}`)
-      const roomName = room_card.getElementsByClassName('display-3')[0]
+      const room_id = room['id']
+      const room_card = document.getElementById(`${room['id']}`);
+      const roomName = room_card.getElementsByClassName('display-3')[0];
+
+      const roomAlive = document.getElementById(`alive-button${room_id}`);
+
+      toggleRoomAlive(roomAlive, room_id);
 
       // Get agent 
       // const agent = await proxy.getAgentByID(room['id'])
@@ -580,7 +592,7 @@ export async function renderRoomValues() {
         agents.forEach(agent => {
           if (room['id'] == agent['room_id'])
             {
-              agent_ip = ` [${agent['ip_address']}]`
+              agent_ip = ` [${agent['device_ip_address']}]`
             }
         })
 
@@ -590,7 +602,7 @@ export async function renderRoomValues() {
       //   roomName.setAttribute('style', 'color: grey')
       // }
 
-      const status_value = document.getElementById(`status_value${room['id']}`);
+      const status_value = document.getElementById(`status_value${room_id}`);
       const isStopped = `${room['actions'][room['actions'].length-1]['stop']}`;
       
       if (isStopped == 0){
@@ -605,15 +617,13 @@ export async function renderRoomValues() {
         status_value.setAttribute('style', 'color: grey');
       }
       
-
-
       if (room['measurements'].length) {
         // Need a label, value, and row for each
 
-        const t_value = document.getElementById(`t_value${room['id']}`)
-        const h_value = document.getElementById(`h_value${room['id']}`)
-        const p_value = document.getElementById(`p_value${room['id']}`)
-        const l_value = document.getElementById(`l_value${room['id']}`)
+        const t_value = document.getElementById(`t_value${room_id}`)
+        const h_value = document.getElementById(`h_value${room_id}`)
+        const p_value = document.getElementById(`p_value${room_id}`)
+        const l_value = document.getElementById(`l_value${room_id}`)
 
         t_value.textContent = `${room['measurements'][room['measurements'].length-1]['temperature']}`;
         h_value.textContent = `${room['measurements'][room['measurements'].length-1]['humidity']}`;
@@ -623,10 +633,10 @@ export async function renderRoomValues() {
 
       if (room['actions'].length) {
         // Need a label, value, and row for each
-        const vent_value = document.getElementById(`vent_value${room['id']}`)
-        const shade_value = document.getElementById(`shade_value${room['id']}`);
-        const vent_button = document.getElementById(`vent_button${room['id']}`);
-        const shade_button= document.getElementById(`shade_button${room['id']}`);
+        const vent_value = document.getElementById(`vent_value${room_id}`)
+        const shade_value = document.getElementById(`shade_value${room_id}`);
+        const vent_button = document.getElementById(`vent_button${room_id}`);
+        const shade_button= document.getElementById(`shade_button${room_id}`);
 
         vent_value.setAttribute('style', 'color: green');
         shade_value.setAttribute('style', 'color: green');
@@ -652,7 +662,6 @@ export async function renderRoomValues() {
           shade_value.setAttribute('style', 'color: red');
           vent_button.disabled = true;
           vent_button.textContent = "Disabled"
-          
           
           vent_value.textContent = "Pending";
           vent_value.setAttribute('style', 'color: red');
@@ -780,7 +789,7 @@ const sleepNow = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 async function checkRoomAlive(room_id){
   await sendAckRequest(room_id);
-  await sleepNow(5000)
+  await sleepNow(3000)
   const response = await checkAckResponse(room_id);
 
   // console.log("ACKNOWLEDGE RESPONSE: " + response);
@@ -802,7 +811,6 @@ function redirectToDownloadCSV(server_ip, room_id)
   window.location.href = absoluteURL.href;
 }
 
-
 // Create first server
 const server_ip = await createFirstServer(true);
 
@@ -810,13 +818,32 @@ const server_ip = await createFirstServer(true);
 displayServerIPAddress(server_ip);
 
 // Render all room cards
-renderRoomCards();
+await renderRoomCards();
 
 // Start the interval to update room values within room cars
-let intervalId = setInterval(renderRoomValues, 10000);
+let intervalId = setInterval(renderRoomValues, 8000);
 
 // Check if room 2 is alive
-let checkAliveIntervalId = setInterval(checkRoomAlive, 30000, 2);
+// let checkAliveIntervalId = setInterval(checkRoomAlive, 30000, 2);
+
+async function toggleRoomAlive(powerButton, room_id){
+  // const powerButton = document.getElementById(`alive-button${room_id}`);
+
+  powerButton.classList.remove('alive-button-off');
+  powerButton.classList.add('alive-button-pending');
+
+  let isAlive = await checkRoomAlive(room_id);
+
+  if (isAlive == 1){
+    powerButton.classList.remove('alive-button-pending');
+    powerButton.classList.add('alive-button-on');
+  } else {
+    powerButton.classList.remove('alive-button-on');
+    powerButton.classList.remove('alive-button-pending');
+    powerButton.classList.add('alive-button-off');
+  }
+}
+
 
 // New room card button
 // renderNewRoomCard();
