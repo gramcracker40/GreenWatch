@@ -529,6 +529,22 @@ export class GreenhouseProxy {
     
 
     // Update an agent by id
+    async updateAgent(agent_id, agentObj) {
+        const options = {
+            method: 'PATCH',
+            headers: default_headers,
+            body: JSON.stringify(agentObj)
+        }
+
+        try {
+            let response = await fetch(`/servers/agents/${agent_id}`, options);
+            if (response.ok) {
+                console.log("[API] Agent Created Successfully");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Delete an agent by id
 

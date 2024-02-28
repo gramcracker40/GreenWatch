@@ -22,7 +22,7 @@ async function setRoomName() {
     agents.forEach(agent => {
       if (roomID == agent['room_id'])
         {
-          agent_ip = ` [${agent['ip_address']}]`;
+          agent_ip = ` [${agent['device_ip_address']}]`;
           roomNameText.setAttribute('style', 'color: black');
         }
     })
@@ -63,6 +63,7 @@ function getCreateAgentObject() {
   const agent = {
     "duration": "00:00:03.000000",
     "ip_address": "127.0.0.1",
+    "status": 0,
     "room_id": roomID,
     "server_id": 1
   }

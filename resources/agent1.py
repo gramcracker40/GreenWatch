@@ -8,8 +8,7 @@ from spidev import SpiDev
 roomID = 1
 ServerIP='127.0.0.1'
 duration = 3
-
-private_key = '56DYF7DQPZLFI6S7C1QIH8RH30OMOK5RF8K87IGSBKHB78KLS5P08VPZ8VAV'
+private_key = 'SVV708ABSK9EN3DMNAH9CFV1MCQ76UNUE6T9MKE0S3QRAU514QL1SORMK1V0'
 
 req_headers = {
     "Key": private_key
