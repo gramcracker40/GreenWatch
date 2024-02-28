@@ -165,6 +165,9 @@ export async function renderRoomCards() {
         const lastAction = await proxy.getLastActionByRoomID(roomID);
         // console.log(lastAction['stop']);
 
+        console.log(`Room ID ${roomID} Acknowledged: ${lastAction['ack']}`);
+
+
         // DEBUG: Test 'pinging'
         // console.log(`Room ID ${room['id']} Acknowledged: ${lastAction['ack']}`);
         
