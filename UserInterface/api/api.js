@@ -579,8 +579,8 @@ export class GreenhouseProxy {
             let response = await fetch(`/rooms/${roomID}`, options);
             if (response.ok) {
                 let data = await response.json();
-                console.log(data['actions'])
-                console.log((data['actions']).length)
+                // console.log(data['actions'])
+                // console.log((data['actions']).length)
                 return data['actions'][(data['actions']).length - 1];
             }
         } catch (error) {
