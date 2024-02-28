@@ -56,7 +56,7 @@ main {
 .dark-mode header {
   background-color: #333333; /* Adjust header background for dark mode */
 }
-.dark-mode .alive-button-svg{
+.dark-mode .alive-button-on{
   background-color: #007E33; /* Adjusted green for better visibility in dark mode */
 }
 
@@ -103,6 +103,14 @@ main {
   width: 50px;
 }
 
-.alive-button-svg{
+.alive-button-on{
+  background-color: #007E33;
+}
+
+.alive-button-off{
+  background-color: grey;
+}
+
+.alive-button-pending{
   background-color: orange;
 }

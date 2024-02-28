@@ -70,7 +70,7 @@ export async function renderRoomCards() {
   const agents = await proxy.getAgents();
 
   const isDarkMode = localStorage.getItem('darkMode');
-  console.log(`[DARK MODE] ${isDarkMode}`)
+  // console.log(`[DARK MODE] ${isDarkMode}`)
 
   const vent_states = ['Open', 'Closed', 'Pending']
   const shade_states = ['Open', 'Closed', 'Pending']
@@ -120,10 +120,10 @@ export async function renderRoomCards() {
       return lastAction;
       }
 
-      // DEBUG: Test 'pinging'
-      getLastAction(room).then(response => {
-        console.log(`Room ID ${room['id']} Acknowledged: ${response['ack']}`);
-      })
+      // // DEBUG: Test 'pinging'
+      // getLastAction(room).then(response => {
+      //   console.log(`Room ID ${room['id']} Acknowledged: ${response['ack']}`);
+      // })
 
       // Main buttons
       // Create a button element
@@ -166,7 +166,7 @@ export async function renderRoomCards() {
         // console.log(lastAction['stop']);
 
         // DEBUG: Test 'pinging'
-        console.log(`Room ID ${room['id']} Acknowledged: ${lastAction['ack']}`);
+        // console.log(`Room ID ${room['id']} Acknowledged: ${lastAction['ack']}`);
         
         // Create action object
         const actionObj = getCreateActionObject(
@@ -188,10 +188,10 @@ export async function renderRoomCards() {
         // Post message in notes
         const message = `[MEASUREMENT] Started logging in room ${roomID}`; 
         await proxy.createRoomMessage(roomID, userID, message);
-        console.log("[SUCCESS] Started logging in room: " + roomID);
+        // console.log("[SUCCESS] Started logging in room: " + roomID);
         
         renderRoomValues();
-        console.log("[TEST] Reloading Cards...");
+        // console.log("[TEST] Reloading Cards...");
         });
 
       stop_button.textContent = "Stop Logging";
@@ -214,6 +214,7 @@ export async function renderRoomCards() {
         // Create action object
         const actionObj = getCreateActionObject(
           0,
+          0,
           1,
           lastAction['vent_state'],
           lastAction['shade_state'],
@@ -230,11 +231,11 @@ export async function renderRoomCards() {
         // Post message in notes
         const message = `[MEASUREMENT] Stopped logging in room ${roomID}`; 
         await proxy.createRoomMessage(roomID, userID, message);
-        console.log("[SUCCESS] Stopped logging in room: " + roomID);
+        // console.log("[SUCCESS] Stopped logging in room: " + roomID);
 
         // Refresh cards
         renderRoomValues();
-        console.log("[TEST] Reloading Cards...");
+        // console.log("[TEST] Reloading Cards...");
         });
 
       download_button.addEventListener('click', async function(event)
@@ -373,7 +374,7 @@ export async function renderRoomCards() {
         shade_value.setAttribute('style', 'color: green');
         shade_value.setAttribute('id', `shade_value${room['id']}`)
 
-        console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
+        // console.log("last action state: " + room['actions'][room['actions'].length-1]['status'])
         if (room['actions'][room['actions'].length-1]['status'] == 3)
         {
           if (room['actions'][room['actions'].length-1]['shade_state'] != null)
@@ -449,6 +450,7 @@ export async function renderRoomCards() {
         // Create action object
         const actionObj = getCreateActionObject(
           0,
+          0,
           lastAction['stop'],
           ((lastAction['vent_state'] * -1) + 1),
           (lastAction['shade_state']),
@@ -465,12 +467,12 @@ export async function renderRoomCards() {
         // Post message in notes
         const message = `[ACTION] Changing vent in room ${roomID} to ${vent_states[actionObj['vent_state']]}`; 
         await proxy.createRoomMessage(roomID, userID, message);
-        console.log("[SUCCESS] Created new action for room: " + roomID);
+        // console.log("[SUCCESS] Created new action for room: " + roomID);
         
         // Refresh cards
         // renderRoomCards();
         renderRoomValues();
-        console.log("[TEST] Reloading Cards...");
+        // console.log("[TEST] Reloading Cards...");
         });
 
       shade_button.textContent = "Toggle Shade";
@@ -511,11 +513,11 @@ export async function renderRoomCards() {
         // Post message in notes
         const message = `[ACTION] Changing shade in room ${roomID} to ${shade_states[actionObj['shade_state']]}`; 
         await proxy.createRoomMessage(roomID, userID, message);
-        console.log("[SUCCESS] Created new action for room: " + roomID)
+        // console.log("[SUCCESS] Created new action for room: " + roomID)
 
         // Refresh cards
         renderRoomValues();
-        console.log("[TEST] Reloading Cards...");
+        // console.log("[TEST] Reloading Cards...");
 
         });    
         
@@ -688,10 +690,10 @@ function renderNewRoomCard() {
   main.append(card);
 }
 
-function getCreateActionObject(status, stop, vent_state, shade_state, reboot) {
+function getCreateActionObject(ack, status, stop, vent_state, shade_state, reboot) {
 
   const action = {
-      "ack": 0,
+      "ack": ack,
       "status": status,
       "stop": stop,
       "vent_state": vent_state,
@@ -758,13 +760,31 @@ async function sendAckRequest(room_id) {
     lastAction['shade_state'],
     lastAction['reboot']
   );
-  await proxy.createAction(room_id, action);
+  const response = await proxy.createAction(room_id, action);
 }
 
 async function checkAckResponse(room_id) {
   // Checks status of acknowledgement request sent to agent
   const lastAction = await proxy.getLastActionByRoomID(room_id);
-  console.log(`Room ID ${room_id} Acknowledged: ${lastAction['ack']}`);
+  if (lastAction['status'] == 3){
+    console.log(`Room ID ${room_id} Acknowledged: ${lastAction['ack']}`);
+    return lastAction['ack'];
+  } else {
+    console.log(`Room ID ${room_id} Acknowledged: ${0}`);
+    return 0;
+  }
+}
+
+// Wait for `delay` milliseconds
+const sleepNow = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
+async function checkRoomAlive(room_id){
+  await sendAckRequest(room_id);
+  await sleepNow(5000)
+  const response = await checkAckResponse(room_id);
+
+  // console.log("ACKNOWLEDGE RESPONSE: " + response);
+  return response;
 }
 
 // Function to redirect to a relative URL
@@ -794,6 +814,9 @@ renderRoomCards();
 
 // Start the interval to update room values within room cars
 let intervalId = setInterval(renderRoomValues, 10000);
+
+// Check if room 2 is alive
+let checkAliveIntervalId = setInterval(checkRoomAlive, 30000, 2);
 
 // New room card button
 // renderNewRoomCard();

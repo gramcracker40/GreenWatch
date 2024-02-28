@@ -71,7 +71,7 @@ function getCreateAgentObject() {
 }
 
 // Function to redirect to a relative URL
-function redirectToDownloadAgent(server_ip) 
+function redirectToDownloadAgent(server_ip)
 {
   let absoluteURL = `http://${server_ip}:5000/servers/agents/${roomID}`;
 
