@@ -116,11 +116,15 @@ class RoomSchema(PlainRoomSchema):
 class AgentSchema(PlainAgentSchema):
     duration = fields.Time(required=True)
     ip_address = fields.String(required=True)
+    status = fields.Int(required=True)
+    device_ip_address = fields.String()
 
 
 class AgentUpdateSchema(Schema):
     duration = fields.Time()
     ip_address = fields.String()
+    status = fields.Int()
+    device_ip_address = fields.String()
 
 class ExperimentSchema(PlainExperimentSchema):
     
