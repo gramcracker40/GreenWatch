@@ -70,6 +70,7 @@ main {
   padding: 20px;
   text-align: center;
   cursor: pointer;
+  animation: blink ;
 }
 .room-card img {
   max-width: 100%;
@@ -113,4 +114,13 @@ main {
 
 .alive-button-pending{
   background-color: orange;
+  animation: alive-button-blink 1s infinite; /*blink animation 1s on a loop*/
+}
+
+/* Animations */
+
+/* Blink animation for Alive Button */
+@keyframes alive-button-blink { 
+  0%, 100% { background-color: grey; } /* Starting and ending with grey */
+  50% { background-color: orange; } /* Transition to orange at halfway point */
 }

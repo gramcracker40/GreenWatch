@@ -826,6 +826,9 @@ let intervalId = setInterval(renderRoomValues, 8000);
 // Check if room 2 is alive
 // let checkAliveIntervalId = setInterval(checkRoomAlive, 30000, 2);
 
+
+//toggleRoomAlive(): checks if room is on if it is on it is green (alive-button-on)
+// if it isn't on it is off. When it is off remove on and pending class set to off class(CSS). 
 async function toggleRoomAlive(powerButton, room_id){
   // const powerButton = document.getElementById(`alive-button${room_id}`);
 
