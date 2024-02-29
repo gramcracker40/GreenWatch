@@ -2,22 +2,7 @@
 <html data-bs-theme="light">
   <!-- Hard Set Dark mode with Bootstrap data-bs-theme="dark" -->
 <head>
-  <meta charset="UTF-8">
-  <title>GreenWatch Home</title>
-
-<!-- TODO -->
-<!-- 
-DOM Events to dynamically create add room card
-Add text in chatbox for a room with no messages
-
-
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>GreenWatch Home</title>
-  <!-- <link rel="stylesheet" href="./css/style.css"> -->
+<meta charset="UTF-8">
 <title>GreenWatch Home</title>
 <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 <!-- Bootstrap CSS -->
@@ -32,7 +17,7 @@ Add text in chatbox for a room with no messages
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img class="logo" src="/images/greenwatchlogo.png" alt="" height="50" width="50"></a>
+      <a class="navbar-brand" href="#"><img class="logo" src="\images\greenwatchlogo.png" alt="" height="50" width="50"></a>
       <a id="server-ip" class="navbar-brand" href="http://127.0.0.1:5000/servers">Server IPv4 Address: ...</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
         aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,14 +72,9 @@ Add text in chatbox for a room with no messages
         <div class="card-header bg-transparent">
           <div class="d-flex align-items-center justify-content-between">
             Notifications
-            <!-- Dropdown -->
-            <!-- <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="chatbox-dropdown" data-bs-toggle="dropdown">
-              Select Room
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="chatbox-dropdown" id="dropdown-menu">
-            </ul>
-          </div> -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+              <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+            </svg>
             <select class="form-control" id="chatbox-dropdown" style="max-width: 40%;">
             </select>
           </div>
