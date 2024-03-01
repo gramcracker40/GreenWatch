@@ -64,3 +64,11 @@
 .modal-trigger:hover {
   background-color: grey;
 }
+
+/* Dark Mode */
+.dark-mode .list-group-item{
+  background-color: #333333;
+  border-color: transparent;
+  color: white;
+  font-size: clamp(1rem,50%,2rem);
+}
