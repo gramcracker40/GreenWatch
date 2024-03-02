@@ -248,7 +248,7 @@ class Action(MethodView):
     def post(self, action_data, room_id):
         '''
         Take an action in a room - Only agents created in the dashboard can 
-        tak actions in the room they were created for originally. 
+        take actions in the room they were created for originally. 
         Anything else will be rejected.
         '''
         room = RoomModel.query.get_or_404(room_id)

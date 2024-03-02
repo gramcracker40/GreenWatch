@@ -134,3 +134,29 @@ function extractDate(date) {
 
   return `${day} ${month}, ${year}`;
 }
+
+export function withTimeout(promise, timeout) {
+  // Create a promise that rejects after the timeout
+  let timeoutPromise = new Promise((resolve, reject) => {
+    let id = setTimeout(() => {
+      clearTimeout(id);
+      reject(new Error('The operation timed out'));
+    }, timeout);
+  });
+  
+  // Race the passed promise against the timeout
+  return Promise.race([promise, timeoutPromise]);
+}
+
+export function timeStringToSeconds(timeString) {
+  // Split the time string into hours, minutes, and seconds
+  let parts = timeString.split(':');
+
+  // Convert each part to an integer. Parts are expected to be in HH:MM:SS format.
+  let hours = parseInt(parts[0], 10);
+  let minutes = parseInt(parts[1], 10);
+  let seconds = parseInt(parts[2], 10);
+
+  // Convert hours and minutes to seconds and add them together with the seconds part
+  return hours * 3600 + minutes * 60 + seconds;
+}

@@ -129,6 +129,11 @@ main {
   animation: alive-button-blink 1s infinite; /*blink animation 1s on a loop*/
 }
 
+.alive-button-pending-green{
+  background-color: #007E33;
+  animation: alive-button-blink-green 1s infinite; /*blink animation 1s on a loop*/
+}
+
 
 /* ChatBox Styling */
 
@@ -138,5 +143,11 @@ main {
 /* Blink animation for Alive Button */
 @keyframes alive-button-blink { 
   0%, 100% { background-color: grey; } /* Starting and ending with grey */
+  50% { background-color: orange; } /* Transition to orange at halfway point */
+}
+
+/* Blink animation for Alive Button */
+@keyframes alive-button-blink-green { 
+  0%, 100% { background-color: #007E33; } /* Starting and ending with grey */
   50% { background-color: orange; } /* Transition to orange at halfway point */
 }
