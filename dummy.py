@@ -394,6 +394,10 @@ if __name__ == "__main__":
 
     while True:
         print("****************************\n")
+
+        # Update agent status to 'on'
+        patch_status = requests.patch(agent_url, headers=req_headers, json={'status': 1})
+        
         if not stop:
             dataSet = take_measurements(simulated=True)
             print(dataSet)

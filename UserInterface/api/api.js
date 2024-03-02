@@ -500,6 +500,7 @@ export class GreenhouseProxy {
             let response = await fetch(`/servers/agents/${roomID}`, options);
             if (response.ok) {
                 let data = await response.json();
+                console.log(data)
                 return data;
             }
         } catch (error) {
@@ -539,7 +540,7 @@ export class GreenhouseProxy {
         try {
             let response = await fetch(`/servers/agents/${agent_id}`, options);
             if (response.ok) {
-                console.log("[API] Agent Created Successfully");
+                // console.log("[API] Agent Updated Successfully");
             }
         } catch (error) {
             console.log(error);
@@ -604,6 +605,29 @@ export class GreenhouseProxy {
         }
     }
 
+    // Get last action with specified field in specified by roomID
+    async getLastFieldActionByRoomID(roomID, field, state) {
+        const options = {
+            headers: default_headers
+        }
+
+        try {
+            let response = await fetch(`/rooms/${roomID}`, options);
+            if (response.ok) {
+                let data = await response.json();
+
+                for (let i = data['actions'].length - 1; i >= 0; i--){
+                    if (data['actions'][i][field] == state){
+                        return data['actions'][i];  
+                    }
+                }
+                return {};
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // Create a new action by room
     async createAction(roomID, actionObj) {
         const options = {
@@ -615,7 +639,7 @@ export class GreenhouseProxy {
         try {
             let response = await fetch(`/rooms/${roomID}/action`, options);
             if (response.ok) {
-                console.log(`Action Created Successfully for Room ${roomID}`);
+                // console.log(`Action Created Successfully for Room ${roomID}`);
             }
         } catch (error) {
             console.log(error);
