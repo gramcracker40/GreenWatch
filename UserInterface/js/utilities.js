@@ -160,3 +160,18 @@ export function timeStringToSeconds(timeString) {
   // Convert hours and minutes to seconds and add them together with the seconds part
   return hours * 3600 + minutes * 60 + seconds;
 }
+
+export function getCurrentDate() {
+  // Function to set the current date as the default value of the #startDate input
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  // .getMonth() is zero-based; adding 1 to get correct month number
+  // .padStart(2, '0') ensures the month and day are always 2 digits
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  
+  // Formatting the date as YYYY-MM-DD
+  const formattedToday = `${yyyy}-${mm}-${dd}`;
+  
+  return formattedToday;
+}
