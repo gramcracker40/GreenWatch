@@ -20,7 +20,13 @@ async function renderMeasurements() {
   const startDate = document.getElementById('startDate');
   const endDate = document.getElementById('endDate');
   let isDateNull = false;
-  let measurements = []
+  let measurements = [];
+
+  if (startDate.value == "" || endDate.value == ""){
+    startDate.value = Utils.getCurrentDate();
+    endDate.value = Utils.getCurrentDate();
+    }
+  
 
   const dateObj = {
     "end_date": `${endDate.value}`,
@@ -42,7 +48,7 @@ async function renderMeasurements() {
       measurements = response['data'];
     });
     // measurements = measurementsObj['data'];
-    console.log(measurements);
+    // console.log(measurements);
 
     if (measurements.length) {
       // Enable export data button
@@ -90,11 +96,11 @@ async function renderMeasurements() {
       });
   
       // Debug Lines
-      console.log("Temperature:\n" + t_data);
-      console.log("Humidity:\n" + h_data);
-      console.log("Pressure:\n" + p_data);
-      console.log("Light:\n" + l_data);
-      console.log("Timestamps:\n" + dates);    
+      // console.log("Temperature:\n" + t_data);
+      // console.log("Humidity:\n" + h_data);
+      // console.log("Pressure:\n" + p_data);
+      // console.log("Light:\n" + l_data);
+      // console.log("Timestamps:\n" + dates);    
   
       switch(parseInt(chartSelector.value)) {
         case 1: 

@@ -231,7 +231,7 @@ export class GreenhouseProxy {
             // let response = await fetch(`/rooms/${roomID}/`, options);
             if (response.ok) {
                 let data = await response.json();
-                console.log(data);
+                // console.log(data);
                 return data;
             }
         } catch (error) {
