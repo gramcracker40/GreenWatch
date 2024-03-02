@@ -89,17 +89,28 @@ export async function renderRoomCards(intervalId) {
       card.setAttribute('class', 'room-card');
       card.setAttribute('id', `${room_id}`);
 
-      if (agents[room_id-1]['status'] == 1){
-        roomAlive.setAttribute('class', 'btn btn-primary alive-button-on');
-      } else {
-        roomAlive.setAttribute('class', 'btn btn-primary alive-button-pending');
+      try{
+        if (agents[room_id-1]['status'] == 1){
+          roomAlive.setAttribute('class', 'btn btn-primary alive-button-on');
+        } else {
+          roomAlive.setAttribute('class', 'btn btn-primary alive-button-pending');
+        }
+      } catch (error) {
+        console.log("Room " + room_id + " " + error.message);
+        roomAlive.setAttribute('class', 'btn btn-primary alive-button-off');
       }
+        
       
       roomAlive.innerHTML = Utils.powerButton;
       // roomAlive.setAttribute('class','alive-button');
       roomAlive.setAttribute('id',`alive-button${room_id}`);
-
-      toggleRoomAlive(roomAlive, room_id, intervalId);
+      
+      try{
+        toggleRoomAlive(roomAlive, room_id, intervalId);
+      } catch (error) {
+        console.log("Room " + room_id + " " + error.message);
+      }
+      
       roomAlive.addEventListener('click', async function(event) {
         // Prevent the event from propagating to the card
         event.stopPropagation();
@@ -277,7 +288,12 @@ export async function renderRoomCards(intervalId) {
       
       let isStopped = -1;
       getLastAction(room_id).then(response => {
-        isStopped = response['stop'];
+        try{
+          isStopped = response['stop'];
+        } catch (error) {
+          console.log("Room " + room_id + " " + error.message);
+          isStopped = 1;
+        }
         // console.log(`isStopped: ${isStopped}`)
         if (isStopped == 0){
           start_button.disabled = true;
@@ -499,6 +515,7 @@ export async function renderRoomCards(intervalId) {
         // Create action object
         const actionObj = getCreateActionObject(
           0,
+          0,
           lastAction['stop'],
           lastAction['vent_state'],
           ((lastAction['shade_state'] * -1) + 1),
@@ -566,10 +583,15 @@ export async function renderRoomValues(intervalId) {
 
       const roomAlive = document.getElementById(`alive-button${room_id}`);
 
-      if (agents[room_id-1]['status'] == 1)
-      {
-        toggleRoomAlive(roomAlive, room_id, intervalId);
+      try{
+        if (agents[room_id-1]['status'] == 1)
+          {
+            toggleRoomAlive(roomAlive, room_id, intervalId);
+          }
+      } catch (error){
+        
       }
+      
       
       // Get agent 
       // const agent = await proxy.getAgentByID(room['id'])
@@ -587,8 +609,16 @@ export async function renderRoomValues(intervalId) {
       //   roomName.setAttribute('style', 'color: grey')
       // }
 
+
       const status_value = document.getElementById(`status_value${room_id}`);
-      const isStopped = `${room['actions'][room['actions'].length-1]['stop']}`;
+
+      let isStopped;
+      try {
+        isStopped = `${room['actions'][room['actions'].length-1]['stop']}`;
+      } catch (error) {
+        console.log("Room " + room_id + " " + error.message);
+        isStopped = 1;
+      }      
       
       if (isStopped == 0){
         // start_button.disabled = true;
@@ -815,37 +845,40 @@ function redirectToDownloadCSV(server_ip, room_id)
 async function toggleRoomAlive(powerButton, room_id, intervalID){
   // const powerButton = document.getElementById(`alive-button${room_id}`);
   const agents = await proxy.getAgents();
-  const agent = agents[room_id-1];
+  try {
+    const agent = agents[room_id-1];
+    // Stop updating card values
+    // clearInterval(intervalID);
+    
+    if (agent['status'] == 0)
+    {
+      powerButton.classList.remove('alive-button-off');
+      powerButton.classList.add('alive-button-pending');
+    } else {
+      // powerButton.classList.remove('alive-button-on');
+      // powerButton.classList.remove('alive-button-pending');
+      // powerButton.classList.add('alive-button-pending-green');
+    }
 
-  // Stop updating card values
-  // clearInterval(intervalID);
-  
-  if (agent['status'] == 0)
-  {
-    powerButton.classList.remove('alive-button-off');
-    powerButton.classList.add('alive-button-pending');
-  } else {
-    // powerButton.classList.remove('alive-button-on');
-    // powerButton.classList.remove('alive-button-pending');
-    // powerButton.classList.add('alive-button-pending-green');
-  }
+    let isAlive = await checkRoomAlive(room_id, 6000);
 
-  let isAlive = await checkRoomAlive(room_id, 6000);
-
-  if (isAlive == 1){
-    // Change status of agent to 'on'
-    await proxy.updateAgent(room_id, {"status": 1})
-    powerButton.classList.remove('alive-button-pending');
-    powerButton.classList.remove('alive-button-pending-green');
-    powerButton.classList.add('alive-button-on');
-  } else {
-    // Change status of agent to 'off'
-    await proxy.updateAgent(room_id, {"status": 0})
-    powerButton.classList.remove('alive-button-on');
-    powerButton.classList.remove('alive-button-pending');
-    powerButton.classList.remove('alive-button-pending-green');
-    powerButton.classList.add('alive-button-off');
-  }
+    if (isAlive == 1){
+      // Change status of agent to 'on'
+      await proxy.updateAgent(room_id, {"status": 1})
+      powerButton.classList.remove('alive-button-pending');
+      powerButton.classList.remove('alive-button-pending-green');
+      powerButton.classList.add('alive-button-on');
+    } else {
+      // Change status of agent to 'off'
+      await proxy.updateAgent(room_id, {"status": 0})
+      powerButton.classList.remove('alive-button-on');
+      powerButton.classList.remove('alive-button-pending');
+      powerButton.classList.remove('alive-button-pending-green');
+      powerButton.classList.add('alive-button-off');
+    }
+  } catch (error) {
+    console.log("Room " + room_id + " " + error.message);
+  }  
 
   // // Start the interval to update room values within room cars
   // intervalId = setInterval(renderRoomValues, 8000, intervalId);
