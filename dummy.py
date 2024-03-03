@@ -254,6 +254,7 @@ def process_actions(get_room):
                         if last_action['stop'] != stop:
                             stop = last_action['stop']
                             setActionToStatus(last_action, 3)
+                            update_current_states(config_data)
 
                         if last_action['reboot'] != reboot:
                             reboot = last_action['reboot']
