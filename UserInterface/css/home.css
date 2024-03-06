@@ -31,6 +31,14 @@ main {
   margin-bottom: 5px;
 }
 
+/* .form-check-input{
+  background-color: black;
+}
+
+.form-check-label {
+  background-color: #dddddd ;
+} */
+
 /* Dark Mode CSS */
 .dark-mode {
   background-color: #343a40; /* Bootstrap dark background */
@@ -47,6 +55,14 @@ main {
   color: #dddddd; /* Lighter text for visibility */
   border-color: #333333; /* Optional: adjust if you have borders */
 }
+
+.dark-mode .form-check-input{
+  background-color: #dddddd;
+}
+
+/* .dark-mode .form-check-label{
+  background-color: black;
+} */
 
 .dark-mode .room-card:hover,
 .dark-mode .room-plus-card:hover,
