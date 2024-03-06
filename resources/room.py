@@ -191,11 +191,11 @@ class Measurement(MethodView):
         builds .csv file from .json measurements object
         """
 
-        csv_file_path = dir_path + f"/resources/room{room_id}_measurements.csv"
-
-        # Read the JSON data
-        
         data = json_obj  # Assumes the JSON data is an array of objects
+        startDate = data[0].timestamp.date()
+        endDate = data[-1].timestamp.date()
+
+        csv_file_path = dir_path + f"/resources/{startDate}_{endDate}_room{room_id}.csv"  
 
         # Open the CSV file for writing
         with open(csv_file_path, 'w', newline='') as csv_file:
