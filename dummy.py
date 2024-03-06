@@ -10,14 +10,14 @@ import socket
 import subprocess
 import math
 
-roomID = 1
+roomID = 2
 # ServerIP='138.197.101.211'
 ServerIP='127.0.0.1'
 server_data = None
 duration = 3
 start_time = time()
 # private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
-private_key = 'CMILUWXJMFOXU6NZA3CT2P25A48NASR8WPOC7T2B8INR0H0LQSKWQ3EAJYTF'
+private_key = 'XWSRH387XZRO6SMRR0M4CC7TP77KEW43LV41PCCA9EH9UQ1X4BOCRH8UR3GI'
 
 req_headers = {
     "Key": private_key
@@ -254,6 +254,7 @@ def process_actions(get_room):
                         if last_action['stop'] != stop:
                             stop = last_action['stop']
                             setActionToStatus(last_action, 3)
+                            update_current_states(config_data)
 
                         if last_action['reboot'] != reboot:
                             reboot = last_action['reboot']
@@ -417,7 +418,7 @@ if __name__ == "__main__":
             sleep(duration)
 
         # Get data from room
-        get_room = requests.get(f'http://{ServerIP}:5000/rooms/{roomID}')
+        get_room = requests.get(f'http://{ServerIP}:5000/rooms/{roomID}', headers=req_headers)
         # print(get_room.json()['actions'])
 
         if vent_state < 2:

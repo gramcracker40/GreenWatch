@@ -119,13 +119,17 @@ export async function renderRoomCards(intervalId) {
         roomAlive.classList.remove('alive-button-pending');
         roomAlive.classList.remove('alive-button-pending-green');
 
-        if (agents[room_id-1]['status'] == 1){
-          roomAlive.classList.add('alive-button-pending-green');
-        } else {
+        try {
+          if (agents[room_id-1]['status'] == 1){
+            roomAlive.classList.add('alive-button-pending-green');
+          } else {
+            roomAlive.classList.add('alive-button-pending');
+          }  
+          toggleRoomAlive(roomAlive, room_id, intervalId);
+        } catch (error){
+          console.log("Room " + room_id + " " + error.message);
           roomAlive.classList.add('alive-button-pending');
         }
-        
-        toggleRoomAlive(roomAlive, room_id, intervalId);
       })
       
       // roomAlive.setAttribute('style', 'color: green');
@@ -724,7 +728,6 @@ function getCreateActionObject(ack, status, stop, vent_state, shade_state, reboo
       "shade_state": shade_state,
       "reboot": reboot
   };
-
   return action;
 }
 
@@ -770,7 +773,21 @@ function displayServerIPAddress(server_ip) {
   // Display server ip address
   const serverIPText = document.getElementById('server-ip');
   serverIPText.textContent = `Server IPv4 Address: ${server_ip}`;
-  serverIPText.href = `http://${server_ip}:5000/servers`;
+  // serverIPText.href = `http://${server_ip}:5000/servers`;
+
+  serverIPText.addEventListener('click', async () => {
+    
+    let response = await proxy.getServers();
+    console.log(response);
+    // Convert the JSON object to a Blob containing a JSON string
+    const blob = new Blob([JSON.stringify(response, null, 2)], {type : 'application/json'});
+    
+    // Create a URL for the blob
+    const url = URL.createObjectURL(blob);
+    
+    // Open a new tab with the JSON blob
+    window.open(url, '_blank');
+  })
 }
 
 async function sendAckRequest(room_id) {
@@ -785,6 +802,7 @@ async function sendAckRequest(room_id) {
     lastAction['reboot']
   );
   const response = await proxy.createAction(room_id, action);
+  return response;
 }
 
 async function checkAckResponse(room_id) {
@@ -826,7 +844,7 @@ async function checkRoomAlive(room_id, roomTimeout){
 }
 
 // Function to redirect to a relative URL
-function redirectToDownloadCSV(server_ip, room_id) 
+async function redirectToDownloadCSV(server_ip, room_id) 
 {
   let absoluteURL = 
     `http://${server_ip}:5000/rooms/${room_id}/measurement/csv`;
@@ -838,14 +856,26 @@ function redirectToDownloadCSV(server_ip, room_id)
 
   // Redirect to the absolute URL
   window.location.href = absoluteURL.href;
+
+  // let response = await proxy.getAllMeasurmentsCSV(room_id);
+  // console.log(response);
+  // // Convert the JSON object to a Blob containing a JSON string
+  // // const blob = new Blob([response], { type: 'text/csv' });
+  
+  // // // Create a URL for the blob
+  // // const url = URL.createObjectURL(blob);
+  
+  // // // Open a new tab with the JSON blob
+  // // window.open(url, '_blank');
+  // Utils.download(response, `Room_${room_id}_Measurements.csv`);
 }
 
 //toggleRoomAlive(): checks if room is on if it is on it is green (alive-button-on)
 // if it isn't on it is off. When it is off remove on and pending class set to off class(CSS). 
 async function toggleRoomAlive(powerButton, room_id, intervalID){
-  // const powerButton = document.getElementById(`alive-button${room_id}`);
   const agents = await proxy.getAgents();
   try {
+    const delay = 10000; // ms
     const agent = agents[room_id-1];
     // Stop updating card values
     // clearInterval(intervalID);
@@ -854,27 +884,21 @@ async function toggleRoomAlive(powerButton, room_id, intervalID){
     {
       powerButton.classList.remove('alive-button-off');
       powerButton.classList.add('alive-button-pending');
-    } else {
-      // powerButton.classList.remove('alive-button-on');
-      // powerButton.classList.remove('alive-button-pending');
-      // powerButton.classList.add('alive-button-pending-green');
-    }
+    } 
 
-    let isAlive = await checkRoomAlive(room_id, 6000);
+    let isAlive = await checkRoomAlive(room_id, delay);
 
     if (isAlive == 1){
       // Change status of agent to 'on'
-      await proxy.updateAgent(room_id, {"status": 1})
-      powerButton.classList.remove('alive-button-pending');
-      powerButton.classList.remove('alive-button-pending-green');
-      powerButton.classList.add('alive-button-on');
+      switchPowerAliveButton(powerButton, room_id, 1)
     } else {
       // Change status of agent to 'off'
-      await proxy.updateAgent(room_id, {"status": 0})
-      powerButton.classList.remove('alive-button-on');
-      powerButton.classList.remove('alive-button-pending');
-      powerButton.classList.remove('alive-button-pending-green');
-      powerButton.classList.add('alive-button-off');
+      isAlive = await checkRoomAlive(room_id, delay);
+      if (isAlive == 1){
+        switchPowerAliveButton(powerButton, room_id, 1)
+      } else {
+        switchPowerAliveButton(powerButton, room_id, 0)
+      }   
     }
   } catch (error) {
     console.log("Room " + room_id + " " + error.message);
@@ -884,6 +908,24 @@ async function toggleRoomAlive(powerButton, room_id, intervalID){
   // intervalId = setInterval(renderRoomValues, 8000, intervalId);
 }
 
+async function switchPowerAliveButton(powerButton, room_id, status)
+{
+  if (status == 1){
+    // Change status of agent to 'on'
+    await proxy.updateAgent(room_id, {"status": 1})
+    powerButton.classList.remove('alive-button-pending');
+    powerButton.classList.remove('alive-button-pending-green');
+    powerButton.classList.add('alive-button-on');
+  } else {
+    await proxy.updateAgent(room_id, {"status": 0})
+    powerButton.classList.remove('alive-button-on');
+    powerButton.classList.remove('alive-button-pending');
+    powerButton.classList.remove('alive-button-pending-green');
+    powerButton.classList.add('alive-button-off');
+  }
+
+}
+
 // Create first server
 const server_ip = await createFirstServer(true);
 
@@ -891,7 +933,7 @@ const server_ip = await createFirstServer(true);
 displayServerIPAddress(server_ip);
 
 // Start the interval to update room values within room cars
-let intervalId = setInterval(renderRoomValues, 8000);
+let intervalId = setInterval(renderRoomValues, 15000);
 
 // Render all room cards
 await renderRoomCards(intervalId);

@@ -239,6 +239,25 @@ export class GreenhouseProxy {
         }
     }
 
+    // Get all measurements for room in .csv file 
+    async getAllMeasurmentsCSV(room_id){
+        const options = {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'text/csv',
+                'Content-Disposition': `attachment; filename="filename.csv"`
+            }
+        }
+
+        try {
+            let response = await fetch(`/rooms/${room_id}/measurement/csv`, options);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     // Create room measurement by room id
     async createMeasurement(roomID, measurement) {
         const options = {

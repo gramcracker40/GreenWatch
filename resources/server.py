@@ -23,7 +23,7 @@ dir_path = os.path.dirname(os.path.dirname(__file__))
 
 @blp.route("/servers")
 class Servers(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(ServerSchema())
     def post(self, server_data):
         '''
@@ -63,7 +63,7 @@ class Servers(MethodView):
         return [host_name, host_ip]
     
 
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, ServerSchema(many=True))
     def get(self):
         return ServerModel.query.all()
@@ -71,7 +71,7 @@ class Servers(MethodView):
 
 @blp.route("/servers/<int:server_id>")
 class Server(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def delete(self, server_id):
         server = ServerModel.query.get_or_404(server_id)
 
@@ -83,7 +83,7 @@ class Server(MethodView):
 
         return {"Success": True}, 200
     
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(ServerUpdateSchema())
     def patch(self, server_data, server_id):
         '''
@@ -100,7 +100,7 @@ class Server(MethodView):
 
 @blp.route("/servers/<int:server_id>/host")
 class Server(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def get(self, server_id):
         try:
             host_name = gethostname()
@@ -176,7 +176,7 @@ class Agents(MethodView):
         #     create_exe_p.kill()
 
 
-    #@jwt_required()
+    # @jwt_required()
     @blp.arguments(AgentSchema())
     def post(self, agent_data):
         '''
@@ -209,7 +209,7 @@ class Agents(MethodView):
 
         return {"Success": True, "private_key": passcode, "server_ip": server.ip_address,"room_id": room.id, "agent_id": new_agent.id}, 201
    
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, AgentSchema(many=True))
     def get(self):
         return AgentModel.query.all()
@@ -218,7 +218,7 @@ class Agents(MethodView):
 @blp.route("/servers/agents/<int:agent_id>")
 class Agent(MethodView):
 
-    #@jwt_required()
+    # @jwt_required()
     def get(self, agent_id):
         '''
         Grabs agent specific executable file. 
@@ -236,7 +236,7 @@ class Agent(MethodView):
 
         return send_file(build_path)
 
-    #@jwt_required(fresh=True)
+    @jwt_required(fresh=True)
     def delete(self, agent_id):
         '''
         delete an agent and all build paths associated by id
@@ -280,7 +280,7 @@ class Agent(MethodView):
 @blp.route("/servers/agents/<int:agent_id>/ping")
 class Agent(MethodView):
 
-    #@jwt_required()
+    @jwt_required()
     def get(self, agent_id):
         '''
         Pings an agent to return its status
