@@ -24,7 +24,7 @@ def admin_check(jwt_obj):
 
 @blp.route("/rooms")
 class Rooms(MethodView):
-    ##@jwt_required()
+    @jwt_required()
     @blp.response(200, RoomSchema(many=True))
     def get(self):
         '''
@@ -33,7 +33,7 @@ class Rooms(MethodView):
         #admin_check(get_jwt())
         return RoomModel.query.all()
     
-    ##@jwt_required(fresh=True)
+    @jwt_required(fresh=True)
     @blp.arguments(RoomSchema)
     def post(self, room_data):
         '''
@@ -61,7 +61,7 @@ class Rooms(MethodView):
 @blp.route("/rooms/<int:room_id>")
 class Room(MethodView):
 
-    #@jwt_required()
+    # @jwt_required()
     @blp.response(200, RoomSchema)
     def get(self, room_id):
         '''
@@ -69,7 +69,7 @@ class Room(MethodView):
         '''
         return RoomModel.query.get_or_404(room_id)
     
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(RoomUpdateSchema)
     def patch(self, room_data, room_id):
         '''
@@ -87,15 +87,15 @@ class Room(MethodView):
 
         return {"Success": True}, 201
     
-    #@jwt_required(fresh=True)
+    @jwt_required(fresh=True)
     def delete(self, room_id):
         '''
         Delete a Room -- admin user required and JWT must be fresh
         '''
         
-        # jwt = get_jwt()
-        # if(jwt['admin'] == False):
-        #     abort(403, message=f"User trying to delete room_id={room_id} is not an admin")
+        jwt = get_jwt()
+        if(jwt['admin'] == False):
+            abort(403, message=f"User trying to delete room_id={room_id} is not an admin")
         
 
         room = RoomModel.query.get_or_404(room_id)
@@ -126,30 +126,37 @@ class Measurement(MethodView):
 
         key = request.headers.get("Key")
         same = pbkdf2_sha256.verify(key, agent.private_key)
+        # print(f"Same Agent Private Key: {same}, Agent Key: {agent.private_key}, Request Key: {pbkdf2_sha256.encrypt(key)}")
+        print(f"Same Agent Private Key: {same}")
 
-        ExperimentCheck()
+        if same:
 
-        measurement = MeasurementModel(**measurement_data)
-        measurement.timestamp = datetime.now()
-        measurement.room_id = room_id
+            ExperimentCheck()
 
-        active_experiments = [experiment for experiment in room.experiments
-                            if experiment.active]
+            measurement = MeasurementModel(**measurement_data)
+            measurement.timestamp = datetime.now()
+            measurement.room_id = room_id
 
-        if active_experiments:
-            active_experiments[0].measurements.append(measurement)
+            active_experiments = [experiment for experiment in room.experiments
+                                if experiment.active]
+
+            if active_experiments:
+                active_experiments[0].measurements.append(measurement)
+            
+            room.measurements.append(measurement)
+
+            try:
+                db.session.add(measurement)
+                db.session.commit()
+
+            except SQLAlchemyError as err:
+                abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
+
+
+            return {"message": f"Successfully added new measurement to room ID {room_id}", "duration": agent.duration.second}, 201
         
-        room.measurements.append(measurement)
-
-        try:
-            db.session.add(measurement)
-            db.session.commit()
-
-        except SQLAlchemyError as err:
-            abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
-
-
-        return {"message": "Successfully added new measurement", "duration": agent.duration.second}, 201
+        else:
+            return {"message": f"Invalid Private Key, measurement not added to room ID {room_id}", "duration": None}, 401
     
     @blp.response(201, MeasurementSchema(many=True))
     def get(self, room_id):
@@ -158,7 +165,7 @@ class Measurement(MethodView):
         '''
         return MeasurementModel.query.filter_by(room_id=room_id).all()
     
-    # #@jwt_required()
+    @jwt_required()
     @blp.arguments(DateRangeSchema)
     def put(self, dates, room_id):
         '''
@@ -229,8 +236,10 @@ class Measurement(MethodView):
                 print("The JSON file is empty or not formatted as expected.")
 
         print(f"JSON data  has been converted to CSV and saved as '{csv_file_path}'")
+        
         return csv_file_path
-     
+    
+    # @jwt_required()
     @blp.response(201, MeasurementSchema(many=True))
     def get(self, room_id):
         '''
@@ -257,41 +266,45 @@ class Action(MethodView):
         if agent is None:
             abort(404, message="Agent not found for room", error="agent_does_not_exist", fix=f"add an agent to {room.name}")
 
+        key = request.headers.get("Key")
+        token = request.headers.get("Authorization")
 
-        # key = request.headers.get("Key")
-        # same = pbkdf2_sha256.verify(key, agent.private_key)
+        if key is not None:
+            valid = pbkdf2_sha256.verify(key, agent.private_key)
+            # print(f"Same Agent Private Key: {same}, Agent Key: {agent.private_key}, Request Key: {pbkdf2_sha256.encrypt(key)}")
+            print(f"Same Agent Private Key: {valid}")
+        elif token is not None:
+            # jwt = get_jwt()
+            # admin_check(jwt)
+            # if(jwt['admin'] == False):
+            #     abort(403, message=f"User trying to add action to Room ID {room_id} is not an admin")
+            # else:
+                valid = True
 
-        ExperimentCheck()
+        if valid:
+            ExperimentCheck()
+            
+            action = ActionModel(**action_data)
+            action.timestamp = datetime.now()
+            action.room_id = room_id
+            action.status = action_data['status']
+            
+            room.actions.append(action)
 
-        # measurement = MeasurementModel(**measurement_data)
-        # measurement.timestamp = datetime.now()
-        # measurement.room_id = room_id
+            try:
+                db.session.add(action)
+                db.session.commit()
 
-        # active_experiments = [experiment for experiment in room.experiments
-        #                     if experiment.active]
+            except SQLAlchemyError as err:
+                abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
 
-        # if active_experiments:
-        #     active_experiments[0].measurements.append(measurement)
+            return {"message": f"Successfully added new action to room ID {room_id} - ", "duration": agent.duration.second}, 201
         
-        action = ActionModel(**action_data)
-        action.timestamp = datetime.now()
-        action.room_id = room_id
-        action.status = action_data['status']
-        
-
-        room.actions.append(action)
-
-        try:
-            db.session.add(action)
-            db.session.commit()
-
-        except SQLAlchemyError as err:
-            abort(500, message=f"a SQLAlchemy error occurred, err: {err}")
-
-        return {"message": "Successfully added new action - ", "duration": agent.duration.second}, 201
+        else:
+            return {"message": f"Invalid Credentials, action not added to room ID {room_id}", "duration": None}, 401
     
 
-    #@jwt_required()
+    # @jwt_required()
     @blp.arguments(ActionUpdateSchema)
     def patch(self, action_data, room_id):
         '''
@@ -312,7 +325,7 @@ class Action(MethodView):
 
 @blp.route("/rooms/messages")
 class Messages(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, MessageSchema(many=True))
     def get(self):
         '''
@@ -327,7 +340,7 @@ class Message(MethodView):
     Used to work with messages in the seperate rooms. 
     Allows notes to be made about experiment progress. 
     '''
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(MessageSchema)
     def post(self, message_data, room_id):
         '''
@@ -359,7 +372,7 @@ class Message(MethodView):
 
         return {"Success":True, "message_id": new_message.id}, 201
     
-    #@jwt_required()
+    @jwt_required()
     @blp.response(201, MessageSchema(many=True))
     def get(self, room_id):
         '''
@@ -370,7 +383,7 @@ class Message(MethodView):
 
 @blp.route("/rooms/messages/<int:message_id>")
 class SpecificMessage(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def delete(self, message_id):
         '''
         Delete a Message
@@ -382,7 +395,7 @@ class SpecificMessage(MethodView):
 
         return {"Success": True}, 200
     
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(MessageUpdateSchema)
     def patch(self, message_data, message_id):
         '''
