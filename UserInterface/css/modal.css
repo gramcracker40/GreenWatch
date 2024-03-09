@@ -72,3 +72,11 @@
   color: white;
   font-size: clamp(1rem,50%,2rem);
 }
+
+
+/* Card Header for chatbox */
+
+.header-chatbox{
+  font-weight: 700;
+  size: 100px;
+}
