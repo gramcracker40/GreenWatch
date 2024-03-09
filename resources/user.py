@@ -16,7 +16,7 @@ blp = Blueprint("users", "users", description="Operations on users")
 
 @blp.route("/register")
 class UserRegister(MethodView):
-    ##@jwt_required()
+    #@jwt_required()
     @blp.arguments(UserRegisterSchema)
     def post(self, user_data):
         '''
@@ -83,7 +83,7 @@ class UserLogout(MethodView):
 
 @blp.route("/refresh")
 class TokenRefresh(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def post(self):
         '''
         refreshes and maintains access for the client, refreshing every hour is best practice.
@@ -102,7 +102,7 @@ class TokenRefresh(MethodView):
 
 @blp.route("/users")
 class Users(MethodView):
-    #@jwt_required()
+    @jwt_required()
     @blp.response(200, UserRegisterSchema(many=True))
     def get(self):
         '''
@@ -114,7 +114,7 @@ class Users(MethodView):
 
 @blp.route("/users/<int:user_id>")
 class User(MethodView):
-    #@jwt_required()
+    @jwt_required()
     def delete(self, user_id):
         '''
         Deletes a user by id
@@ -131,7 +131,7 @@ class User(MethodView):
         return {"Success": True}, 200
 
 
-    #@jwt_required()
+    @jwt_required()
     @blp.arguments(UserUpdateSchema)
     def patch(self, user_data, user_id):
         '''
