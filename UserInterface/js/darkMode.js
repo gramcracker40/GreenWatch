@@ -1,3 +1,6 @@
+//* This file is currently not being used */
+//The intention of htis file is to parse the code and help optimization. 
+
 // Function to initialize dark mode toggle logic
 export function initializeDarkModeToggle() {
     // Wait for the DOM to be fully loaded
