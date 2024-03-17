@@ -112,3 +112,15 @@ function redirectToDownloadAgent(server_ip)
   // Redirect to the absolute URL
   window.location.href = absoluteURL.href;
 }
+
+// Function to automatically adjust chart size upon resize
+function setChartContainerHeight() {
+  var chartContainer = document.getElementById('canvas-div');
+  chartContainer.style.height = (chartContainer.clientWidth * 0.666) + 'px';
+}
+
+// Call the function when the window is resized
+window.addEventListener('resize', setChartContainerHeight);
+
+// Call the function when the page loads
+window.addEventListener('load', setChartContainerHeight);

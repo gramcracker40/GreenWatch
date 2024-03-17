@@ -8,7 +8,7 @@ from spidev import SpiDev
 roomID = 1
 ServerIP='127.0.0.1'
 duration = 3
-private_key = 'CMILUWXJMFOXU6NZA3CT2P25A48NASR8WPOC7T2B8INR0H0LQSKWQ3EAJYTF'
+private_key = '32ZTNL2NEOD7IQYCDK4IBKXCB2BNNXSMYHTKGJHSA1SXLHYELHCREJJ6I9PZ'
 
 req_headers = {
     "Key": private_key
@@ -61,3 +61,4 @@ while True:
 
     server_data = json.loads(post_measurement.text)
     sleep(int(server_data["duration"]))
+
