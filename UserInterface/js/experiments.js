@@ -76,6 +76,32 @@ function hideExperimentsBtn() {
 
 hideExperimentsBtn();
 
+// Function to add rows to experiment tables
+function AddRows(names, experiment, expTable){
+  for(let i = 0; i < names.length; i++){
+    const newRow = document.createElement('tr');
+
+    // Create cells for the data: type, low, and high
+    const typeCell = document.createElement('td');
+    typeCell.textContent = names[i][0];
+    // typeCell.style.textAlign = 'center';
+    const lowCell = document.createElement('td');
+    lowCell.textContent = experiment['lower_' + names[i][1]];
+    lowCell.style.color = 'blue';
+    const highCell = document.createElement('td');
+    highCell.textContent = experiment['upper_' + names[i][1]];
+    highCell.style.color = 'red';
+  
+    // Append cells to the row
+    newRow.appendChild(typeCell);
+    newRow.appendChild(lowCell);
+    newRow.appendChild(highCell);
+  
+    // Append the row to the table
+    expTable.appendChild(newRow);
+  }
+}
+
 // Create cards for experiments
 async function renderExperimentCards() {
   // console.log("Rendering experiments");
@@ -94,53 +120,33 @@ async function renderExperimentCards() {
     if (experiment['room_id'] == currentRoom) {
       // Create card structure
       const listItem = document.createElement('div');
+      const row = document.createElement('div');
       const nameDiv = document.createElement('div');
-      const experimentName = document.createElement('div');
-      const thresholdDiv = document.createElement('div');
-      const tHighCard = document.createElement('div');
-      const tHighCardHeader = document.createElement('div');
-      const tHighCardBody = document.createElement('div');
-      const tLowCard = document.createElement('div');
-      const tLowCardHeader = document.createElement('div');
-      const tLowCardBody = document.createElement('div');
-      const hHighCard = document.createElement('div');
-      const hHighCardHeader = document.createElement('div');
-      const hHighCardBody = document.createElement('div');
-      const hLowCard = document.createElement('div');
-      const hLowCardHeader = document.createElement('div');
-      const hLowCardBody = document.createElement('div');
+      const tableDiv = document.createElement('div');
+      const expTable = document.createElement('table');
+      const headerRow = document.createElement('tr');
+      const measurementHeader = document.createElement('th');
+      const lowHeader = document.createElement('th');
+      const highHeader = document.createElement('th');
       const icons = document.createElement('div');
       const edit = document.createElement('i');
       const trash = document.createElement('i'); 
 
-      thresholdDiv.setAttribute('class', 'd-flex align-items-center');
-      listItem.setAttribute('class', 'list-group-item justify-content-between d-flex align-items-center');
 
-      nameDiv.setAttribute('class', 'col-3');
-      experimentName.textContent = experiment['name'];
+      listItem.setAttribute('class', 'list-group-item justify-content-between align-items-center');
+      nameDiv.setAttribute('class', 'col-12 mb-3 text-center fs-2');
+      nameDiv.textContent = experiment['name'];
 
-      tHighCard.setAttribute('class', 'card m-2 p-2');
-      tHighCardHeader.setAttribute('class', 'card-header');
-      tHighCardHeader.textContent = "Temperature High";
-      tHighCardBody.setAttribute('class', 'card-body justify-content-center');
-      tHighCardBody.textContent = experiment['upper_temp'];
-      tLowCard.setAttribute('class', 'card m-2 p-2');
-      tLowCardHeader.setAttribute('class', 'card-header');
-      tLowCardHeader.textContent = "Temperature Low";
-      tLowCardBody.setAttribute('class', 'card-body justify-content-center');
-      tLowCardBody.textContent = experiment['lower_temp'];
-      hHighCard.setAttribute('class', 'card m-2 p-2');
-      hHighCardHeader.setAttribute('class', 'card-header');
-      hHighCardHeader.textContent = "Humidity High";
-      hHighCardBody.setAttribute('class', 'card-body justify-content-center');
-      hHighCardBody.textContent = experiment['upper_hum'];
-      hLowCard.setAttribute('class', 'card m-2 p-2');
-      hLowCardHeader.setAttribute('class', 'card-header');
-      hLowCardHeader.textContent = "Humidity Low";
-      hLowCardBody.setAttribute('class', 'card-body justify-content-center');
-      hLowCardBody.textContent = experiment['lower_hum'];
+      row.setAttribute('class', 'd-flex')
+      tableDiv.setAttribute('class', ' align-items-center col-9');
 
-      icons.setAttribute('class', 'justify-content-between');
+      // if the user is an admin, then append the icons
+      if (Utils.parseJwt(Utils.getJwt()['access_token'])['admin']) {
+        icons.append(edit);
+        icons.append(trash);
+      }
+
+      icons.setAttribute('class', 'd-flex flex-column col-3');
       edit.setAttribute('class', 'fa-solid fa-pen-to-square btn btn-outline-dark m-2');
       edit.setAttribute('data-bs-target', '#edit-experiment-modal');
       edit.setAttribute('data-bs-toggle', 'modal');
@@ -148,29 +154,28 @@ async function renderExperimentCards() {
       trash.setAttribute('data-bs-target', '#delete-experiment-modal');
       trash.setAttribute('data-bs-toggle', 'modal');
 
-      experimentListGroup.append(listItem);
-      listItem.append(nameDiv);
-      nameDiv.append(experimentName);
-      listItem.append(thresholdDiv);
-      thresholdDiv.append(tHighCard);
-      tHighCard.append(tHighCardHeader);
-      tHighCard.append(tHighCardBody);
-      thresholdDiv.append(tLowCard);
-      tLowCard.append(tLowCardHeader);
-      tLowCard.append(tLowCardBody);
-      thresholdDiv.append(hHighCard);
-      hHighCard.append(hHighCardHeader);
-      hHighCard.append(hHighCardBody);
-      thresholdDiv.append(hLowCard);
-      hLowCard.append(hLowCardHeader);
-      hLowCard.append(hLowCardBody);
 
-      // if the user is an admin, then append the icons
-      if (Utils.parseJwt(Utils.getJwt()['access_token'])['admin']) {
-        listItem.append(icons);
-        icons.append(edit);
-        icons.append(trash);
-      }
+      expTable.setAttribute('class', 'table');
+      measurementHeader.textContent = 'Measurement';
+      measurementHeader.style.textAlign = 'center';
+      lowHeader.textContent = 'Low';
+      lowHeader.style.textAlign = 'center';
+      highHeader.textContent = 'High';
+      highHeader.style.textAlign = 'center';
+
+      experimentListGroup.append(listItem);
+      listItem.append(nameDiv, row);
+      row.append(icons, tableDiv);
+      tableDiv.append(expTable);
+      expTable.appendChild(headerRow);
+      headerRow.append(measurementHeader, lowHeader, highHeader);
+
+      const names = [['Temperature', 'temp'],
+                     ['Humidity', 'hum']];
+      
+      AddRows(names, experiment, expTable);
+
+
 
       // Only allow viewing of experiment if it is the active experiment of the room
       // if (experiment['active']) {
