@@ -3,7 +3,7 @@
         "duration": 3
     },
     "states": {
-        "stop": 1,
+        "stop": 0,
         "vent_state": 1,
         "shade_state": 0,
         "reboot": 0
