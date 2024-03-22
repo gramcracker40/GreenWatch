@@ -284,9 +284,9 @@ export async function renderRoomCards(intervalId) {
       const status_label = document.createElement('p');
       const status_value = document.createElement('p');
       status_row.setAttribute('class', 'd-flex justify-content-between');
-      status_label.setAttribute('class', 'h1');
+      status_label.setAttribute('class', 'h2');
       status_label.textContent = "Logging: ";
-      status_value.setAttribute('class', 'h1');
+      status_value.setAttribute('class', 'h2');
       status_value.setAttribute('id', `status_value${room_id}`);
       status_value.textContent = `...`;
       
@@ -302,7 +302,7 @@ export async function renderRoomCards(intervalId) {
         if (isStopped == 0){
           start_button.disabled = true;
           stop_button.disabled = false;
-          status_value.textContent = " Active " + "(" + agents[room_id-1]['duration'] + ")";
+          status_value.textContent = " Active " + "(/" + Utils.timeStringToSeconds(agents[room_id-1]['duration']) + "s)";
           status_value.setAttribute('style', 'color: green');
         }else{
           start_button.disabled = false;
@@ -627,7 +627,7 @@ export async function renderRoomValues(intervalId) {
       if (isStopped == 0){
         // start_button.disabled = true;
         // stop_button.disabled = false;
-        status_value.textContent = " Active (" + agents[room_id-1]['duration'] +")";
+        status_value.textContent = " Active " + "(/" + Utils.timeStringToSeconds(agents[room_id-1]['duration']) + "s)";
         status_value.setAttribute('style', 'color: green');
       }else{
         // start_button.disabled = false;
@@ -829,7 +829,7 @@ async function checkRoomAlive(room_id, roomTimeout){
   // console.log("duration: " + agents[room_id-1]['duration']);
 
   // wait 'duration' milliseconds for agent to acknowledge request plus additional second
-  await sleepNow(Utils.timeStringToSeconds(agents[room_id-1]['duration'], 10) * 1000 + 1000); 
+  await sleepNow(Utils.timeStringToSeconds(agents[room_id-1]['duration']) * 1000 + 1000); 
   
   return await checkAckResponse(room_id);
   // try {
