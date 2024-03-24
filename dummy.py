@@ -10,14 +10,14 @@ import socket
 import subprocess
 import math
 
-roomID = 2
+roomID = 1
 # ServerIP='138.197.101.211'
 ServerIP='127.0.0.1'
 server_data = None
 duration = 3
 start_time = time()
-# private_key = 'FKLVPN17IC4JPB6NPJE0MSM4ISHQRF0EQ2MNRFLEGRP3PP7HMP649SWU1PDU'
-private_key = '32ZTNL2NEOD7IQYCDK4IBKXCB2BNNXSMYHTKGJHSA1SXLHYELHCREJJ6I9PZ'
+
+private_key = 'GO5XY5WAQUMCVZIQ983140M4JK1B1KR6EF0F4O5B3NDFP40DZ8FQD5DDR0OB'
 
 req_headers = {
     "Key": private_key
